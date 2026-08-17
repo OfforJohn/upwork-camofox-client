@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  upwork-camofox-client:
+    build: .
+    container_name: upwork-camofox-client
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    networks:
+      - upwork-network
+
+networks:
+  upwork-network:
+    driver: bridge
