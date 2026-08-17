@@ -5,6 +5,7 @@ from typing import Optional, Dict, Any, List
 import asyncio
 from datetime import datetime
 import json
+from .interface import BrowserInterface
 
 
 @dataclass
@@ -123,10 +124,9 @@ class SessionConfig:
 class CamofoxSession:
     """Account-scoped Camofox session manager."""
 
-    def __init__(self, config: SessionConfig):
+    def __init__(self, config: SessionConfig, browser: Optional[BrowserInterface] = None):
         self.config = config
-        self.browser = None
-        self.page = None
+        self.browser: Optional[BrowserInterface] = browser
         self.is_active = False
         self.created_at = datetime.utcnow()
 
@@ -151,8 +151,20 @@ class CamofoxSession:
         """Navigate to URL within the session."""
         if not self.is_active:
             raise RuntimeError("Session is not active")
-        # TODO: Implement navigation via Camofox SDK
-        await asyncio.sleep(0.1)
+        if self.browser:
+            await self.browser.navigate(url)
+        else:
+            # Fallback for placeholder implementation
+            await asyncio.sleep(0.1)
+
+    async def get_page_info(self):
+        """Get current page title and URL."""
+        if self.browser:
+            return await self.browser.get_page_info()
+        else:
+            # Fallback for placeholder implementation
+            from .interface import PageInfo
+            return PageInfo(title="Upwork", url="https://www.upwork.com")
 
     async def get_cookies(self) -> List[Cookie]:
         """Get current cookies from the session."""
@@ -182,8 +194,9 @@ class CamofoxSession:
 class SessionManager:
     """Manages account-scoped Camofox sessions."""
 
-    def __init__(self):
+    def __init__(self, browser_factory: Optional[callable] = None):
         self.sessions: Dict[str, CamofoxSession] = {}
+        self.browser_factory = browser_factory
 
     async def get_session(self, account_id: str, config: SessionConfig) -> CamofoxSession:
         """Get or create a session for the given account."""
@@ -194,7 +207,8 @@ class SessionManager:
             else:
                 del self.sessions[account_id]
 
-        session = CamofoxSession(config)
+        browser = self.browser_factory() if self.browser_factory else None
+        session = CamofoxSession(config, browser=browser)
         await session.launch()
         self.sessions[account_id] = session
         return session

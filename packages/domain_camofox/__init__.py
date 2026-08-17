@@ -9,6 +9,7 @@ from .session import (
     Cookie,
     SessionState,
 )
+from .interface import BrowserInterface, FakeBrowser, PageInfo
 
 __all__ = [
     "CamofoxSession",
@@ -18,4 +19,7 @@ __all__ = [
     "HumanizationConfig",
     "Cookie",
     "SessionState",
+    "BrowserInterface",
+    "FakeBrowser",
+    "PageInfo",
 ]
