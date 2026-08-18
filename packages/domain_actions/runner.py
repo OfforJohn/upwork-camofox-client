@@ -121,15 +121,13 @@ class ActionRunner:
         
         # Step 2: Open Upwork surface
         await session.navigate("https://www.upwork.com")
-        
+
         # Step 3: Read title/url for auth validation
-        # TODO: Extract actual title and URL from browser
-        title = "Upwork"
-        url = "https://www.upwork.com"
-        
+        page_info = await session.get_page_info()
+
         # Step 4: AuthGuard.validate(title, url)
         auth_guard = AuthGuard(session)
-        auth_result = await auth_guard.validate(title, url)
+        auth_result = await auth_guard.validate(page_info.title, page_info.url)
         
         if not auth_result.is_authenticated:
             return ActionResult(

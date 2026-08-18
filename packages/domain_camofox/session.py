@@ -3,7 +3,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Dict, Any, List
 import asyncio
-from datetime import datetime
+from datetime import datetime, UTC
 import json
 from .interface import BrowserInterface
 
@@ -137,48 +137,53 @@ class CamofoxSession:
         self.browser_context = None
         self.page = None
         self.is_active = False
-        self.created_at = datetime.utcnow()
+        self.created_at = datetime.now(UTC)
 
     async def launch(self) -> None:
         """Launch browser session with cookies, proxy, and humanization."""
+        # If fake browser is provided, skip real Camoufox launch
+        if self.browser:
+            self.is_active = True
+            return
+
         if not CAMOUFOX_AVAILABLE:
             raise RuntimeError("Camoufox SDK is not available. Install camoufox package.")
-        
+
         # Build Camoufox launch options
         launch_options: Dict[str, Any] = {}
-        
+
         # Configure proxy if provided
         if self.config.proxy:
             proxy_dict = self.config.proxy.to_dict()
             launch_options["proxy"] = proxy_dict
-        
+
         # Configure humanization if provided
         if self.config.humanization:
             humanization_dict = self.config.humanization.to_dict()
             launch_options.update(humanization_dict)
-        
+
         # Launch Camoufox browser as async context manager
         self.camofox = AsyncCamoufox(**launch_options)
         browser = await self.camofox.__aenter__()
-        
+
         # Create browser context
         self.browser_context = await browser.new_context()
-        
+
         # Load cookies if provided (after context creation)
         if self.config.cookies:
             cookies_list = [cookie.to_dict() for cookie in self.config.cookies]
             await self.browser_context.add_cookies(cookies_list)
-        
+
         # Create page
         self.page = await self.browser_context.new_page()
-        
+
         # Restore session state if provided
         if self.config.session_state.local_storage:
             await self._restore_local_storage(self.config.session_state.local_storage)
-        
+
         if self.config.session_state.session_storage:
             await self._restore_session_storage(self.config.session_state.session_storage)
-        
+
         self.is_active = True
 
     async def _restore_local_storage(self, local_storage: Dict[str, str]) -> None:
