@@ -142,19 +142,43 @@ class TestIntegration:
         browser_factory = lambda: FakeBrowser(should_authenticate=True)
         runner = ActionRunner()
         runner.session_manager = SessionManager(browser_factory=browser_factory)
-        
+
         # Create action envelope
         action = ActionEnvelope(
             type=ActionType.JOBS_SEARCH,
             account_id="test_account",
             payload={"query": "python"},
         )
-        
+
         # Execute action
         result = await runner.execute(action)
-        
+
         # Assert success
         assert result.success
         assert result.data is not None
         assert "search_id" in result.data
         assert "cursor_id" in result.data
+
+    @pytest.mark.asyncio
+    async def test_fixture_extraction_produces_two_listings(self):
+        """Test that fixture extraction produces exactly 2 job listings."""
+        # Create runner with fake browser
+        browser_factory = lambda: FakeBrowser(should_authenticate=True)
+        runner = ActionRunner()
+        runner.session_manager = SessionManager(browser_factory=browser_factory)
+
+        # Create action envelope
+        action = ActionEnvelope(
+            type=ActionType.JOBS_SEARCH,
+            account_id="test_account",
+            payload={"query": "python"},
+        )
+
+        # Execute action
+        result = await runner.execute(action)
+
+        # Assert fixture produces exactly 2 listings
+        assert result.success
+        assert result.data is not None
+        assert result.data["total_jobs_count"] == 2
+        assert result.data["new_jobs_count"] == 2
