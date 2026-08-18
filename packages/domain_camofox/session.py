@@ -7,6 +7,12 @@ from datetime import datetime
 import json
 from .interface import BrowserInterface
 
+try:
+    from camoufox.async_api import AsyncCamoufox
+    CAMOUFOX_AVAILABLE = True
+except ImportError:
+    CAMOUFOX_AVAILABLE = False
+
 
 @dataclass
 class ProxyConfig:
@@ -127,32 +133,70 @@ class CamofoxSession:
     def __init__(self, config: SessionConfig, browser: Optional[BrowserInterface] = None):
         self.config = config
         self.browser: Optional[BrowserInterface] = browser
+        self.camofox: Optional[AsyncCamoufox] = None
         self.is_active = False
         self.created_at = datetime.utcnow()
 
     async def launch(self) -> None:
         """Launch browser session with cookies, proxy, and humanization."""
-        # TODO: Integrate with actual Camofox SDK
-        # This is a placeholder for the Camofox SDK integration
-        # The actual implementation will use camofox package
+        if not CAMOUFOX_AVAILABLE:
+            raise RuntimeError("Camoufox SDK is not available. Install camoufox package.")
         
-        # Simulate session launch
-        await asyncio.sleep(0.1)
+        # Build Camoufox launch options
+        launch_options: Dict[str, Any] = {}
+        
+        # Configure proxy if provided
+        if self.config.proxy:
+            proxy_dict = self.config.proxy.to_dict()
+            launch_options["proxy"] = proxy_dict
+        
+        # Configure humanization if provided
+        if self.config.humanization:
+            humanization_dict = self.config.humanization.to_dict()
+            launch_options.update(humanization_dict)
+        
+        # Launch Camoufox browser
+        self.camofox = AsyncCamoufox(**launch_options)
+        
+        # Load cookies if provided
+        if self.config.cookies:
+            cookies_list = [cookie.to_dict() for cookie in self.config.cookies]
+            await self.camofox.add_cookies(cookies_list)
+        
+        # Restore session state if provided
+        if self.config.session_state.local_storage:
+            await self._restore_local_storage(self.config.session_state.local_storage)
+        
+        if self.config.session_state.session_storage:
+            await self._restore_session_storage(self.config.session_state.session_storage)
+        
         self.is_active = True
-        
-        # In real implementation:
-        # 1. Load cookies from config
-        # 2. Configure proxy from config
-        # 3. Apply humanization from config
-        # 4. Launch browser via Camofox SDK
-        # 5. Restore session state
+
+    async def _restore_local_storage(self, local_storage: Dict[str, str]) -> None:
+        """Restore localStorage from session state."""
+        if not self.camofox:
+            return
+        # TODO: Implement localStorage restoration via Camoufox
+        # This depends on Camoufox's specific API for localStorage manipulation
+
+    async def _restore_session_storage(self, session_storage: Dict[str, str]) -> None:
+        """Restore sessionStorage from session state."""
+        if not self.camofox:
+            return
+        # TODO: Implement sessionStorage restoration via Camoufox
+        # This depends on Camoufox's specific API for sessionStorage manipulation
 
     async def navigate(self, url: str) -> None:
         """Navigate to URL within the session."""
         if not self.is_active:
             raise RuntimeError("Session is not active")
+        
         if self.browser:
+            # Use injected browser interface (for testing)
             await self.browser.navigate(url)
+        elif self.camofox:
+            # Use real Camoufox browser
+            await self.camofox.goto(url)
         else:
             # Fallback for placeholder implementation
             await asyncio.sleep(0.1)
@@ -161,6 +205,11 @@ class CamofoxSession:
         """Get current page title and URL."""
         if self.browser:
             return await self.browser.get_page_info()
+        elif self.camofox:
+            from .interface import PageInfo
+            title = await self.camofox.title()
+            url = self.camofox.url
+            return PageInfo(title=title, url=url)
         else:
             # Fallback for placeholder implementation
             from .interface import PageInfo
@@ -168,12 +217,17 @@ class CamofoxSession:
 
     async def get_cookies(self) -> List[Cookie]:
         """Get current cookies from the session."""
-        # TODO: Implement cookie extraction via Camofox SDK
+        if self.camofox:
+            cookies = await self.camofox.cookies()
+            return [Cookie.from_dict(cookie) for cookie in cookies]
         return self.config.cookies
 
     async def get_session_state(self) -> SessionState:
         """Get current session state from the browser."""
-        # TODO: Implement session state extraction via Camofox SDK
+        if self.camofox:
+            # TODO: Implement session state extraction via Camoufox
+            # This depends on Camoufox's specific API for localStorage/sessionStorage
+            pass
         return self.config.session_state
 
     async def close(self) -> None:
@@ -181,14 +235,18 @@ class CamofoxSession:
         if not self.is_active:
             return
         
-        # TODO: 
-        # 1. Extract cookies from browser
-        # 2. Extract session state
-        # 3. Persist to domain_storage
-        # 4. Close browser via Camofox SDK
+        # Extract cookies from browser
+        if self.camofox:
+            cookies = await self.camofox.cookies()
+            self.config.cookies = [Cookie.from_dict(cookie) for cookie in cookies]
+            
+            # Extract session state
+            # TODO: Implement session state extraction
+            
+            # Close browser
+            await self.camofox.close()
         
         self.is_active = False
-        await asyncio.sleep(0.1)
 
 
 class SessionManager:

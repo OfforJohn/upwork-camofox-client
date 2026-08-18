@@ -1,0 +1,13 @@
+domain_accounts
+domain_actions
+domain_api
+domain_camofox
+domain_contracts
+domain_contracts_upwork
+domain_cursors
+domain_events
+domain_jobs
+domain_messaging
+domain_proposals
+domain_records
+domain_storage
