@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 from typing import Optional, Dict, Any
-from datetime import datetime
+from datetime import datetime, UTC
 import uuid
 
 
@@ -14,8 +14,8 @@ class CursorRecord:
     position: int = 0
     total_results: int = 0
     next_page_token: Optional[str] = None
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -43,13 +43,13 @@ class CursorRecord:
     def advance(self, step: int = 1) -> None:
         """Advance cursor position."""
         self.position += step
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)
 
     def reset(self) -> None:
         """Reset cursor to initial position."""
         self.position = 0
         self.next_page_token = None
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)
 
 
 class CursorRepository:
@@ -60,7 +60,7 @@ class CursorRepository:
 
     async def save(self, cursor: CursorRecord) -> None:
         """Save cursor to storage."""
-        cursor.updated_at = datetime.utcnow()
+        cursor.updated_at = datetime.now(UTC)
         self._storage[cursor.id] = cursor
 
     async def get(self, cursor_id: str) -> Optional[CursorRecord]:

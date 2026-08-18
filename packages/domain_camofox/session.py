@@ -255,26 +255,29 @@ class CamofoxSession:
         if not self.is_active:
             return
 
-        # Extract cookies from browser
-        if self.browser_context:
-            cookies = await self.browser_context.cookies()
-            self.config.cookies = [Cookie.from_dict(cookie) for cookie in cookies]
+        try:
+            # Extract cookies from browser
+            if self.browser_context:
+                cookies = await self.browser_context.cookies()
+                self.config.cookies = [Cookie.from_dict(cookie) for cookie in cookies]
 
-            # Extract session state
-            # TODO: Implement session state extraction
+                # Extract session state
+                # TODO: Implement session state extraction
+        finally:
+            # Always cleanup browser resources, even if cookie extraction fails
+            if self.browser_context:
+                # Close browser context
+                await self.browser_context.close()
 
-            # Close browser context
-            await self.browser_context.close()
+                # Exit Camoufox context manager
+                if self.camofox:
+                    await self.camofox.__aexit__(None, None, None)
 
-            # Exit Camoufox context manager
-            if self.camofox:
-                await self.camofox.__aexit__(None, None, None)
-
-        # Clear references
-        self.browser_context = None
-        self.page = None
-        self.camofox = None
-        self.is_active = False
+            # Clear references
+            self.browser_context = None
+            self.page = None
+            self.camofox = None
+            self.is_active = False
 
 
 class SessionManager:

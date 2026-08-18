@@ -22,31 +22,46 @@ class AuthGuard:
     async def validate(self, title: str, url: str) -> AuthValidationResult:
         """
         Validate authentication state from visible DOM.
-        
+
         This checks the visible browser state to confirm the user is
         authenticated on Upwork, not just that cookies are present.
-        
+
         Args:
             title: Page title from browser
             url: Current URL from browser
-            
+
         Returns:
             AuthValidationResult with authentication status
         """
-        # TODO: Implement actual auth validation using Camofox session
-        # This is a placeholder for the implementation
-        
-        # In real implementation:
-        # 1. Check if URL contains upwork.com
-        # 2. Check for login/signup indicators (redirects to login page)
-        # 3. Check for authenticated user indicators (user avatar, name in header)
-        # 4. Extract username from visible DOM if authenticated
-        # 5. Return validation result
-        
-        # Placeholder - assume authenticated for now
+        # Check for login/signup URL patterns
+        login_patterns = [
+            "/ab/account-security/login",
+            "/ab/account-security/signup",
+            "/login",
+            "/signup",
+        ]
+
+        url_lower = url.lower()
+        for pattern in login_patterns:
+            if pattern in url_lower:
+                return AuthValidationResult(
+                    is_authenticated=False,
+                    error=f"Redirected to login page: {pattern} in URL"
+                )
+
+        # Check for login indicators in page title
+        title_lower = title.lower()
+        if "log in" in title_lower or "sign up" in title_lower:
+            return AuthValidationResult(
+                is_authenticated=False,
+                error=f"Login page detected in title: {title}"
+            )
+
+        # If no login indicators found, assume authenticated
+        # TODO: Add DOM-based checks for user avatar, username in header
         return AuthValidationResult(
             is_authenticated=True,
-            username="placeholder_user",
+            username=None,  # Will be extracted from DOM in future implementation
         )
 
     async def check_login_redirect(self, url: str) -> bool:

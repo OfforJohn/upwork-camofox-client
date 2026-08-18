@@ -13,11 +13,16 @@ class TestAuthFailure:
     """Test authentication failure scenarios."""
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="AuthGuard is still placeholder - always returns authenticated")
     async def test_auth_validation_failure_returns_error(self):
         """Test that auth validation failure returns error result."""
-        # Create runner with fake browser that fails auth
-        browser_factory = lambda: FakeBrowser(should_authenticate=False)
+        # Create runner with fake browser that simulates login page
+        class LoginFakeBrowser(FakeBrowser):
+            async def navigate(self, url: str) -> None:
+                await super().navigate(url)
+                # Override to simulate login page URL
+                self._current_url = "https://www.upwork.com/ab/account-security/login"
+
+        browser_factory = lambda: LoginFakeBrowser()
         runner = ActionRunner()
         runner.session_manager = SessionManager(browser_factory=browser_factory)
 

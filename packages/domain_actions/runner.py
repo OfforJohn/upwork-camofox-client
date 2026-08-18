@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 from typing import Optional, Dict, Any, List
-from datetime import datetime
+from datetime import datetime, UTC
 import json
 import uuid
 from enum import Enum
@@ -30,7 +30,7 @@ class ActionEnvelope:
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     type: ActionType = ActionType.JOBS_SEARCH
     payload: Dict[str, Any] = field(default_factory=dict)
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(UTC))
     account_id: str = ""
     correlation_id: Optional[str] = None
 
