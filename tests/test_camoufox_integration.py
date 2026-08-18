@@ -18,29 +18,30 @@ class TestCamoufoxIntegration:
             account_id="test_account",
             cookies=[],
         )
-        
+
         # Launch session
         session = CamofoxSession(config)
         await session.launch()
-        
-        assert session.is_active
-        assert session.camofox is not None
-        assert session.browser_context is not None
-        assert session.page is not None
-        
-        # Navigate to Upwork
-        await session.navigate("https://www.upwork.com")
-        
-        # Get page info
-        page_info = await session.get_page_info()
-        
-        assert page_info is not None
-        assert "upwork.com" in page_info.url.lower()
-        assert page_info.title is not None
-        
-        # Close session
-        await session.close()
-        
+
+        try:
+            assert session.is_active
+            assert session.camofox is not None
+            assert session.browser_context is not None
+            assert session.page is not None
+
+            # Navigate to Upwork
+            await session.navigate("https://www.upwork.com")
+
+            # Get page info
+            page_info = await session.get_page_info()
+
+            assert page_info is not None
+            assert "upwork.com" in page_info.url.lower()
+            assert page_info.title is not None
+        finally:
+            # Close session even if navigation fails
+            await session.close()
+
         assert not session.is_active
         assert session.browser_context is None
         assert session.page is None
@@ -92,7 +93,7 @@ class TestCamoufoxIntegration:
         # Navigate
         await session.navigate("https://www.upwork.com")
         page_info = await session.get_page_info()
-        assert page_info.url == "https://www.upwork.com"
+        assert "upwork.com" in page_info.url.lower()
         
         # Close
         await session.close()

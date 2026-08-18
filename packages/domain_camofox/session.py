@@ -201,16 +201,19 @@ class CamofoxSession:
         """Navigate to URL within the session."""
         if not self.is_active:
             raise RuntimeError("Session is not active")
-        
+
         if self.browser:
             # Use injected browser interface (for testing)
             await self.browser.navigate(url)
         elif self.page:
-            # Use real Camoufox page
-            await self.page.goto(url)
+            # Use real Camoufox page with domcontentloaded and 60s timeout
+            await self.page.goto(
+                url,
+                wait_until="domcontentloaded",
+                timeout=60_000,
+            )
         else:
-            # Fallback for placeholder implementation
-            await asyncio.sleep(0.1)
+            raise RuntimeError("Browser page is not available")
 
     async def get_page_info(self):
         """Get current page title and URL."""
@@ -246,22 +249,26 @@ class CamofoxSession:
         """Close session and persist cookies/session-state."""
         if not self.is_active:
             return
-        
+
         # Extract cookies from browser
         if self.browser_context:
             cookies = await self.browser_context.cookies()
             self.config.cookies = [Cookie.from_dict(cookie) for cookie in cookies]
-            
+
             # Extract session state
             # TODO: Implement session state extraction
-            
+
             # Close browser context
             await self.browser_context.close()
-            
+
             # Exit Camoufox context manager
             if self.camofox:
                 await self.camofox.__aexit__(None, None, None)
-        
+
+        # Clear references
+        self.browser_context = None
+        self.page = None
+        self.camofox = None
         self.is_active = False
 
 
