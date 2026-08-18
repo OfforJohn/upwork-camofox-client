@@ -134,6 +134,8 @@ class CamofoxSession:
         self.config = config
         self.browser: Optional[BrowserInterface] = browser
         self.camofox: Optional[AsyncCamoufox] = None
+        self.browser_context = None
+        self.page = None
         self.is_active = False
         self.created_at = datetime.utcnow()
 
@@ -155,13 +157,20 @@ class CamofoxSession:
             humanization_dict = self.config.humanization.to_dict()
             launch_options.update(humanization_dict)
         
-        # Launch Camoufox browser
+        # Launch Camoufox browser as async context manager
         self.camofox = AsyncCamoufox(**launch_options)
+        browser = await self.camofox.__aenter__()
         
-        # Load cookies if provided
+        # Create browser context
+        self.browser_context = await browser.new_context()
+        
+        # Load cookies if provided (after context creation)
         if self.config.cookies:
             cookies_list = [cookie.to_dict() for cookie in self.config.cookies]
-            await self.camofox.add_cookies(cookies_list)
+            await self.browser_context.add_cookies(cookies_list)
+        
+        # Create page
+        self.page = await self.browser_context.new_page()
         
         # Restore session state if provided
         if self.config.session_state.local_storage:
@@ -174,17 +183,19 @@ class CamofoxSession:
 
     async def _restore_local_storage(self, local_storage: Dict[str, str]) -> None:
         """Restore localStorage from session state."""
-        if not self.camofox:
+        if not self.page:
             return
         # TODO: Implement localStorage restoration via Camoufox
         # This depends on Camoufox's specific API for localStorage manipulation
+        # Example: await self.page.evaluate(f"""localStorage.setItem(...)""")
 
     async def _restore_session_storage(self, session_storage: Dict[str, str]) -> None:
         """Restore sessionStorage from session state."""
-        if not self.camofox:
+        if not self.page:
             return
         # TODO: Implement sessionStorage restoration via Camoufox
         # This depends on Camoufox's specific API for sessionStorage manipulation
+        # Example: await self.page.evaluate(f"""sessionStorage.setItem(...)""")
 
     async def navigate(self, url: str) -> None:
         """Navigate to URL within the session."""
@@ -194,9 +205,9 @@ class CamofoxSession:
         if self.browser:
             # Use injected browser interface (for testing)
             await self.browser.navigate(url)
-        elif self.camofox:
-            # Use real Camoufox browser
-            await self.camofox.goto(url)
+        elif self.page:
+            # Use real Camoufox page
+            await self.page.goto(url)
         else:
             # Fallback for placeholder implementation
             await asyncio.sleep(0.1)
@@ -205,10 +216,10 @@ class CamofoxSession:
         """Get current page title and URL."""
         if self.browser:
             return await self.browser.get_page_info()
-        elif self.camofox:
+        elif self.page:
             from .interface import PageInfo
-            title = await self.camofox.title()
-            url = self.camofox.url
+            title = await self.page.title()
+            url = self.page.url
             return PageInfo(title=title, url=url)
         else:
             # Fallback for placeholder implementation
@@ -217,16 +228,17 @@ class CamofoxSession:
 
     async def get_cookies(self) -> List[Cookie]:
         """Get current cookies from the session."""
-        if self.camofox:
-            cookies = await self.camofox.cookies()
+        if self.browser_context:
+            cookies = await self.browser_context.cookies()
             return [Cookie.from_dict(cookie) for cookie in cookies]
         return self.config.cookies
 
     async def get_session_state(self) -> SessionState:
         """Get current session state from the browser."""
-        if self.camofox:
+        if self.page:
             # TODO: Implement session state extraction via Camoufox
             # This depends on Camoufox's specific API for localStorage/sessionStorage
+            # Example: local_storage = await self.page.evaluate("Object.entries(localStorage)")
             pass
         return self.config.session_state
 
@@ -236,15 +248,19 @@ class CamofoxSession:
             return
         
         # Extract cookies from browser
-        if self.camofox:
-            cookies = await self.camofox.cookies()
+        if self.browser_context:
+            cookies = await self.browser_context.cookies()
             self.config.cookies = [Cookie.from_dict(cookie) for cookie in cookies]
             
             # Extract session state
             # TODO: Implement session state extraction
             
-            # Close browser
-            await self.camofox.close()
+            # Close browser context
+            await self.browser_context.close()
+            
+            # Exit Camoufox context manager
+            if self.camofox:
+                await self.camofox.__aexit__(None, None, None)
         
         self.is_active = False
 

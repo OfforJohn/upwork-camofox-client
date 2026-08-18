@@ -25,6 +25,8 @@ class TestCamoufoxIntegration:
         
         assert session.is_active
         assert session.camofox is not None
+        assert session.browser_context is not None
+        assert session.page is not None
         
         # Navigate to Upwork
         await session.navigate("https://www.upwork.com")
@@ -40,6 +42,8 @@ class TestCamoufoxIntegration:
         await session.close()
         
         assert not session.is_active
+        assert session.browser_context is None
+        assert session.page is None
 
     @pytest.mark.asyncio
     async def test_get_cookies_from_real_browser(self):
@@ -76,10 +80,14 @@ class TestCamoufoxIntegration:
         
         # Initially inactive
         assert not session.is_active
+        assert session.browser_context is None
+        assert session.page is None
         
         # Launch
         await session.launch()
         assert session.is_active
+        assert session.browser_context is not None
+        assert session.page is not None
         
         # Navigate
         await session.navigate("https://www.upwork.com")
@@ -89,6 +97,39 @@ class TestCamoufoxIntegration:
         # Close
         await session.close()
         assert not session.is_active
+
+    @pytest.mark.asyncio
+    async def test_real_async_lifecycle(self):
+        """Test real async lifecycle: context manager, context, page creation."""
+        config = SessionConfig(
+            account_id="test_account",
+            cookies=[],
+        )
+        
+        session = CamofoxSession(config)
+        
+        # Launch should create context manager, browser context, and page
+        await session.launch()
+        assert session.camofox is not None
+        assert session.browser_context is not None
+        assert session.page is not None
+        
+        # Navigate should use page.goto()
+        await session.navigate("https://www.upwork.com")
+        
+        # Get page info should use page.title() and page.url
+        page_info = await session.get_page_info()
+        assert page_info.title is not None
+        assert page_info.url is not None
+        
+        # Get cookies should use context.cookies()
+        cookies = await session.get_cookies()
+        assert isinstance(cookies, list)
+        
+        # Close should properly exit context manager
+        await session.close()
+        assert session.browser_context is None
+        assert session.page is None
 
 
 if __name__ == "__main__":
