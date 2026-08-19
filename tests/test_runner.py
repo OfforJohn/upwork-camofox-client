@@ -7,7 +7,7 @@ from packages.domain_camofox.session import SessionManager, SessionConfig
 from packages.domain_camofox.interface import FakeBrowser
 from packages.domain_accounts.auth_guard import AuthGuard, AuthValidationResult
 from packages.domain_cursors.repository import CursorRepository
-from packages.domain_jobs.search import JobsSearch, JobSearchParams
+from packages.domain_jobs.search import JobsSearch, JobSearchParams, UpworkBlockedError
 
 
 class TestAuthFailure:
@@ -201,3 +201,55 @@ class TestJobsSearchURL:
         url = jobs_search._build_search_url(params)
 
         assert url == "https://www.upwork.com/jobs/search/"
+
+
+class TestPageStateGuard:
+    """Test page state guard for Cloudflare challenge detection."""
+
+    def test_cloudflare_challenge_raises_blocked_error(self):
+        """Test that Cloudflare challenge page raises UpworkBlockedError."""
+        fake_browser = FakeBrowser()
+        jobs_search = JobsSearch(fake_browser)
+
+        # Cloudflare challenge HTML
+        challenge_html = "<html><title>Just a moment...</title></html>"
+
+        with pytest.raises(UpworkBlockedError, match="Cloudflare challenge"):
+            jobs_search._assert_search_page(challenge_html)
+
+    def test_cf_chl_marker_raises_blocked_error(self):
+        """Test that cf-chl- marker raises UpworkBlockedError."""
+        fake_browser = FakeBrowser()
+        jobs_search = JobsSearch(fake_browser)
+
+        # HTML with cf-chl- marker
+        challenge_html = "<html><div class='cf-chl-opt'></div></html>"
+
+        with pytest.raises(UpworkBlockedError, match="Cloudflare challenge"):
+            jobs_search._assert_search_page(challenge_html)
+
+    def test_valid_search_page_passes_guard(self):
+        """Test that valid search page passes guard without error."""
+        fake_browser = FakeBrowser()
+        jobs_search = JobsSearch(fake_browser)
+
+        # Valid search page HTML
+        valid_html = "<html><title>Upwork Job Search</title></html>"
+
+        # Should not raise
+        jobs_search._assert_search_page(valid_html)
+
+    def test_valid_page_with_zero_listings_returns_empty_list(self):
+        """Test that valid page with no job listings returns empty list."""
+        fake_browser = FakeBrowser()
+        jobs_search = JobsSearch(fake_browser)
+
+        # Valid search page HTML with no job tiles
+        empty_results_html = "<html><title>Upwork Job Search</title><div>No jobs found</div></html>"
+
+        # Guard should pass
+        jobs_search._assert_search_page(empty_results_html)
+
+        # Parser should return empty list
+        listings = jobs_search._extract_listings_from_dom(empty_results_html)
+        assert listings == []

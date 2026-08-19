@@ -6,7 +6,13 @@ from datetime import datetime
 import json
 import re
 from pathlib import Path
+from urllib.parse import urlencode
 from bs4 import BeautifulSoup
+
+
+class UpworkBlockedError(Exception):
+    """Raised when Upwork returns a Cloudflare challenge page or blocks access."""
+    pass
 
 
 @dataclass
@@ -49,6 +55,12 @@ class JobsSearch:
     def __init__(self, session):
         self.session = session
 
+    def _assert_search_page(self, html: str) -> None:
+        """Assert that the HTML is a valid search page, not a Cloudflare challenge."""
+        lowered = html.lower()
+        if "just a moment..." in lowered or "cf-chl-" in lowered:
+            raise UpworkBlockedError("Upwork returned a Cloudflare challenge page")
+
     async def search(self, params: JobSearchParams, limit: int = 50) -> List[JobListing]:
         """Search for jobs on Upwork."""
         # Build search URL from parameters
@@ -59,6 +71,9 @@ class JobsSearch:
 
         # Get page HTML content from session (either fake browser fixture or real browser)
         html = await self.session.get_page_content()
+
+        # Assert page is not a Cloudflare challenge
+        self._assert_search_page(html)
 
         if html:
             return self._extract_listings_from_dom(html)
@@ -77,13 +92,13 @@ class JobsSearch:
     def _build_search_url(self, params: JobSearchParams) -> str:
         """Build Upwork search URL from parameters."""
         base_url = "https://www.upwork.com/jobs/search/"
-        query_parts = []
+        query_params = {}
 
         if params.query:
-            query_parts.append(f"q={params.query}")
+            query_params["q"] = params.query
 
-        if query_parts:
-            return f"{base_url}?{'&'.join(query_parts)}"
+        if query_params:
+            return f"{base_url}?{urlencode(query_params)}"
 
         return base_url
 
