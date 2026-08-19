@@ -3,6 +3,7 @@
 import pytest
 from packages.domain_camofox.session import CamofoxSession, SessionConfig, CAMOUFOX_AVAILABLE
 from packages.domain_camofox.interface import PageInfo, FakeBrowser
+from packages.domain_jobs.search import JobsSearch, JobSearchParams
 
 
 @pytest.mark.integration
@@ -96,6 +97,34 @@ class TestCamoufoxIntegration:
             await session.close()
 
         assert not session.is_active
+
+    @pytest.mark.asyncio
+    async def test_live_job_extraction_with_query(self):
+        """Test that real Upwork job extraction works with a query parameter."""
+        # Create session config
+        config = SessionConfig(
+            account_id="test_account",
+            cookies=[],
+        )
+
+        # Launch session
+        session = CamofoxSession(config)
+        await session.launch()
+
+        try:
+            # Create JobsSearch instance
+            jobs_search = JobsSearch(session)
+
+            # Search with a query
+            params = JobSearchParams(query="python")
+            listings = await jobs_search.search(params)
+
+            # Assert we got some listings (real page should have jobs)
+            assert isinstance(listings, list)
+            # Note: We don't assert a specific count since real results vary
+            # Just verify the extraction pipeline works end-to-end
+        finally:
+            await session.close()
 
 
 if __name__ == "__main__":

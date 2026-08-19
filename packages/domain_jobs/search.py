@@ -50,6 +50,12 @@ class JobsSearch:
 
     async def search(self, params: JobSearchParams, limit: int = 50) -> List[JobListing]:
         """Search for jobs on Upwork."""
+        # Build search URL from parameters
+        search_url = self._build_search_url(params)
+
+        # Navigate to search URL
+        await self.session.navigate(search_url)
+
         # Get page HTML content from session (either fake browser fixture or real browser)
         html = await self.session.get_page_content()
 
@@ -69,8 +75,16 @@ class JobsSearch:
 
     def _build_search_url(self, params: JobSearchParams) -> str:
         """Build Upwork search URL from parameters."""
-        # TODO: Implement URL construction
-        return "https://www.upwork.com/search/jobs/"
+        base_url = "https://www.upwork.com/search/jobs/"
+        query_parts = []
+
+        if params.query:
+            query_parts.append(f"q={params.query}")
+
+        if query_parts:
+            return f"{base_url}?{'&'.join(query_parts)}"
+
+        return base_url
 
     def _extract_listings_from_dom(self, html: str) -> List[JobListing]:
         """Extract job listings from HTML DOM."""

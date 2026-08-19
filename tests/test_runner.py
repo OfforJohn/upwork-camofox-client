@@ -7,6 +7,7 @@ from packages.domain_camofox.session import SessionManager, SessionConfig
 from packages.domain_camofox.interface import FakeBrowser
 from packages.domain_accounts.auth_guard import AuthGuard, AuthValidationResult
 from packages.domain_cursors.repository import CursorRepository
+from packages.domain_jobs.search import JobsSearch, JobSearchParams
 
 
 class TestAuthFailure:
@@ -182,3 +183,28 @@ class TestIntegration:
         assert result.data is not None
         assert result.data["total_jobs_count"] == 2
         assert result.data["new_jobs_count"] == 2
+
+
+class TestJobsSearchURL:
+    """Test JobsSearch URL construction."""
+
+    def test_build_search_url_includes_query_filter(self):
+        """Test that _build_search_url includes query parameter in URL."""
+        fake_browser = FakeBrowser()
+        jobs_search = JobsSearch(fake_browser)
+
+        params = JobSearchParams(query="python")
+        url = jobs_search._build_search_url(params)
+
+        assert "q=python" in url
+        assert "https://www.upwork.com/search/jobs/" in url
+
+    def test_build_search_url_without_query(self):
+        """Test that _build_search_url returns base URL when no query."""
+        fake_browser = FakeBrowser()
+        jobs_search = JobsSearch(fake_browser)
+
+        params = JobSearchParams()
+        url = jobs_search._build_search_url(params)
+
+        assert url == "https://www.upwork.com/search/jobs/"
