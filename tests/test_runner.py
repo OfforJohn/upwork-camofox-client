@@ -84,53 +84,46 @@ class TestCursorSaveOrdering:
     @pytest.mark.asyncio
     async def test_records_saved_before_cursor(self):
         """Test that records are saved before cursor is advanced."""
-        # Create runner with fake browser
+        # Create runner with fake browser (returns fixture HTML, so records are created)
         browser_factory = lambda: FakeBrowser(should_authenticate=True)
         runner = ActionRunner()
         runner.session_manager = SessionManager(browser_factory=browser_factory)
-        
+
         # Track save order
         save_order = []
-        
+
         original_cursor_repo = runner.cursor_repository
-        
+
         class TrackingCursorRepository(CursorRepository):
             async def save(self, cursor):
                 save_order.append("cursor")
                 await super().save(cursor)
-        
+
         runner.cursor_repository = TrackingCursorRepository()
-        
+
         # Track record saves
         original_job_storage = runner.job_storage
-        
+
         class TrackingStorage(dict):
             def __setitem__(self, key, value):
                 save_order.append("record")
                 super().__setitem__(key, value)
-        
+
         runner.job_storage = TrackingStorage()
-        
+
         # Create action envelope
         action = ActionEnvelope(
             type=ActionType.JOBS_SEARCH,
             account_id="test_account",
             payload={"query": "python"},
         )
-        
+
         # Execute action
         result = await runner.execute(action)
-        
-        # Assert records were saved before cursor
-        if save_order:
-            # Check that all "record" entries come before any "cursor" entry
-            cursor_index = next((i for i, x in enumerate(save_order) if x == "cursor"), None)
-            if cursor_index is not None:
-                for i, item in enumerate(save_order):
-                    if item == "cursor":
-                        assert i == cursor_index, "Cursor should only be saved once at the end"
-                    elif item == "record":
-                        assert i < cursor_index, "Records must be saved before cursor"
+
+        # Assert exact event order: record, record, cursor
+        assert len(save_order) == 3, f"Expected 3 save events (2 records + 1 cursor), got {len(save_order)}"
+        assert save_order == ["record", "record", "cursor"], f"Expected [record, record, cursor], got {save_order}"
 
 
 class TestIntegration:
@@ -197,7 +190,7 @@ class TestJobsSearchURL:
         url = jobs_search._build_search_url(params)
 
         assert "q=python" in url
-        assert "https://www.upwork.com/search/jobs/" in url
+        assert "https://www.upwork.com/jobs/search/" in url
 
     def test_build_search_url_without_query(self):
         """Test that _build_search_url returns base URL when no query."""
@@ -207,4 +200,4 @@ class TestJobsSearchURL:
         params = JobSearchParams()
         url = jobs_search._build_search_url(params)
 
-        assert url == "https://www.upwork.com/search/jobs/"
+        assert url == "https://www.upwork.com/jobs/search/"

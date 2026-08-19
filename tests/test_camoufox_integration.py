@@ -123,6 +123,15 @@ class TestCamoufoxIntegration:
             assert isinstance(listings, list)
             # Note: We don't assert a specific count since real results vary
             # Just verify the extraction pipeline works end-to-end
+
+            # Save live HTML for parser development
+            html = await session.get_page_content()
+            if html:
+                from pathlib import Path
+                fixture_path = Path(__file__).parent.parent / "tests" / "fixtures" / "upwork_live_search.html"
+                with open(fixture_path, "w", encoding="utf-8") as f:
+                    f.write(html)
+                print(f"\nSaved live HTML to {fixture_path}")
         finally:
             await session.close()
 

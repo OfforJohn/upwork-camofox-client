@@ -6,6 +6,7 @@ from datetime import datetime
 import json
 import re
 from pathlib import Path
+from bs4 import BeautifulSoup
 
 
 @dataclass
@@ -75,7 +76,7 @@ class JobsSearch:
 
     def _build_search_url(self, params: JobSearchParams) -> str:
         """Build Upwork search URL from parameters."""
-        base_url = "https://www.upwork.com/search/jobs/"
+        base_url = "https://www.upwork.com/jobs/search/"
         query_parts = []
 
         if params.query:
@@ -90,26 +91,36 @@ class JobsSearch:
         """Extract job listings from HTML DOM."""
         listings = []
 
-        # Simple regex-based extraction for fixture testing
-        # In production, use proper HTML parser like BeautifulSoup
-        job_pattern = r'<div class="job-tile">.*?<h3 class="job-title">(.*?)</h3>.*?<div class="job-description">(.*?)</div>.*?<span class="budget">(.*?)</span>.*?<a class="job-link" href="(.*?)">View Job</a>.*?</div>'
+        soup = BeautifulSoup(html, 'html.parser')
 
-        matches = re.findall(job_pattern, html, re.DOTALL)
+        # Try to find job tiles (fixture format)
+        job_tiles = soup.find_all('div', class_='job-tile')
 
-        for idx, (title, description, budget, url) in enumerate(matches):
-            # Extract job ID from URL
-            job_id_match = re.search(r'/jobs/([a-z0-9-]+)', url)
-            job_id = job_id_match.group(1) if job_id_match else f"job_{idx}"
+        for idx, tile in enumerate(job_tiles):
+            title_elem = tile.find('h3', class_='job-title')
+            desc_elem = tile.find('div', class_='job-description')
+            budget_elem = tile.find('span', class_='budget')
+            link_elem = tile.find('a', class_='job-link')
 
-            listings.append(JobListing(
-                job_id=job_id,
-                title=title.strip(),
-                description=description.strip(),
-                client_id="unknown",
-                client_name="Unknown Client",
-                posted_date=datetime.now(),
-                url=f"https://www.upwork.com{url}",
-                budget={"amount": budget.strip()},
-            ))
+            if title_elem and desc_elem and link_elem:
+                title = title_elem.get_text(strip=True)
+                description = desc_elem.get_text(strip=True)
+                budget = budget_elem.get_text(strip=True) if budget_elem else "Unknown"
+                url = link_elem.get('href', '')
+
+                # Extract job ID from URL
+                job_id_match = re.search(r'/jobs/([a-z0-9-]+)', url)
+                job_id = job_id_match.group(1) if job_id_match else f"job_{idx}"
+
+                listings.append(JobListing(
+                    job_id=job_id,
+                    title=title,
+                    description=description,
+                    client_id="unknown",
+                    client_name="Unknown Client",
+                    posted_date=datetime.now(),
+                    url=f"https://www.upwork.com{url}",
+                    budget={"amount": budget},
+                ))
 
         return listings
