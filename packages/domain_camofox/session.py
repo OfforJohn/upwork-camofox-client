@@ -232,7 +232,16 @@ class CamofoxSession:
         else:
             # Fallback for placeholder implementation
             from .interface import PageInfo
-            return PageInfo(title="Upwork", url="https://www.upwork.com")
+            return PageInfo(title="", url="")
+
+    async def get_page_content(self) -> str:
+        """Get current page HTML content."""
+        if self.browser:
+            return await self.browser.get_page_content()
+        elif self.page:
+            return await self.page.content()
+        else:
+            return ""
 
     async def get_cookies(self) -> List[Cookie]:
         """Get current cookies from the session."""

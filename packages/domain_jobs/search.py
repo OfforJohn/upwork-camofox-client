@@ -50,16 +50,13 @@ class JobsSearch:
 
     async def search(self, params: JobSearchParams, limit: int = 50) -> List[JobListing]:
         """Search for jobs on Upwork."""
-        # For now, use fixture-based extraction for testing
-        # TODO: Implement actual search using Camofox session
-        fixture_path = Path(__file__).parent.parent.parent / "tests" / "fixtures" / "upwork_job_listing.html"
+        # Get page HTML content from session (either fake browser fixture or real browser)
+        html = await self.session.get_page_content()
 
-        if fixture_path.exists():
-            with open(fixture_path, "r", encoding="utf-8") as f:
-                html = f.read()
+        if html:
             return self._extract_listings_from_dom(html)
 
-        # Placeholder return if fixture not found
+        # Placeholder return if no content available
         return []
 
     async def get_job_details(self, job_id: str) -> JobListing:

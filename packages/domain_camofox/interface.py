@@ -26,6 +26,11 @@ class BrowserInterface(ABC):
         pass
 
     @abstractmethod
+    async def get_page_content(self) -> str:
+        """Get current page HTML content."""
+        pass
+
+    @abstractmethod
     async def close(self) -> None:
         """Close the browser session."""
         pass
@@ -57,6 +62,16 @@ class FakeBrowser(BrowserInterface):
     async def get_page_info(self) -> PageInfo:
         """Get current page title and URL."""
         return PageInfo(title=self._current_title, url=self._current_url)
+
+    async def get_page_content(self) -> str:
+        """Get current page HTML content."""
+        # Return fixture HTML for test compatibility
+        from pathlib import Path
+        fixture_path = Path(__file__).parent.parent.parent / "tests" / "fixtures" / "upwork_job_listing.html"
+        if fixture_path.exists():
+            with open(fixture_path, "r", encoding="utf-8") as f:
+                return f.read()
+        return ""
 
     async def close(self) -> None:
         """Close the browser session."""
