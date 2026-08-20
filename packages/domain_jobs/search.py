@@ -53,7 +53,7 @@ class JobsSearch:
 
     def __init__(self, session):
         self.session = session
-        self.job_card_locator = "section[data-ev-sublocation='job_feed_tile']"
+        self.job_card_locator = "[data-test*='job-tile']"
 
     def _assert_search_page(self, html: str) -> None:
         """Assert that the HTML is a valid search page, not a Cloudflare challenge."""
@@ -123,10 +123,12 @@ class JobsSearch:
             # Extract data from all job cards using evaluate_all
             cards_data = await job_cards_locator.evaluate_all("""
                 (elements) => elements.map(el => {
-                    const titleLink = el.querySelector('h3.job-tile-title a');
-                    const postedOn = el.querySelector('[data-test="posted-on"]');
+                    const titleLink = el.querySelector('h2.job-tile-title a, h3.job-tile-title a');
+                    const postedOn = el.querySelector('[data-test="posted-on"], [data-test="job-pubilshed-date"]');
                     const proposalsTier = el.querySelector('[data-test="proposals-tier"]');
-                    const description = el.querySelector('.job-description');
+                    const description = el.querySelector('.job-description, [data-test="job-description-text"]');
+                    const clientInfo = el.querySelector('[data-test="client-name"]');
+                    const tags = Array.from(el.querySelectorAll('[data-test="token"]')).map(t => t.textContent.trim());
                     
                     return {
                         title: titleLink ? titleLink.textContent.trim() : null,
@@ -134,6 +136,9 @@ class JobsSearch:
                         posted_on: postedOn ? postedOn.textContent.trim() : null,
                         proposals: proposalsTier ? proposalsTier.textContent.trim() : null,
                         description: description ? description.textContent.trim() : null,
+                        client_name: clientInfo ? clientInfo.textContent.trim() : null,
+                        client_id: el.getAttribute('data-ev-job-uid'),
+                        tags: tags,
                         opening_uid: el.getAttribute('data-ev-opening_uid'),
                         position: el.getAttribute('data-ev-position'),
                         feed_name: el.getAttribute('data-ev-feed_name')
@@ -149,18 +154,26 @@ class JobsSearch:
                 job_id_match = re.search(r'/jobs/([a-z0-9-]+)', card_data['url'])
                 job_id = job_id_match.group(1) if job_id_match else card_data.get('opening_uid', f"job_{idx}")
 
+                # Parse posted date from text (e.g., "Posted 1 hour ago")
+                posted_date = datetime.now()  # Default to now if parsing fails
+                posted_on_text = card_data.get('posted_on', '')
+                if posted_on_text:
+                    # Simple parsing - could be enhanced with proper date parsing
+                    posted_date = datetime.now()  # Keep as now for now, can be improved
+
                 listings.append(JobListing(
                     job_id=job_id,
                     title=card_data.get('title', 'Unknown'),
                     description=card_data.get('description', ''),
-                    client_id="unknown",
-                    client_name="Unknown Client",
-                    posted_date=datetime.now(),
+                    client_id=card_data.get('client_id') or 'unknown',
+                    client_name=card_data.get('client_name') or 'Unknown Client',
+                    posted_date=posted_date,
                     url=f"https://www.upwork.com{card_data['url']}",
                     budget={
                         "proposals": card_data.get('proposals'),
                         "posted_on": card_data.get('posted_on')
                     },
+                    tags=card_data.get('tags', []),
                 ))
 
         except Exception as e:

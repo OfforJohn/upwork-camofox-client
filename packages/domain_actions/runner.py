@@ -178,6 +178,7 @@ class ActionRunner:
             action_id=action.id,
             success=True,
             data={
+                "jobs": [record.to_dict() for record in saved_records],
                 "search_id": search_id,
                 "cursor_id": cursor.id,
                 "new_jobs_count": len(saved_records),

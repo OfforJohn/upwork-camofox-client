@@ -33,7 +33,7 @@ class JobRecord:
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "id": self.id,
+            "job_id": self.id,
             "title": self.title,
             "description": self.description,
             "client_id": self.client_id,
@@ -43,14 +43,12 @@ class JobRecord:
             "status": self.status.value,
             "budget": self.budget,
             "tags": self.tags,
-            "created_at": self.created_at.isoformat(),
-            "updated_at": self.updated_at.isoformat(),
         }
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "JobRecord":
         return cls(
-            id=data["id"],
+            id=data.get("job_id", data.get("id")),
             title=data["title"],
             description=data["description"],
             client_id=data["client_id"],
@@ -60,8 +58,8 @@ class JobRecord:
             status=JobStatus(data.get("status", "open")),
             budget=data.get("budget"),
             tags=data.get("tags", []),
-            created_at=datetime.fromisoformat(data["created_at"]),
-            updated_at=datetime.fromisoformat(data["updated_at"]),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
 
 
