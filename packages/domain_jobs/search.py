@@ -91,7 +91,7 @@ class JobsSearch:
 
     def _build_search_url(self, params: JobSearchParams) -> str:
         """Build Upwork search URL from parameters."""
-        base_url = "https://www.upwork.com/jobs/search/"
+        base_url = "https://www.upwork.com/nx/search/jobs/"
         query_params = {}
 
         if params.query:

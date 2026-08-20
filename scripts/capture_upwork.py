@@ -11,7 +11,7 @@ async def main():
     await session.launch()
 
     try:
-        await session.navigate("https://www.upwork.com/jobs/search/?q=python")
+        await session.navigate("https://www.upwork.com/nx/search/jobs/?q=python")
 
         await asyncio.to_thread(
             input,
@@ -19,6 +19,10 @@ async def main():
         )
 
         html = await session.get_page_content()
+        page_info = await session.get_page_info()
+        print(f"Final page URL: {page_info.url}")
+        print(f"Final page title: {page_info.title}")
+        
         output = Path("tests/fixtures/upwork_authenticated_search.html")
         output.write_text(html, encoding="utf-8")
         print(f"saved {len(html):,} characters to {output}")
