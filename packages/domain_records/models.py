@@ -21,9 +21,9 @@ class JobRecord:
     id: str
     title: str
     description: str
-    client_id: str
-    client_name: str
     url: str
+    client_id: str | None = None
+    client_name: str | None = None
     posted_date: datetime | None = None
     posted_date_text: str | None = None
     status: JobStatus = JobStatus.OPEN

@@ -113,6 +113,12 @@ def parse_summary_card(html: str) -> JobSummary:
     # Normalize URL to absolute at parser boundary
     url = urljoin("https://www.upwork.com", raw_url)
     
+    # Reject contaminated title fields
+    if "&amp;" in title:
+        raise ValueError(f"Title contains HTML entity: {title}")
+    if "span-class-highlight" in title:
+        raise ValueError(f"Title contains CSS class artifact: {title}")
+    
     # Extract description from JobDescription
     desc_element = job_card.css_first('[data-test="UpCLineClamp JobDescription"]')
     if not desc_element:
@@ -121,6 +127,12 @@ def parse_summary_card(html: str) -> JobSummary:
     description = desc_element.text(strip=True)
     if not description:
         raise ValueError("Empty job description")
+    
+    # Reject contaminated description fields (feedback menu phrases)
+    feedback_phrases = ["Just not interested", "Not a good fit", "Too expensive", "Not qualified"]
+    for phrase in feedback_phrases:
+        if phrase in description:
+            raise ValueError(f"Description contains feedback menu phrase: {phrase}")
     
     # Extract posted date from job-pubilshed-date
     posted_element = job_card.css_first('[data-test="job-pubilshed-date"]')
@@ -158,13 +170,12 @@ def parse_summary_card(html: str) -> JobSummary:
     
     # If still no client name, leave it as None (no fallback)
     
-    # Extract tags
-    tags = []
-    tag_elements = job_card.css('[data-test="token"]')
-    for tag_element in tag_elements:
-        tag_text = tag_element.text(strip=True)
-        if tag_text:
-            tags.append(tag_text)
+    # Extract tags with ordered deduplication
+    tags = list(dict.fromkeys(
+        tag.text(strip=True)
+        for tag in job_card.css('[data-test="token"]')
+        if tag.text(strip=True)
+    ))
     
     # Extract budget info
     budget = {}

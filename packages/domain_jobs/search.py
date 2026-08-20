@@ -139,7 +139,7 @@ class JobsSearch:
             )
 
             # Parse each card using selectolax parser
-            for card_html in cards_html:
+            for index, card_html in enumerate(cards_html):
                 try:
                     summary = parse_summary_card(card_html)
                     
@@ -157,9 +157,9 @@ class JobsSearch:
                         budget=summary.budget,
                         tags=summary.tags,
                     ))
-                except ValueError as e:
-                    # Fail loudly on missing required fields
-                    raise RuntimeError(f"Failed to parse job card: {e}")
+                except ValueError as exc:
+                    # Fail loudly on missing required fields with card index for diagnosis
+                    raise RuntimeError(f"Failed to parse job card {index}: {exc}") from exc
 
         except Exception as e:
             raise RuntimeError(f"Failed to extract job cards from DOM: {e}")

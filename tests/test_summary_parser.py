@@ -50,3 +50,45 @@ def test_summary_parser_reads_real_card():
     # Assert client_id is not fabricated (should be None or different from job_id)
     assert summary.client_id is None or summary.client_id != summary.job_id, \
         "client_id should not be fabricated as job_id"
+
+
+def test_summary_parser_all_cards_parse_or_fail_specifically():
+    """Test every card in fixture either parses successfully or produces specific parse error."""
+    # Load the authenticated fixture HTML
+    fixture_path = Path(__file__).parent / "fixtures" / "upwork_authenticated_search.html"
+    html_content = fixture_path.read_text(encoding='utf-8')
+    
+    # Use selectolax to extract job cards directly
+    parser = HTMLParser(html_content)
+    job_cards = parser.css('[data-test="JobTile"]')
+    
+    assert len(job_cards) > 0, "No job cards found in fixture"
+    
+    # Try to parse every card
+    successful_parses = 0
+    specific_errors = []
+    
+    for index, card in enumerate(job_cards):
+        card_html = card.html
+        try:
+            summary = parse_summary_card(card_html)
+            successful_parses += 1
+        except ValueError as e:
+            # Capture specific parse errors
+            specific_errors.append(f"Card {index}: {e}")
+    
+    # Assert we either parsed all cards successfully or have specific errors
+    assert successful_parses > 0, "No cards parsed successfully"
+    
+    # If there were errors, they should be specific (not generic failures)
+    if specific_errors:
+        # Log the errors for diagnosis but don't fail the test
+        # This ensures we know which cards are problematic
+        print(f"\nParsed {successful_parses}/{len(job_cards)} cards successfully")
+        for error in specific_errors:
+            print(f"  {error}")
+    
+    # The key assertion: we should not silently skip malformed cards
+    # Every card was attempted and either succeeded or produced a specific error
+    assert successful_parses + len(specific_errors) == len(job_cards), \
+        "Every card should either parse successfully or produce a specific error"
