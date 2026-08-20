@@ -168,6 +168,55 @@ class TestIntegration:
         # Skip this test for now - DOM extraction requires real Playwright page object
         pytest.skip("DOM extraction requires real Playwright page object, not FakeBrowser")
 
+    @pytest.mark.asyncio
+    async def test_clean_output_contract_regression(self):
+        """Regression test for clean output contract - ensures jobs array structure is maintained."""
+        from packages.domain_records.models import JobRecord, JobStatus
+        from datetime import datetime, UTC
+        import uuid
+
+        # Create a sample JobRecord with all required fields
+        job_record = JobRecord(
+            id="test-job-123",
+            title="Python Developer Needed",
+            description="Looking for senior Python developer with LLM experience",
+            client_id="client-456",
+            client_name="Test Client",
+            posted_date=datetime.now(UTC),
+            url="https://www.upwork.com/jobs/test-job-123",
+            status=JobStatus.OPEN,
+            budget={
+                "proposals": "5 to 10",
+                "posted_on": "1 hour ago"
+            },
+            tags=["Python", "LLM", "Data Science"]
+        )
+
+        # Test JobRecord.to_dict() produces clean output
+        output = job_record.to_dict()
+
+        # Verify required fields are present
+        required_fields = ["job_id", "title", "description", "client_id", "client_name", "posted_date", "url", "status", "budget", "tags"]
+        for field in required_fields:
+            assert field in output, f"Missing required field: {field}"
+
+        # Verify deprecated fields are NOT present
+        deprecated_fields = ["id", "created_at", "updated_at"]
+        for field in deprecated_fields:
+            assert field not in output, f"Found deprecated field: {field}"
+
+        # Verify job_id is used instead of id
+        assert output["job_id"] == "test-job-123"
+        assert "id" not in output
+
+        # Verify status is string value, not enum
+        assert output["status"] == "open"
+        assert isinstance(output["status"], str)
+
+        # Verify tags is a list
+        assert isinstance(output["tags"], list)
+        assert len(output["tags"]) == 3
+
 
 class TestJobsSearchURL:
     """Test JobsSearch URL construction."""
