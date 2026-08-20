@@ -7,6 +7,7 @@ import json
 import re
 from pathlib import Path
 from urllib.parse import urlencode
+from .summary_parser import parse_summary_card
 
 
 class UpworkBlockedError(Exception):
@@ -73,6 +74,11 @@ class JobsSearch:
         if self.session.page is not None:
             await self.session.page.wait_for_load_state('networkidle', timeout=10000)
 
+        # Assert we're on a valid search page, not a Cloudflare challenge
+        if self.session.page is not None:
+            page_content = await self.session.page.content()
+            self._assert_search_page(page_content)
+
         # Extract job cards using DOM evaluation
         job_cards = await self._extract_job_cards_from_dom()
 
@@ -110,7 +116,7 @@ class JobsSearch:
         return base_url
 
     async def _extract_job_cards_from_dom(self) -> List[JobListing]:
-        """Extract job cards from DOM using Playwright locator.evaluate_all()."""
+        """Extract job cards from DOM using outerHTML and parse with selectolax."""
         listings = []
 
         # Check if we have a real Playwright page object
@@ -126,61 +132,32 @@ class JobsSearch:
             if card_count == 0:
                 return []
 
-            # Extract data from all job cards using evaluate_all
-            cards_data = await job_cards_locator.evaluate_all("""
-                (elements) => elements.map(el => {
-                    const titleLink = el.querySelector('h2.job-tile-title a, h3.job-tile-title a');
-                    const postedOn = el.querySelector('[data-test="posted-on"], [data-test="job-pubilshed-date"]');
-                    const proposalsTier = el.querySelector('[data-test="proposals-tier"]');
-                    const description = el.querySelector('.job-description, [data-test="job-description-text"]');
-                    const clientInfo = el.querySelector('[data-test="client-name"]');
-                    const tags = Array.from(el.querySelectorAll('[data-test="token"]')).map(t => t.textContent.trim());
+            # Extract outerHTML from all job cards
+            cards_html = await job_cards_locator.evaluate_all(
+                "elements => elements.map(element => element.outerHTML)"
+            )
+
+            # Parse each card using selectolax parser
+            for card_html in cards_html:
+                try:
+                    summary = parse_summary_card(card_html)
                     
-                    return {
-                        title: titleLink ? titleLink.textContent.trim() : null,
-                        url: titleLink ? titleLink.getAttribute('href') : null,
-                        posted_on: postedOn ? postedOn.textContent.trim() : null,
-                        proposals: proposalsTier ? proposalsTier.textContent.trim() : null,
-                        description: description ? description.textContent.trim() : null,
-                        client_name: clientInfo ? clientInfo.textContent.trim() : null,
-                        client_id: el.getAttribute('data-ev-job-uid'),
-                        tags: tags,
-                        opening_uid: el.getAttribute('data-ev-opening_uid'),
-                        position: el.getAttribute('data-ev-position'),
-                        feed_name: el.getAttribute('data-ev-feed_name')
-                    };
-                })
-            """)
-
-            for idx, card_data in enumerate(cards_data):
-                if not card_data.get('url'):
-                    continue
-
-                # Extract job ID from URL
-                job_id_match = re.search(r'/jobs/([a-z0-9-]+)', card_data['url'])
-                job_id = job_id_match.group(1) if job_id_match else card_data.get('opening_uid', f"job_{idx}")
-
-                # Parse posted date from text (e.g., "Posted 1 hour ago")
-                posted_date = datetime.now()  # Default to now if parsing fails
-                posted_on_text = card_data.get('posted_on', '')
-                if posted_on_text:
-                    # Simple parsing - could be enhanced with proper date parsing
-                    posted_date = datetime.now()  # Keep as now for now, can be improved
-
-                listings.append(JobListing(
-                    job_id=job_id,
-                    title=card_data.get('title', 'Unknown'),
-                    description=card_data.get('description', ''),
-                    client_id=card_data.get('client_id') or 'unknown',
-                    client_name=card_data.get('client_name') or 'Unknown Client',
-                    posted_date=posted_date,
-                    url=f"https://www.upwork.com{card_data['url']}",
-                    budget={
-                        "proposals": card_data.get('proposals'),
-                        "posted_on": card_data.get('posted_on')
-                    },
-                    tags=card_data.get('tags', []),
-                ))
+                    # Convert JobSummary to JobListing
+                    # No fallback values - fail loudly if required fields are missing
+                    listings.append(JobListing(
+                        job_id=summary.job_id,
+                        title=summary.title,
+                        description=summary.description,
+                        client_id=summary.client_id,  # Must be present, no fallback
+                        client_name=summary.client_name,  # Must be present, no fallback
+                        posted_date=datetime.now(),  # TODO: Parse real posted date from text
+                        url=f"https://www.upwork.com{summary.url}",
+                        budget=summary.budget,
+                        tags=summary.tags,
+                    ))
+                except ValueError as e:
+                    # Fail loudly on missing required fields
+                    raise RuntimeError(f"Failed to parse job card: {e}")
 
         except Exception as e:
             raise RuntimeError(f"Failed to extract job cards from DOM: {e}")

@@ -25,6 +25,7 @@ packages/domain_proposals/submit.py
 packages/domain_records/__init__.py
 packages/domain_records/models.py
 packages/domain_records/normalizer.py
+tests/test_camoufox_integration.py
 tests/test_runner.py
 upwork_camofox_client.egg-info/PKG-INFO
 upwork_camofox_client.egg-info/SOURCES.txt

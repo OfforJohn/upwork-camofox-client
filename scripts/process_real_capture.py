@@ -125,6 +125,12 @@ def process_captured_html():
     print(json.dumps(response, indent=2, default=str))
     print(f"{'='*60}")
     
+    # Save to file
+    output_path = Path(__file__).parent.parent / "tests" / "fixtures" / "clean_output_results.json"
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(response, f, indent=2, default=str)
+    print(f"\n✅ Saved clean output to: {output_path}")
+    
     # Verify the output format
     if response["jobs"]:
         first_job = response["jobs"][0]
