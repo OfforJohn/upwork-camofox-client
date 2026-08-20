@@ -36,10 +36,11 @@ class JobListing:
     job_id: str
     title: str
     description: str
-    client_id: str
-    client_name: str
-    posted_date: datetime
+    posted_date: str  # Truthful source value like "17 minutes ago"
     url: str
+    client_id: str | None = None
+    client_name: str | None = None
+    posted_at: datetime | None = None  # Only when absolute timestamp parsed
     budget: Optional[Dict[str, Any]] = None
     status: str = "open"
     tags: List[str] = None
@@ -148,10 +149,11 @@ class JobsSearch:
                         job_id=summary.job_id,
                         title=summary.title,
                         description=summary.description,
-                        client_id=summary.client_id,  # Must be present, no fallback
-                        client_name=summary.client_name,  # Must be present, no fallback
-                        posted_date=datetime.now(),  # TODO: Parse real posted date from text
-                        url=f"https://www.upwork.com{summary.url}",
+                        client_id=summary.client_id,  # Optional, no fallback
+                        client_name=summary.client_name,  # Optional, no fallback
+                        posted_date=summary.posted_date,  # Truthful source value
+                        posted_at=None,  # No absolute timestamp from card
+                        url=summary.url,  # Already normalized by parser
                         budget=summary.budget,
                         tags=summary.tags,
                     ))

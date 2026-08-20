@@ -23,8 +23,9 @@ class JobRecord:
     description: str
     client_id: str
     client_name: str
-    posted_date: datetime
     url: str
+    posted_date: datetime | None = None
+    posted_date_text: str | None = None
     status: JobStatus = JobStatus.OPEN
     budget: Optional[Dict[str, Any]] = None
     tags: List[str] = field(default_factory=list)
@@ -38,7 +39,8 @@ class JobRecord:
             "description": self.description,
             "client_id": self.client_id,
             "client_name": self.client_name,
-            "posted_date": self.posted_date.isoformat(),
+            "posted_date": self.posted_date.isoformat() if self.posted_date else None,
+            "posted_date_text": self.posted_date_text,
             "url": self.url,
             "status": self.status.value,
             "budget": self.budget,
@@ -47,13 +49,15 @@ class JobRecord:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "JobRecord":
+        posted_raw = data.get("posted_date")
         return cls(
             id=data.get("job_id", data.get("id")),
             title=data["title"],
             description=data["description"],
             client_id=data["client_id"],
             client_name=data["client_name"],
-            posted_date=datetime.fromisoformat(data["posted_date"]),
+            posted_date=datetime.fromisoformat(posted_raw) if posted_raw else None,
+            posted_date_text=data.get("posted_date_text"),
             url=data["url"],
             status=JobStatus(data.get("status", "open")),
             budget=data.get("budget"),

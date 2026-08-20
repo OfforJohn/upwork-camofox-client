@@ -20,7 +20,8 @@ class JobNormalizer:
             description=listing.description,
             client_id=listing.client_id,
             client_name=listing.client_name,
-            posted_date=listing.posted_date,
+            posted_date=listing.posted_at,  # Absolute timestamp if available
+            posted_date_text=listing.posted_date,  # Truthful source value
             url=listing.url,
             status=status,
             budget=listing.budget,

@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import re
+from urllib.parse import urljoin
 
 
 class JobSummary(BaseModel):
@@ -43,8 +44,6 @@ class JobSummary(BaseModel):
     def validate_url(cls, v: str) -> str:
         if not v or v.strip() == "":
             raise ValueError("url is required and cannot be empty")
-        if not v.startswith('/'):
-            raise ValueError("url must start with /")
         return v.strip()
     
     @field_validator('description')
@@ -107,9 +106,12 @@ def parse_summary_card(html: str) -> JobSummary:
             raise ValueError("Missing job title link element")
     
     title = title_link.text(strip=True)
-    url = title_link.attrs.get('href')
-    if not url:
+    raw_url = title_link.attrs.get('href')
+    if not raw_url:
         raise ValueError("Missing href attribute on job title link")
+    
+    # Normalize URL to absolute at parser boundary
+    url = urljoin("https://www.upwork.com", raw_url)
     
     # Extract description from JobDescription
     desc_element = job_card.css_first('[data-test="UpCLineClamp JobDescription"]')
@@ -130,8 +132,13 @@ def parse_summary_card(html: str) -> JobSummary:
         raise ValueError("Empty posted date")
     
     # Extract client info - look for client information in the card
-    client_id = job_id  # Use job_id as client_id fallback (same attribute)
+    client_id = None  # No fallback - must be present in HTML or None
     client_name = None
+    
+    # Try to find client ID from data attributes
+    client_id_element = job_card.css_first('[data-client-uid]')
+    if client_id_element:
+        client_id = client_id_element.attrs.get('data-client-uid')
     
     # Try to find client name from various possible selectors
     client_element = job_card.css_first('[data-test="client-name"]')
