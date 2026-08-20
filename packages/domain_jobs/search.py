@@ -8,6 +8,7 @@ import re
 from pathlib import Path
 from urllib.parse import urlencode
 from .summary_parser import parse_summary_card
+from .detail_parser import parse_detail_page
 
 
 class UpworkBlockedError(Exception):
@@ -95,13 +96,62 @@ class JobsSearch:
 
         return job_cards[:limit]
 
-    async def get_job_details(self, job_id: str) -> JobListing:
-        """Get detailed information for a specific job."""
-        # TODO: Implement job detail extraction
-        # Navigate to job page and extract full details
+    async def get_job_details(self, url: str) -> JobListing:
+        """Get detailed information for a specific job by navigating to its detail page.
         
-        # Placeholder
-        raise NotImplementedError("Job details extraction not yet implemented")
+        Args:
+            url: The absolute URL of the job detail page
+            
+        Returns:
+            JobListing: Enriched job listing with detail page information
+            
+        Raises:
+            ValueError: If URL is invalid
+            RuntimeError: If navigation or parsing fails
+        """
+        if not url or not url.startswith("https://www.upwork.com"):
+            raise ValueError(f"Invalid job URL: {url}")
+        
+        # Check if we have a real Playwright page object
+        if self.session.page is None:
+            raise RuntimeError("Cannot get job details without a real browser page")
+        
+        try:
+            # Navigate to job detail page
+            await self.session.navigate(url)
+            
+            # Wait for page to load
+            await self.session.page.wait_for_load_state('networkidle', timeout=10000)
+            
+            # Assert we're on a valid page, not a Cloudflare challenge
+            page_content = await self.session.page.content()
+            self._assert_search_page(page_content)
+            
+            # Get the full page HTML for parsing
+            html = await self.session.page.content()
+            
+            # Parse the detail page
+            detail = parse_detail_page(html)
+            
+            # Convert JobDetail to JobListing
+            return JobListing(
+                job_id=detail.job_id,
+                title=detail.title,
+                description=detail.description,
+                client_id=detail.client_id,
+                client_name=detail.client_name,
+                posted_date=detail.posted_date,
+                posted_at=detail.posted_at,
+                url=url,  # Use the URL we navigated to
+                budget=detail.budget,
+                tags=detail.tags,
+                status=detail.status,
+            )
+            
+        except ValueError as exc:
+            raise RuntimeError(f"Failed to parse job detail page: {exc}") from exc
+        except Exception as exc:
+            raise RuntimeError(f"Failed to navigate to job detail page: {exc}") from exc
 
     def _build_search_url(self, params: JobSearchParams) -> str:
         """Build Upwork search URL from parameters."""

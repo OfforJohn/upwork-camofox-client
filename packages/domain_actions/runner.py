@@ -89,6 +89,8 @@ class ActionRunner:
         """Execute an action through the pipeline."""
         if action.type == ActionType.JOBS_SEARCH:
             return await self._execute_jobs_search(action)
+        elif action.type == ActionType.JOBS_GET:
+            return await self._execute_jobs_get(action)
         else:
             return ActionResult(
                 action_id=action.id,
@@ -183,6 +185,64 @@ class ActionRunner:
                 "cursor_id": cursor.id,
                 "new_jobs_count": len(saved_records),
                 "total_jobs_count": len(listings),
+            },
+            events=self.event_emitter.get_history(),
+        )
+
+    async def _execute_jobs_get(self, action: ActionEnvelope) -> ActionResult:
+        """Execute jobs.get action to fetch detailed job information."""
+        correlation_id = action.correlation_id or action.id
+        
+        # Get job URL from payload
+        job_url = action.payload.get("url")
+        if not job_url:
+            return ActionResult(
+                action_id=action.id,
+                success=False,
+                error="Missing required field: url",
+            )
+        
+        # Get or create Camofox session
+        session_config = self._build_session_config(action.account_id)
+        session = await self.session_manager.get_session(action.account_id, session_config)
+        
+        # Emit session launched event
+        session_event = Event(
+            type=EventType.SESSION_LAUNCHED,
+            data={"account_id": action.account_id},
+            correlation_id=correlation_id,
+        )
+        self.event_emitter.emit(session_event)
+        
+        # Execute job detail fetch via Camofox session
+        jobs_search = JobsSearch(session)
+        try:
+            listing = await jobs_search.get_job_details(job_url)
+        except Exception as exc:
+            return ActionResult(
+                action_id=action.id,
+                success=False,
+                error=f"Failed to fetch job details: {exc}",
+            )
+        
+        # Normalize to job record
+        record = self.normalizer.normalize(listing)
+        
+        # Save record
+        self.job_storage[record.id] = record
+        
+        # Emit job found event
+        job_event = self.event_emitter.create_job_found_event(
+            job_record=record.to_dict(),
+            correlation_id=correlation_id,
+        )
+        self.event_emitter.emit(job_event)
+        
+        return ActionResult(
+            action_id=action.id,
+            success=True,
+            data={
+                "job": record.to_dict(),
             },
             events=self.event_emitter.get_history(),
         )
