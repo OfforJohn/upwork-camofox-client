@@ -46,22 +46,30 @@ class TestRecordSaveFailure:
     """Test record save failure scenarios."""
 
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="JobsSearch returns empty list - no records to save yet")
     async def test_record_save_failure_prevents_cursor_advance(self):
         """Test that record save failure prevents cursor advance."""
-        # Create runner with fake browser
-        browser_factory = lambda: FakeBrowser(should_authenticate=True)
+        from pathlib import Path
+
+        # Load fixture HTML for real parsed records
+        fixture_path = Path(__file__).parent.parent / "tests" / "fixtures" / "upwork_job_listing.html"
+        html = fixture_path.read_text(encoding="utf-8")
+
+        # Create fake browser with fixture content
+        browser_factory = lambda: FakeBrowser(should_authenticate=True, page_content=html)
         runner = ActionRunner()
         runner.session_manager = SessionManager(browser_factory=browser_factory)
 
-        # Mock record storage to fail using a custom dict subclass
-        class FailingStorage(dict):
-            def __setitem__(self, key, value):
-                if key == "fail_test":
-                    raise RuntimeError("Storage failure")
-                super().__setitem__(key, value)
+        # Create failing job repository that raises on first save
+        class FailingJobRepository(dict):
+            def __init__(self):
+                super().__init__()
+                self.saved = []
 
-        runner.job_storage = FailingStorage()
+            def __setitem__(self, key, value):
+                self.saved.append(value)
+                raise RuntimeError("record save failed")
+
+        runner.job_storage = FailingJobRepository()
 
         # Create action envelope
         action = ActionEnvelope(
@@ -70,12 +78,13 @@ class TestRecordSaveFailure:
             payload={"query": "python"},
         )
 
-        # Execute action
-        result = await runner.execute(action)
+        # Execute action - should raise RuntimeError on record save
+        with pytest.raises(RuntimeError, match="record save failed"):
+            await runner.execute(action)
 
         # Assert cursor was not saved due to record save failure
-        assert not result.success
-        assert "Storage failure" in result.error
+        cursor = await runner.cursor_repository.get("test_account")
+        assert cursor is None
 
 
 class TestCursorSaveOrdering:

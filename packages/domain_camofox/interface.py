@@ -44,9 +44,10 @@ class BrowserInterface(ABC):
 class FakeBrowser(BrowserInterface):
     """Fake browser implementation for testing."""
 
-    def __init__(self, should_authenticate: bool = True, should_fail_navigate: bool = False):
+    def __init__(self, should_authenticate: bool = True, should_fail_navigate: bool = False, page_content: Optional[str] = None):
         self._should_authenticate = should_authenticate
         self._should_fail_navigate = should_fail_navigate
+        self._page_content = page_content
         self._current_url = ""
         self._current_title = ""
         self._is_active = False
@@ -65,6 +66,10 @@ class FakeBrowser(BrowserInterface):
 
     async def get_page_content(self) -> str:
         """Get current page HTML content."""
+        # Return provided page_content if set
+        if self._page_content is not None:
+            return self._page_content
+
         # Return fixture HTML for test compatibility
         from pathlib import Path
         fixture_path = Path(__file__).parent.parent.parent / "tests" / "fixtures" / "upwork_job_listing.html"

@@ -87,20 +87,13 @@ class ActionRunner:
 
     async def execute(self, action: ActionEnvelope) -> ActionResult:
         """Execute an action through the pipeline."""
-        try:
-            if action.type == ActionType.JOBS_SEARCH:
-                return await self._execute_jobs_search(action)
-            else:
-                return ActionResult(
-                    action_id=action.id,
-                    success=False,
-                    error=f"Unsupported action type: {action.type}",
-                )
-        except Exception as e:
+        if action.type == ActionType.JOBS_SEARCH:
+            return await self._execute_jobs_search(action)
+        else:
             return ActionResult(
                 action_id=action.id,
                 success=False,
-                error=str(e),
+                error=f"Unsupported action type: {action.type}",
             )
 
     async def _execute_jobs_search(self, action: ActionEnvelope) -> ActionResult:
