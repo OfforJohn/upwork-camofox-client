@@ -1,8 +1,11 @@
 """Browser interface for injectable Camofox integration."""
 
 from abc import ABC, abstractmethod
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from dataclasses import dataclass
+
+if TYPE_CHECKING:
+    from .session import SessionConfig, Cookie, SessionState
 
 
 @dataclass
@@ -52,6 +55,10 @@ class FakeBrowser(BrowserInterface):
         self._current_title = ""
         self._is_active = False
 
+    async def launch(self, config: "SessionConfig") -> None:
+        """Launch the browser session."""
+        self._is_active = True
+
     async def navigate(self, url: str) -> None:
         """Navigate to a URL."""
         if self._should_fail_navigate:
@@ -77,6 +84,15 @@ class FakeBrowser(BrowserInterface):
             with open(fixture_path, "r", encoding="utf-8") as f:
                 return f.read()
         return ""
+
+    async def get_cookies(self) -> List["Cookie"]:
+        """Get cookies from the session."""
+        return []
+
+    async def get_session_state(self) -> "SessionState":
+        """Get session state from the browser."""
+        from .session import SessionState
+        return SessionState()
 
     async def close(self) -> None:
         """Close the browser session."""

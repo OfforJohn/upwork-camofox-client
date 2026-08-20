@@ -1,7 +1,7 @@
 """Camofox session manager for account-scoped browser sessions."""
 
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Protocol
 import asyncio
 from datetime import datetime, UTC
 import json
@@ -14,6 +14,31 @@ except ImportError:
     CAMOUFOX_AVAILABLE = False
 
 
+class BrowserSessionPort(Protocol):
+    """The small browser interface the session manager actually needs."""
+
+    async def launch(self, config: "SessionConfig") -> None: ...
+
+    async def navigate(self, url: str) -> None: ...
+
+    async def get_cookies(self) -> List["Cookie"]: ...
+
+    async def get_session_state(self) -> "SessionState": ...
+
+    async def close(self) -> None: ...
+
+
+class SessionStore(Protocol):
+    """Persistence interface for account session data."""
+
+    async def save(
+        self,
+        account_id: str,
+        cookies: List["Cookie"],
+        session_state: "SessionState",
+    ) -> None: ...
+
+
 @dataclass
 class ProxyConfig:
     """Proxy configuration for session launch."""
@@ -22,6 +47,15 @@ class ProxyConfig:
     port: int
     username: Optional[str] = None
     password: Optional[str] = None
+
+    def __post_init__(self):
+        """Validate required fields."""
+        if not self.protocol:
+            raise ValueError("ProxyConfig.protocol is required")
+        if not self.host:
+            raise ValueError("ProxyConfig.host is required")
+        if not (1 <= self.port <= 65535):
+            raise ValueError(f"ProxyConfig.port must be between 1 and 65535, got {self.port}")
 
     def to_dict(self) -> Dict[str, Any]:
         result = {
@@ -74,6 +108,15 @@ class Cookie:
     domain: str
     path: str = "/"
     expires: Optional[str] = None
+
+    def __post_init__(self):
+        """Validate required fields."""
+        if not self.name:
+            raise ValueError("Cookie.name is required")
+        if self.value is None:
+            raise ValueError("Cookie.value is required")
+        if not self.domain:
+            raise ValueError("Cookie.domain is required")
 
     def to_dict(self) -> Dict[str, Any]:
         result = {
@@ -130,9 +173,15 @@ class SessionConfig:
 class CamofoxSession:
     """Account-scoped Camofox session manager."""
 
-    def __init__(self, config: SessionConfig, browser: Optional[BrowserInterface] = None):
+    def __init__(
+        self,
+        config: SessionConfig,
+        browser: Optional[BrowserSessionPort] = None,
+        store: Optional[SessionStore] = None,
+    ):
         self.config = config
-        self.browser: Optional[BrowserInterface] = browser
+        self.browser = browser
+        self.store = store
         self.camofox: Optional[AsyncCamoufox] = None
         self.browser_context = None
         self.page = None
@@ -141,8 +190,11 @@ class CamofoxSession:
 
     async def launch(self) -> None:
         """Launch browser session with cookies, proxy, and humanization."""
-        # If fake browser is provided, skip real Camoufox launch
+        if self.is_active:
+            return
+
         if self.browser:
+            await self.browser.launch(self.config)
             self.is_active = True
             return
 
@@ -204,14 +256,11 @@ class CamofoxSession:
 
     async def navigate(self, url: str) -> None:
         """Navigate to URL within the session."""
-        if not self.is_active:
-            raise RuntimeError("Session is not active")
+        self._require_active()
 
         if self.browser:
-            # Use injected browser interface (for testing)
             await self.browser.navigate(url)
         elif self.page:
-            # Use real Camoufox page with domcontentloaded and 60s timeout
             await self.page.goto(
                 url,
                 wait_until="domcontentloaded",
@@ -245,14 +294,22 @@ class CamofoxSession:
 
     async def get_cookies(self) -> List[Cookie]:
         """Get current cookies from the session."""
-        if self.browser_context:
+        self._require_active()
+
+        if self.browser:
+            return await self.browser.get_cookies()
+        elif self.browser_context:
             cookies = await self.browser_context.cookies()
             return [Cookie.from_dict(cookie) for cookie in cookies]
         return self.config.cookies
 
     async def get_session_state(self) -> SessionState:
         """Get current session state from the browser."""
-        if self.page:
+        self._require_active()
+
+        if self.browser:
+            return await self.browser.get_session_state()
+        elif self.page:
             # TODO: Implement session state extraction via Camoufox
             # This depends on Camoufox's specific API for localStorage/sessionStorage
             # Example: local_storage = await self.page.evaluate("Object.entries(localStorage)")
@@ -265,51 +322,69 @@ class CamofoxSession:
             return
 
         try:
-            # Extract cookies from browser
-            if self.browser_context:
+            if self.browser:
+                cookies = await self.browser.get_cookies()
+                state = await self.browser.get_session_state()
+                if self.store:
+                    await self.store.save(self.config.account_id, cookies, state)
+                await self.browser.close()
+            elif self.browser_context:
                 cookies = await self.browser_context.cookies()
                 self.config.cookies = [Cookie.from_dict(cookie) for cookie in cookies]
-
-                # Extract session state
-                # TODO: Implement session state extraction
-        finally:
-            # Always cleanup browser resources, even if cookie extraction fails
-            if self.browser_context:
-                # Close browser context
+                # TODO: Extract session state
+                if self.store:
+                    await self.store.save(
+                        self.config.account_id,
+                        self.config.cookies,
+                        self.config.session_state,
+                    )
                 await self.browser_context.close()
-
-                # Exit Camoufox context manager
                 if self.camofox:
                     await self.camofox.__aexit__(None, None, None)
-
-            # Clear references
+        finally:
             self.browser_context = None
             self.page = None
             self.camofox = None
             self.is_active = False
 
+    def _require_active(self) -> None:
+        if not self.is_active:
+            raise RuntimeError("Session is not active")
+
 
 class SessionManager:
     """Manages account-scoped Camofox sessions."""
 
-    def __init__(self, browser_factory: Optional[callable] = None):
+    def __init__(
+        self,
+        browser_factory: Optional[callable] = None,
+        store: Optional[SessionStore] = None,
+    ):
         self.sessions: Dict[str, CamofoxSession] = {}
+        self._locks: Dict[str, asyncio.Lock] = {}
         self.browser_factory = browser_factory
+        self.store = store
 
     async def get_session(self, account_id: str, config: SessionConfig) -> CamofoxSession:
         """Get or create a session for the given account."""
-        if account_id in self.sessions:
-            session = self.sessions[account_id]
-            if session.is_active:
-                return session
-            else:
-                del self.sessions[account_id]
+        if account_id != config.account_id:
+            raise ValueError("account_id must match config.account_id")
 
-        browser = self.browser_factory() if self.browser_factory else None
-        session = CamofoxSession(config, browser=browser)
-        await session.launch()
-        self.sessions[account_id] = session
-        return session
+        lock = self._locks.setdefault(account_id, asyncio.Lock())
+        async with lock:
+            existing = self.sessions.get(account_id)
+            if existing and existing.is_active:
+                return existing
+
+            browser = self.browser_factory(config) if self.browser_factory else None
+            session = CamofoxSession(
+                config=config,
+                browser=browser,
+                store=self.store,
+            )
+            await session.launch()
+            self.sessions[account_id] = session
+            return session
 
     async def close_session(self, account_id: str) -> None:
         """Close and cleanup a session."""

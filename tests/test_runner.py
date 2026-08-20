@@ -23,7 +23,7 @@ class TestAuthFailure:
                 # Override to simulate login page URL
                 self._current_url = "https://www.upwork.com/ab/account-security/login"
 
-        browser_factory = lambda: LoginFakeBrowser()
+        browser_factory = lambda config: LoginFakeBrowser()
         runner = ActionRunner()
         runner.session_manager = SessionManager(browser_factory=browser_factory)
 
@@ -54,8 +54,8 @@ class TestRecordSaveFailure:
         fixture_path = Path(__file__).parent.parent / "tests" / "fixtures" / "upwork_job_listing.html"
         html = fixture_path.read_text(encoding="utf-8")
 
-        # Create fake browser with fixture content
-        browser_factory = lambda: FakeBrowser(should_authenticate=True, page_content=html)
+        # Create fake browser that simulates login page
+        browser_factory = lambda config: FakeBrowser(should_authenticate=False, page_content=html)
         runner = ActionRunner()
         runner.session_manager = SessionManager(browser_factory=browser_factory)
 
@@ -94,7 +94,7 @@ class TestCursorSaveOrdering:
     async def test_records_saved_before_cursor(self):
         """Test that records are saved before cursor is advanced."""
         # Create runner with fake browser (returns fixture HTML, so records are created)
-        browser_factory = lambda: FakeBrowser(should_authenticate=True)
+        browser_factory = lambda config: FakeBrowser(should_authenticate=True)
         runner = ActionRunner()
         runner.session_manager = SessionManager(browser_factory=browser_factory)
 
@@ -142,7 +142,7 @@ class TestIntegration:
     async def test_successful_search_flow(self):
         """Test successful search flow with all components."""
         # Create runner with fake browser
-        browser_factory = lambda: FakeBrowser(should_authenticate=True)
+        browser_factory = lambda config: FakeBrowser(should_authenticate=True)
         runner = ActionRunner()
         runner.session_manager = SessionManager(browser_factory=browser_factory)
 
@@ -166,7 +166,7 @@ class TestIntegration:
     async def test_fixture_extraction_produces_two_listings(self):
         """Test that fixture extraction produces exactly 2 job listings."""
         # Create runner with fake browser
-        browser_factory = lambda: FakeBrowser(should_authenticate=True)
+        browser_factory = lambda config: FakeBrowser(should_authenticate=True)
         runner = ActionRunner()
         runner.session_manager = SessionManager(browser_factory=browser_factory)
 
@@ -199,7 +199,7 @@ class TestJobsSearchURL:
         url = jobs_search._build_search_url(params)
 
         assert "q=python" in url
-        assert "https://www.upwork.com/jobs/search/" in url
+        assert "https://www.upwork.com/nx/search/jobs/" in url
 
     def test_build_search_url_without_query(self):
         """Test that _build_search_url returns base URL when no query."""
@@ -209,7 +209,7 @@ class TestJobsSearchURL:
         params = JobSearchParams()
         url = jobs_search._build_search_url(params)
 
-        assert url == "https://www.upwork.com/jobs/search/"
+        assert url == "https://www.upwork.com/nx/search/jobs/"
 
 
 class TestPageStateGuard:

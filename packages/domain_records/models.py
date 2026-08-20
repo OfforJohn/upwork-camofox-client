@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 from typing import Optional, Dict, Any, List
-from datetime import datetime
+from datetime import datetime, UTC
 from enum import Enum
 import uuid
 
@@ -28,8 +28,8 @@ class JobRecord:
     status: JobStatus = JobStatus.OPEN
     budget: Optional[Dict[str, Any]] = None
     tags: List[str] = field(default_factory=list)
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -73,8 +73,8 @@ class CursorRecord:
     position: int = 0
     total_results: int = 0
     next_page_token: Optional[str] = None
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -102,10 +102,10 @@ class CursorRecord:
     def advance(self, step: int = 1) -> None:
         """Advance cursor position."""
         self.position += step
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)
 
     def reset(self) -> None:
         """Reset cursor to initial position."""
         self.position = 0
         self.next_page_token = None
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)
