@@ -1,16 +1,16 @@
-# Test Results - Updated After Record Save Failure Fix
+# Test Results - Accurate Current State
 
 ## Test Suite Execution
 
 **Command:** `.venv\Scripts\python.exe -m pytest -q`
 
-**Results:** 15 passed, 0 skipped, 36 warnings in 81.27s (0:01:21)
+**Results:** 14 passed, 1 skipped, 36 warnings in 32.43s
 
 ## Detailed Test Breakdown
 
 ### tests/test_runner.py (11 tests)
 - **TestAuthFailure::test_auth_validation_failure_returns_error** - PASSED
-- **TestRecordSaveFailure::test_record_save_failure_prevents_cursor_advance** - PASSED (was previously skipped)
+- **TestRecordSaveFailure::test_record_save_failure_prevents_cursor_advance** - PASSED (uses real parsed records from fixture)
 - **TestCursorSaveOrdering::test_records_saved_before_cursor** - PASSED
 - **TestIntegration::test_successful_search_flow** - PASSED
 - **TestIntegration::test_fixture_extraction_produces_two_listings** - PASSED
@@ -25,18 +25,28 @@
 - **TestCamoufoxIntegration::test_launch_and_navigate_to_upwork** - PASSED
 - **TestCamoufoxIntegration::test_get_cookies_from_real_browser** - PASSED
 - **TestCamoufoxIntegration::test_session_lifecycle** - PASSED
-- **TestCamoufoxIntegration::test_live_job_extraction_with_query** - PASSED
+- **TestCamoufoxIntegration::test_live_job_extraction_with_query** - SKIPPED (Upwork blocks automated access with Cloudflare - requires manual authentication)
 
 ## Summary
 
-All tests passing with no skips:
-- TestRecordSaveFailure now passes (was previously skipped)
-- Uses real parsed records from fixture HTML
-- Validates that record save failure prevents cursor advancement
+**14 runnable tests pass, 1 live extraction test skipped**
+
+All core functionality tests pass:
+- Record save failure test now passes with real parsed records from fixture
+- Cursor ordering test validates exact event order: ["record", "record", "cursor"]
 - Page-state guard tests validate Cloudflare challenge detection
 - URL construction with urlencode() works correctly
 - Fixture extraction produces 2 listings
-- Cursor ordering test validates exact event order: ["record", "record", "cursor"]
+- Real Camoufox launch/navigation/lifecycle tests pass
+
+## Skipped Test
+
+The live job extraction test is intentionally skipped because:
+- Upwork blocks automated access with Cloudflare
+- Requires manual authentication to bypass
+- Test contains meaningful assertions for when it can run
+- Parser still only recognizes synthetic `div.job-tile` markup
+- `upwork_live_search.html` is a Cloudflare challenge capture
 
 ## Recent Changes
 
@@ -46,15 +56,17 @@ All tests passing with no skips:
 - Removed exception catching in ActionRunner.execute to let failures propagate
 - Added page-state guard with UpworkBlockedError for Cloudflare challenge pages
 - Fixed URL construction with urllib.parse.urlencode()
-
-## Warnings
-
-36 deprecation warnings about `datetime.utcnow()` - these are non-critical and can be addressed later.
+- Improved live job extraction test with meaningful assertions (currently skipped)
 
 ## Implementation Status
 
 - Page-state guard implementation complete and working
-- Record save failure test now properly validates invariant
+- Record save failure test properly validates invariant
 - Parser uses BeautifulSoup for HTML parsing
 - Three distinct states properly handled: blocked, empty, successful
 - Runner's record save loop propagates exceptions instead of catching them
+- Live extraction test ready to run when Cloudflare blocking is resolved
+
+## Warnings
+
+36 deprecation warnings about `datetime.utcnow()` - these are non-critical and can be addressed later.
