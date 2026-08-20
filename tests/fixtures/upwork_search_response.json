@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "total_responses": 86,
+    "total_responses": 89,
     "captured_at": "manual_capture"
   },
   "responses": [
@@ -693,7 +693,7 @@
       "status": 200,
       "content_type": "application/json",
       "data": {
-        "accessToken": "oauth2v2_int_b72534464261e51a7d6d530a243884f2",
+        "accessToken": "oauth2v2_int_d4a6408a77b80dcac50ee032b1b25216",
         "expiresIn": 86400
       }
     },
@@ -7258,24 +7258,6 @@
     },
     {
       "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=spellCheck",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "data": {
-          "search": {
-            "universalSearchNuxt": {
-              "freelancerSpellCheckSuggestionV1": {
-                "suggestion": "python",
-                "isEqualToOriginalQuery": true
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "method": "POST",
       "url": "https://www.upwork.com/api/graphql/v1?alias=autoSuggestions",
       "status": 200,
       "content_type": "application/json",
@@ -7350,6 +7332,24 @@
       }
     },
     {
+      "method": "POST",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=spellCheck",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "data": {
+          "search": {
+            "universalSearchNuxt": {
+              "freelancerSpellCheckSuggestionV1": {
+                "suggestion": "python",
+                "isEqualToOriginalQuery": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
       "method": "GET",
       "url": "https://cdn.cookielaw.org/scripttemplates/202512.1.0/assets/otFloatingRoundedCorner.json",
       "status": 200,
@@ -7366,7 +7366,7 @@
       "status": 200,
       "content_type": "application/json",
       "data": {
-        "receipt": "eyJraWQiOiJ6c3VyMWxObkNrdzU5OEN5bU4vM0M0WjgxSmZCbnlvdGZtWDBrNG1qQ0FJK1Q4Tzl5WkN4T0VmU3ozWDE5YU12dmszQTdldWpBelF5M0NFNzJwbDBydz09IiwiYWxnIjoiSFM1MTIifQ.eyJtb2MiOiJDT09LSUUiLCJzdWIiOiJDb29raWUgVW5pcXVlIElkIiwiYXR0YWNobWVudHMiOm51bGwsIm5vdGVzIjpudWxsLCJzeW5jR3JvdXAiOiI4NzJlN2ExMS0wOTZkLTQ4YjctYmMxNS1lMDFkMDYzM2Y2OTQiLCJ0ZW5hbnRLZXkiOjQ0ODcsImlzcyI6bnVsbCwiY29uc2VudFN0cmluZyI6bnVsbCwibGFuZ3VhZ2UiOm51bGwsInNvdXJjZSI6eyJ0eXBlIjoiV0VCIiwiY29udGVudCI6Imh0dHBzOi8vd3d3LnVwd29yay5jb20vbngvc2VhcmNoL2pvYnMvP3E9cHl0aG9uIiwicHVycG9zZUlkcyI6WyJkOGQ1NTgzZi1hMjdiLTRiMjItOTQxMi02MDQ2ZjIxNTA3NmQiXX0sInByb2Nlc3NWZXJzaW9uIjoyMTMsImVuYWJsZVBhcmVudFByaW1hcnlJZGVudGlmaWVycyI6ZmFsc2UsImF1dGhlbnRpY2F0aW9uUmVxdWlyZWQiOmZhbHNlLCJkYXRhRWxlbWVudFR5cGVNYXAiOnsiSW50ZXJhY3Rpb25UeXBlIjoiVVNFUl9JTlBVVCIsIkNvbnNlbnRNb2RlbCI6IlVTRVJfSU5QVVQiLCJVc2VyQWdlbnQiOiJVU0VSX0lOUFVUIiwiQ291bnRyeSI6IkNPVU5UUlkifSwiZHluYW1pY0NvbGxlY3Rpb25Qb2ludCI6ZmFsc2UsInByb2Nlc3NJZCI6ImFkNzM0ZWE0LTQ3MjEtNDczYS1hMTU1LTEyMGEwNTUzMjRiNiIsImRzRGF0YUVsZW1lbnRzIjpbIkludGVyYWN0aW9uVHlwZSIsIkNvdW50cnkiLCJVc2VyQWdlbnQiLCJDb25zZW50TW9kZWwiXSwiZG91YmxlT3B0SW4iOmZhbHNlLCJjb25zZW50VHlwZSI6IkNPT0tJRUJBTk5FUiIsImFkZGl0aW9uYWxJZGVudGlmaWVycyI6e30sImlhdCI6IjIwMjYtMDgtMjBUMTc6MTg6MTAuNzQxMDE2NDA2IiwiY3VzdG9tUGF5bG9hZCI6eyJJbnRlcmFjdGlvbiI6MCwiQWRkRGVmYXVsdEludGVyYWN0aW9uIjpmYWxzZX0sImp0aSI6IjAxYTAyMDJlLTI3MzUtNzYyMS05NTM1LWYwZWI1YTY5NzQxNyIsInBvbGljeV91cmkiOiJ1cHdvcmsuY29tIiwiaWRlbnRpZmllciI6IjMqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqNiIsImFkZGl0aW9uYWxQYXJlbnRJZGVudGlmaWVyVHlwZXMiOltdLCJwYXJlbnRQcmltYXJ5SWRlbnRpZmllcnNUeXBlIjpudWxsLCJnYWNTdHJpbmciOm51bGwsInRjU3RyaW5nVjIiOm51bGwsInJlY29uZmlybUFjdGl2ZVB1cnBvc2UiOmZhbHNlLCJhbGxvd05vdEdpdmVuQ29uc2VudHMiOmZhbHNlLCJub3RpY2VzIjpbXSwiaXNBbm9ueW1vdXMiOnRydWUsIm11bHRpcGxlSWRlbnRpZmllclR5cGVzIjpmYWxzZSwicHVycG9zZXMiOlt7IklkIjoiNTgzNzlhNzgtMTczZi00NmYwLWI0ZmQtMDBmOWU4MWRiNjRkIiwiVmVyc2lvbiI6MiwiUHJlZmVyZW5jZXMiOltdLCJDdXN0b21QcmVmZXJlbmNlcyI6W10sIlByaXZhY3lOb3RpY2VzIjpbXSwiVHJhbnNhY3Rpb25UeXBlIjoiTk9fQ0hPSUNFIiwiUHVycG9zZUF0dGFjaG1lbnRzIjpbXSwiUHVycG9zZU5vdGUiOm51bGwsImF0dHJpYnV0ZXMiOnt9LCJQdXJwb3NlU2NvcGVzIjpudWxsLCJJbXBsaWNpdENvbnNlbnRMaWZlU3BhbiI6MH0seyJJZCI6ImQ4ZDU1ODNmLWEyN2ItNGIyMi05NDEyLTYwNDZmMjE1MDc2ZCIsIlZlcnNpb24iOjMsIlByZWZlcmVuY2VzIjpbXSwiQ3VzdG9tUHJlZmVyZW5jZXMiOltdLCJQcml2YWN5Tm90aWNlcyI6W10sIlRyYW5zYWN0aW9uVHlwZSI6IkNPTkZJUk1FRCIsIlB1cnBvc2VBdHRhY2htZW50cyI6W10sIlB1cnBvc2VOb3RlIjpudWxsLCJhdHRyaWJ1dGVzIjp7fSwiUHVycG9zZVNjb3BlcyI6bnVsbCwiSW1wbGljaXRDb25zZW50TGlmZVNwYW4iOjB9LHsiSWQiOiIzYmQwNGE2NC05OTg2LTQ4MzUtOTMyYS0yMGM1MWNlY2MyYmUiLCJWZXJzaW9uIjoxLCJQcmVmZXJlbmNlcyI6W10sIkN1c3RvbVByZWZlcmVuY2VzIjpbXSwiUHJpdmFjeU5vdGljZXMiOltdLCJUcmFuc2FjdGlvblR5cGUiOiJDT05GSVJNRUQiLCJQdXJwb3NlQXR0YWNobWVudHMiOltdLCJQdXJwb3NlTm90ZSI6bnVsbCwiYXR0cmlidXRlcyI6e30sIlB1cnBvc2VTY29wZXMiOm51bGwsIkltcGxpY2l0Q29uc2VudExpZmVTcGFuIjowfSx7IklkIjoiMjhmNWYyOWItNmZjZC00MDUyLWIzNjktYTY1OGNmM2MyZWZjIiwiVmVyc2lvbiI6NSwiUHJlZmVyZW5jZXMiOltdLCJDdXN0b21QcmVmZXJlbmNlcyI6W10sIlByaXZhY3lOb3RpY2VzIjpbXSwiVHJhbnNhY3Rpb25UeXBlIjoiQ09ORklSTUVEIiwiUHVycG9zZUF0dGFjaG1lbnRzIjpbXSwiUHVycG9zZU5vdGUiOm51bGwsImF0dHJpYnV0ZXMiOnt9LCJQdXJwb3NlU2NvcGVzIjpudWxsLCJJbXBsaWNpdENvbnNlbnRMaWZlU3BhbiI6MH1dLCJ0ZW5hbnRJZCI6IjExNGNlZDRkLTFmNTEtNGEzYy1iNWIzLWI1YmZlZjc2MDZhYSIsIm92ZXJyaWRlQWN0aXZlUHVycG9zZSI6dHJ1ZSwicmVjZWlwdERhaXN5Q2hhaW5SZW1vdmVkIjp0cnVlLCJvdEp3dFZlcnNpb24iOjEsImVuYWJsZUdlb2xvY2F0aW9uIjp0cnVlfQ.zJhX8L6ofLBf1DjzltzNLIw_KzVI_x0LEdBxlP5zItmgEBejvEQ3qPZRVvze38jLUTVbxHKP5FaqUMSEfxO4nA"
+        "receipt": "eyJraWQiOiJ6c3VyMWxObkNrdzU5OEN5bU4vM0M0WjgxSmZCbnlvdGZtWDBrNG1qQ0FJK1Q4Tzl5WkN4T0VmU3ozWDE5YU12dmszQTdldWpBelF5M0NFNzJwbDBydz09IiwiYWxnIjoiSFM1MTIifQ.eyJtb2MiOiJDT09LSUUiLCJzdWIiOiJDb29raWUgVW5pcXVlIElkIiwiYXR0YWNobWVudHMiOm51bGwsIm5vdGVzIjpudWxsLCJzeW5jR3JvdXAiOiI4NzJlN2ExMS0wOTZkLTQ4YjctYmMxNS1lMDFkMDYzM2Y2OTQiLCJ0ZW5hbnRLZXkiOjQ0ODcsImlzcyI6bnVsbCwiY29uc2VudFN0cmluZyI6bnVsbCwibGFuZ3VhZ2UiOm51bGwsInNvdXJjZSI6eyJ0eXBlIjoiV0VCIiwiY29udGVudCI6Imh0dHBzOi8vd3d3LnVwd29yay5jb20vbngvc2VhcmNoL2pvYnMvP3E9cHl0aG9uIiwicHVycG9zZUlkcyI6WyJkOGQ1NTgzZi1hMjdiLTRiMjItOTQxMi02MDQ2ZjIxNTA3NmQiXX0sInByb2Nlc3NWZXJzaW9uIjoyMTMsImVuYWJsZVBhcmVudFByaW1hcnlJZGVudGlmaWVycyI6ZmFsc2UsImF1dGhlbnRpY2F0aW9uUmVxdWlyZWQiOmZhbHNlLCJkYXRhRWxlbWVudFR5cGVNYXAiOnsiSW50ZXJhY3Rpb25UeXBlIjoiVVNFUl9JTlBVVCIsIkNvbnNlbnRNb2RlbCI6IlVTRVJfSU5QVVQiLCJVc2VyQWdlbnQiOiJVU0VSX0lOUFVUIiwiQ291bnRyeSI6IkNPVU5UUlkifSwiZHluYW1pY0NvbGxlY3Rpb25Qb2ludCI6ZmFsc2UsInByb2Nlc3NJZCI6ImFkNzM0ZWE0LTQ3MjEtNDczYS1hMTU1LTEyMGEwNTUzMjRiNiIsImRzRGF0YUVsZW1lbnRzIjpbIkludGVyYWN0aW9uVHlwZSIsIkNvdW50cnkiLCJVc2VyQWdlbnQiLCJDb25zZW50TW9kZWwiXSwiZG91YmxlT3B0SW4iOmZhbHNlLCJjb25zZW50VHlwZSI6IkNPT0tJRUJBTk5FUiIsImFkZGl0aW9uYWxJZGVudGlmaWVycyI6e30sImlhdCI6IjIwMjYtMDgtMjBUMTc6NTc6MDEuMjM0MjUzNjU0IiwiY3VzdG9tUGF5bG9hZCI6eyJJbnRlcmFjdGlvbiI6MCwiQWRkRGVmYXVsdEludGVyYWN0aW9uIjpmYWxzZX0sImp0aSI6IjAxYTAyMDUxLWI2YjItNzUxNy05ODE5LTk5ZjIxODE1NzJiYyIsInBvbGljeV91cmkiOiJ1cHdvcmsuY29tIiwiaWRlbnRpZmllciI6IjUqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqZCIsImFkZGl0aW9uYWxQYXJlbnRJZGVudGlmaWVyVHlwZXMiOltdLCJwYXJlbnRQcmltYXJ5SWRlbnRpZmllcnNUeXBlIjpudWxsLCJnYWNTdHJpbmciOm51bGwsInRjU3RyaW5nVjIiOm51bGwsInJlY29uZmlybUFjdGl2ZVB1cnBvc2UiOmZhbHNlLCJhbGxvd05vdEdpdmVuQ29uc2VudHMiOmZhbHNlLCJub3RpY2VzIjpbXSwiaXNBbm9ueW1vdXMiOnRydWUsIm11bHRpcGxlSWRlbnRpZmllclR5cGVzIjpmYWxzZSwicHVycG9zZXMiOlt7IklkIjoiNTgzNzlhNzgtMTczZi00NmYwLWI0ZmQtMDBmOWU4MWRiNjRkIiwiVmVyc2lvbiI6MiwiUHJlZmVyZW5jZXMiOltdLCJDdXN0b21QcmVmZXJlbmNlcyI6W10sIlByaXZhY3lOb3RpY2VzIjpbXSwiVHJhbnNhY3Rpb25UeXBlIjoiTk9fQ0hPSUNFIiwiUHVycG9zZUF0dGFjaG1lbnRzIjpbXSwiUHVycG9zZU5vdGUiOm51bGwsImF0dHJpYnV0ZXMiOnt9LCJQdXJwb3NlU2NvcGVzIjpudWxsLCJJbXBsaWNpdENvbnNlbnRMaWZlU3BhbiI6MH0seyJJZCI6ImQ4ZDU1ODNmLWEyN2ItNGIyMi05NDEyLTYwNDZmMjE1MDc2ZCIsIlZlcnNpb24iOjMsIlByZWZlcmVuY2VzIjpbXSwiQ3VzdG9tUHJlZmVyZW5jZXMiOltdLCJQcml2YWN5Tm90aWNlcyI6W10sIlRyYW5zYWN0aW9uVHlwZSI6IkNPTkZJUk1FRCIsIlB1cnBvc2VBdHRhY2htZW50cyI6W10sIlB1cnBvc2VOb3RlIjpudWxsLCJhdHRyaWJ1dGVzIjp7fSwiUHVycG9zZVNjb3BlcyI6bnVsbCwiSW1wbGljaXRDb25zZW50TGlmZVNwYW4iOjB9LHsiSWQiOiIzYmQwNGE2NC05OTg2LTQ4MzUtOTMyYS0yMGM1MWNlY2MyYmUiLCJWZXJzaW9uIjoxLCJQcmVmZXJlbmNlcyI6W10sIkN1c3RvbVByZWZlcmVuY2VzIjpbXSwiUHJpdmFjeU5vdGljZXMiOltdLCJUcmFuc2FjdGlvblR5cGUiOiJDT05GSVJNRUQiLCJQdXJwb3NlQXR0YWNobWVudHMiOltdLCJQdXJwb3NlTm90ZSI6bnVsbCwiYXR0cmlidXRlcyI6e30sIlB1cnBvc2VTY29wZXMiOm51bGwsIkltcGxpY2l0Q29uc2VudExpZmVTcGFuIjowfSx7IklkIjoiMjhmNWYyOWItNmZjZC00MDUyLWIzNjktYTY1OGNmM2MyZWZjIiwiVmVyc2lvbiI6NSwiUHJlZmVyZW5jZXMiOltdLCJDdXN0b21QcmVmZXJlbmNlcyI6W10sIlByaXZhY3lOb3RpY2VzIjpbXSwiVHJhbnNhY3Rpb25UeXBlIjoiQ09ORklSTUVEIiwiUHVycG9zZUF0dGFjaG1lbnRzIjpbXSwiUHVycG9zZU5vdGUiOm51bGwsImF0dHJpYnV0ZXMiOnt9LCJQdXJwb3NlU2NvcGVzIjpudWxsLCJJbXBsaWNpdENvbnNlbnRMaWZlU3BhbiI6MH1dLCJ0ZW5hbnRJZCI6IjExNGNlZDRkLTFmNTEtNGEzYy1iNWIzLWI1YmZlZjc2MDZhYSIsIm92ZXJyaWRlQWN0aXZlUHVycG9zZSI6dHJ1ZSwicmVjZWlwdERhaXN5Q2hhaW5SZW1vdmVkIjp0cnVlLCJvdEp3dFZlcnNpb24iOjEsImVuYWJsZUdlb2xvY2F0aW9uIjp0cnVlfQ.p0TAnkRh6q6YUfbCmMLUNk6KKUR845WYb8ehg8wbp-gt682pfnOa92ZVFk7iMcUJ52C617Yeg3H_C3iHJ4zC6Q"
       }
     },
     {
@@ -7902,6 +7902,26 @@
       }
     },
     {
+      "method": "POST",
+      "url": "https://www.upwork.com/ab/account-security/visitor-gql-token",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "accessToken": "oauth2v2_int_0f91a86459e5ef66946e9d521a997701",
+        "expiresIn": 86400
+      }
+    },
+    {
+      "method": "POST",
+      "url": "https://www.upwork.com/nx/top-nav-ssi/visitor-gql-token",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "accessToken": "oauth2v2_int_c5621ff26c3aa0d2bbecc63e5d195264",
+        "expiresIn": 86400
+      }
+    },
+    {
       "method": "GET",
       "url": "https://cdn.cookielaw.org/consent/beb279fb-8702-46ec-a677-6f14e3828966/0199c4d5-eda0-7691-b387-d43494bae22a/en.json",
       "status": 200,
@@ -14472,32 +14492,12 @@
       }
     },
     {
-      "method": "POST",
-      "url": "https://www.upwork.com/ab/account-security/visitor-gql-token",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "accessToken": "oauth2v2_int_9f702e47a3af3a0e93d5c967810f4e95",
-        "expiresIn": 86400
-      }
-    },
-    {
-      "method": "POST",
-      "url": "https://www.upwork.com/nx/top-nav-ssi/visitor-gql-token",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "accessToken": "oauth2v2_int_b9dd59ba4e3912320ebfeafd0ef79d05",
-        "expiresIn": 86400
-      }
-    },
-    {
       "method": "GET",
       "url": "https://www.upwork.com/ab/account-security/nx-api/timestamp?unit=ms",
       "status": 200,
       "content_type": "application/json",
       "data": {
-        "timestamp": 1787246365763
+        "timestamp": 1787248720012
       }
     },
     {
@@ -14514,12 +14514,21 @@
       }
     },
     {
+      "method": "POST",
+      "url": "https://upwork-privacy.my.onetrust.com/request/v1/consentreceipts/anonymous",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "receipt": "eyJraWQiOiJ6c3VyMWxObkNrdzU5OEN5bU4vM0M0WjgxSmZCbnlvdGZtWDBrNG1qQ0FJK1Q4Tzl5WkN4T0VmU3ozWDE5YU12dmszQTdldWpBelF5M0NFNzJwbDBydz09IiwiYWxnIjoiSFM1MTIifQ.eyJtb2MiOiJDT09LSUUiLCJzdWIiOiJDb29raWUgVW5pcXVlIElkIiwiYXR0YWNobWVudHMiOm51bGwsIm5vdGVzIjpudWxsLCJzeW5jR3JvdXAiOiI4NzJlN2ExMS0wOTZkLTQ4YjctYmMxNS1lMDFkMDYzM2Y2OTQiLCJ0ZW5hbnRLZXkiOjQ0ODcsImlzcyI6bnVsbCwiY29uc2VudFN0cmluZyI6bnVsbCwibGFuZ3VhZ2UiOm51bGwsInNvdXJjZSI6eyJ0eXBlIjoiV0VCIiwiY29udGVudCI6Imh0dHBzOi8vd3d3LnVwd29yay5jb20vYWIvYWNjb3VudC1zZWN1cml0eS9sb2dpbiIsInB1cnBvc2VJZHMiOlsiZDhkNTU4M2YtYTI3Yi00YjIyLTk0MTItNjA0NmYyMTUwNzZkIl19LCJwcm9jZXNzVmVyc2lvbiI6MjEzLCJlbmFibGVQYXJlbnRQcmltYXJ5SWRlbnRpZmllcnMiOmZhbHNlLCJhdXRoZW50aWNhdGlvblJlcXVpcmVkIjpmYWxzZSwiZGF0YUVsZW1lbnRUeXBlTWFwIjp7IkludGVyYWN0aW9uVHlwZSI6IlVTRVJfSU5QVVQiLCJDb25zZW50TW9kZWwiOiJVU0VSX0lOUFVUIiwiVXNlckFnZW50IjoiVVNFUl9JTlBVVCIsIkNvdW50cnkiOiJDT1VOVFJZIn0sImR5bmFtaWNDb2xsZWN0aW9uUG9pbnQiOmZhbHNlLCJwcm9jZXNzSWQiOiJhZDczNGVhNC00NzIxLTQ3M2EtYTE1NS0xMjBhMDU1MzI0YjYiLCJkc0RhdGFFbGVtZW50cyI6WyJJbnRlcmFjdGlvblR5cGUiLCJDb3VudHJ5IiwiVXNlckFnZW50IiwiQ29uc2VudE1vZGVsIl0sImRvdWJsZU9wdEluIjpmYWxzZSwiY29uc2VudFR5cGUiOiJDT09LSUVCQU5ORVIiLCJhZGRpdGlvbmFsSWRlbnRpZmllcnMiOnt9LCJpYXQiOiIyMDI2LTA4LTIwVDE3OjU4OjUyLjAzMzk1MzQ4OCIsImN1c3RvbVBheWxvYWQiOnsiSW50ZXJhY3Rpb24iOjIsIkFkZERlZmF1bHRJbnRlcmFjdGlvbiI6ZmFsc2V9LCJqdGkiOiIwMWEwMjA1My02NzgxLTczNzctYTJlMC00OWRlYzkwYjc5M2IiLCJwb2xpY3lfdXJpIjoidXB3b3JrLmNvbSIsImlkZW50aWZpZXIiOiI1KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKmQiLCJhZGRpdGlvbmFsUGFyZW50SWRlbnRpZmllclR5cGVzIjpbXSwicGFyZW50UHJpbWFyeUlkZW50aWZpZXJzVHlwZSI6bnVsbCwiZ2FjU3RyaW5nIjpudWxsLCJ0Y1N0cmluZ1YyIjpudWxsLCJyZWNvbmZpcm1BY3RpdmVQdXJwb3NlIjpmYWxzZSwiYWxsb3dOb3RHaXZlbkNvbnNlbnRzIjpmYWxzZSwibm90aWNlcyI6W10sImlzQW5vbnltb3VzIjp0cnVlLCJtdWx0aXBsZUlkZW50aWZpZXJUeXBlcyI6ZmFsc2UsInB1cnBvc2VzIjpbeyJJZCI6IjU4Mzc5YTc4LTE3M2YtNDZmMC1iNGZkLTAwZjllODFkYjY0ZCIsIlZlcnNpb24iOjIsIlByZWZlcmVuY2VzIjpbXSwiQ3VzdG9tUHJlZmVyZW5jZXMiOltdLCJQcml2YWN5Tm90aWNlcyI6W10sIlRyYW5zYWN0aW9uVHlwZSI6Ik5PX0NIT0lDRSIsIlB1cnBvc2VBdHRhY2htZW50cyI6W10sIlB1cnBvc2VOb3RlIjpudWxsLCJhdHRyaWJ1dGVzIjp7fSwiUHVycG9zZVNjb3BlcyI6bnVsbCwiSW1wbGljaXRDb25zZW50TGlmZVNwYW4iOjB9LHsiSWQiOiJkOGQ1NTgzZi1hMjdiLTRiMjItOTQxMi02MDQ2ZjIxNTA3NmQiLCJWZXJzaW9uIjozLCJQcmVmZXJlbmNlcyI6W10sIkN1c3RvbVByZWZlcmVuY2VzIjpbXSwiUHJpdmFjeU5vdGljZXMiOltdLCJUcmFuc2FjdGlvblR5cGUiOiJDT05GSVJNRUQiLCJQdXJwb3NlQXR0YWNobWVudHMiOltdLCJQdXJwb3NlTm90ZSI6bnVsbCwiYXR0cmlidXRlcyI6e30sIlB1cnBvc2VTY29wZXMiOm51bGwsIkltcGxpY2l0Q29uc2VudExpZmVTcGFuIjowfSx7IklkIjoiM2JkMDRhNjQtOTk4Ni00ODM1LTkzMmEtMjBjNTFjZWNjMmJlIiwiVmVyc2lvbiI6MSwiUHJlZmVyZW5jZXMiOltdLCJDdXN0b21QcmVmZXJlbmNlcyI6W10sIlByaXZhY3lOb3RpY2VzIjpbXSwiVHJhbnNhY3Rpb25UeXBlIjoiQ09ORklSTUVEIiwiUHVycG9zZUF0dGFjaG1lbnRzIjpbXSwiUHVycG9zZU5vdGUiOm51bGwsImF0dHJpYnV0ZXMiOnt9LCJQdXJwb3NlU2NvcGVzIjpudWxsLCJJbXBsaWNpdENvbnNlbnRMaWZlU3BhbiI6MH0seyJJZCI6IjI4ZjVmMjliLTZmY2QtNDA1Mi1iMzY5LWE2NThjZjNjMmVmYyIsIlZlcnNpb24iOjUsIlByZWZlcmVuY2VzIjpbXSwiQ3VzdG9tUHJlZmVyZW5jZXMiOltdLCJQcml2YWN5Tm90aWNlcyI6W10sIlRyYW5zYWN0aW9uVHlwZSI6IkNPTkZJUk1FRCIsIlB1cnBvc2VBdHRhY2htZW50cyI6W10sIlB1cnBvc2VOb3RlIjpudWxsLCJhdHRyaWJ1dGVzIjp7fSwiUHVycG9zZVNjb3BlcyI6bnVsbCwiSW1wbGljaXRDb25zZW50TGlmZVNwYW4iOjB9XSwidGVuYW50SWQiOiIxMTRjZWQ0ZC0xZjUxLTRhM2MtYjViMy1iNWJmZWY3NjA2YWEiLCJvdmVycmlkZUFjdGl2ZVB1cnBvc2UiOnRydWUsInJlY2VpcHREYWlzeUNoYWluUmVtb3ZlZCI6dHJ1ZSwib3RKd3RWZXJzaW9uIjoxLCJlbmFibGVHZW9sb2NhdGlvbiI6dHJ1ZX0.Im91c2fIi9_X4w1BVsILxkThM1UPJMygQw2emcTxv8gVMDKUdAx3mAwIg3HimdrxjFeiqnO4qdKmF1plz5uRgg"
+      }
+    },
+    {
       "method": "GET",
       "url": "https://www.upwork.com/ab/account-security/nx-api/timestamp?unit=ms",
       "status": 200,
       "content_type": "application/json",
       "data": {
-        "timestamp": 1787246388105
+        "timestamp": 1787248743051
       }
     },
     {
@@ -14561,7 +14570,16 @@
       "status": 200,
       "content_type": "application/json",
       "data": {
-        "timestamp": 1787246419047
+        "timestamp": 1787248751480
+      }
+    },
+    {
+      "method": "GET",
+      "url": "https://www.upwork.com/ab/account-security/nx-api/timestamp?unit=ms",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "timestamp": 1787248752843
       }
     },
     {
@@ -14573,7 +14591,7 @@
         "status": 1,
         "userNid": "d0e6cbf7",
         "expiresIn": 86400,
-        "authToken": "4f543350314ae7fb0f2d9f01545a4bf0f62968263da5db20e42adbf25314b39b",
+        "authToken": "232d0a85ce45a97be1aa57cbca7c898fa2df6cd9aeba7e1db33257bd94230b5e",
         "redirectUrl": "/ab/account-security/success?redir=%2Fnx%2Ffind-work%2F",
         "success": 1
       }
@@ -15119,7 +15137,7 @@
           "identifier": "1607059590658580480",
           "identifierType": "Cookie Unique Id",
           "dataElements": {
-            "InteractionType": "Banner - Close",
+            "InteractionType": "",
             "ConsentModel": "opt-out",
             "UserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0",
             "Country": "NG"
@@ -15130,42 +15148,42 @@
               "id": "28f5f29b-6fcd-4052-b369-a658cf3c2efc",
               "version": 5,
               "status": "ACTIVE",
-              "consentDate": "2026-08-20T15:35:37.874824324Z",
+              "consentDate": "2026-08-20T17:20:37.111470904Z",
               "customPreferences": [],
-              "lastInteractionDate": "2026-08-20T15:35:37.874824324Z",
+              "lastInteractionDate": "2026-08-20T17:20:37.111470904Z",
               "reactivationDate": null
             },
             {
               "id": "d8d5583f-a27b-4b22-9412-6046f215076d",
               "version": 3,
               "status": "ACTIVE",
-              "consentDate": "2026-08-20T15:35:37.874824324Z",
+              "consentDate": "2026-08-20T17:20:37.111470904Z",
               "customPreferences": [],
-              "lastInteractionDate": "2026-08-20T15:35:37.874824324Z",
+              "lastInteractionDate": "2026-08-20T17:20:37.111470904Z",
               "reactivationDate": null,
               "geolocation": {
                 "country": "NG",
                 "state": "LA",
                 "stateName": "Lagos",
-                "receiptGuid": "01a01fd0-4492-822a-a69c-b9b6434a4cdd"
+                "receiptGuid": "01a02030-62f7-8142-b975-50b2dc9756ea"
               }
             },
             {
               "id": "58379a78-173f-46f0-b4fd-00f9e81db64d",
               "version": 2,
               "status": "ALWAYS_ACTIVE",
-              "consentDate": "2026-08-20T15:35:37.874824324Z",
+              "consentDate": "2026-08-20T17:20:37.111470904Z",
               "customPreferences": [],
-              "lastInteractionDate": "2026-08-20T15:35:37.874824324Z",
+              "lastInteractionDate": "2026-08-20T17:20:37.111470904Z",
               "reactivationDate": null
             },
             {
               "id": "3bd04a64-9986-4835-932a-20c51cecc2be",
               "version": 1,
               "status": "ACTIVE",
-              "consentDate": "2026-08-20T15:35:37.874824324Z",
+              "consentDate": "2026-08-20T17:20:37.111470904Z",
               "customPreferences": [],
-              "lastInteractionDate": "2026-08-20T15:35:37.874824324Z",
+              "lastInteractionDate": "2026-08-20T17:20:37.111470904Z",
               "reactivationDate": null
             }
           ],
@@ -15174,7 +15192,7 @@
             "country": "NG",
             "state": "LA",
             "stateName": "Lagos",
-            "receiptGuid": "01a01fd0-4492-822a-a69c-b9b6434a4cdd"
+            "receiptGuid": "01a02030-62f7-8142-b975-50b2dc9756ea"
           }
         }
       ]
@@ -15187,7 +15205,7 @@
       "data": {
         "data": {
           "consentToken": {
-            "token": "eyJhbGciOiJIUzM4NCJ9.eyJlbmNyeXB0ZWRJZGVudGlmaWVyIjoicHA3Skc0NlRTejFxTklUbGtiMWNCbjB6akZzMVNZcHZZUXdkanRSSmVEWT0iLCJpYXQiOjE3ODcyNDY0MjZ9.EYuzkWcGJBFZxmxeCYWlLBoznL6dxouiQW_WylfrCr0awVXxffHYzIESEu4vLStd",
+            "token": "eyJhbGciOiJIUzM4NCJ9.eyJlbmNyeXB0ZWRJZGVudGlmaWVyIjoicHA3Skc0NlRTejFxTklUbGtiMWNCbjB6akZzMVNZcHZZUXdkanRSSmVEWT0iLCJpYXQiOjE3ODcyNDg3NjJ9.fqsHICNBKOKOOXF2o4Vixy8Q07zpGthUq8s5gOj4J0I3uHUAAGS0ZYMe2ZFD9kkH",
             "consentUserId": "pp7JG46TSz1qNITlkb1cBn0zjFs1SYpvYQwdjtRJeDY="
           }
         }
@@ -15207,7 +15225,7 @@
     },
     {
       "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=smf.retrieve.banner",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=smf.retrieve.very_top",
       "status": 200,
       "content_type": "application/json",
       "data": {
@@ -15218,7 +15236,7 @@
     },
     {
       "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=smf.retrieve.very_top",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=smf.retrieve.banner",
       "status": 200,
       "content_type": "application/json",
       "data": {
@@ -15258,24 +15276,6 @@
     },
     {
       "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=smf.retrieve.top",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "data": {
-          "siteMessage": {
-            "title": "",
-            "templateUid": "1986163869543288832",
-            "content": "To do: <a href=\"/nx/skills-assesment/\">Take the working style assessment.</a> Clients trust and hire freelancers who highlight their working style on their profile.",
-            "dismissible": true,
-            "displayLocation": "top",
-            "severity": "Notification"
-          }
-        }
-      }
-    },
-    {
-      "method": "POST",
       "url": "https://www.upwork.com/api/graphql/v1?alias=idvStatusUnifiedUid",
       "status": 200,
       "content_type": "application/json",
@@ -15284,6 +15284,17 @@
           "idvStatusUnifiedUid": {
             "verifiedWithIdBadge": true
           }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=smf.display",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "data": {
+          "siteMessageDisplayed": null
         }
       }
     },
@@ -15309,9 +15320,27 @@
             "totalCount": 0,
             "count": 0,
             "pageInfo": {
-              "endCursor": "eyJBY3RpdmUiOiIwIiwiTGVnYWN5IjoiMCIsIkFyY2hpdmUiOiIwIn0="
+              "endCursor": "eyJBcmNoaXZlIjoiMCIsIkFjdGl2ZSI6IjAiLCJMZWdhY3kiOiIwIn0="
             },
             "invitations": []
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=smf.retrieve.top",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "data": {
+          "siteMessage": {
+            "title": "",
+            "templateUid": "1986163869543288832",
+            "content": "To do: <a href=\"/nx/skills-assesment/\">Take the working style assessment.</a> Clients trust and hire freelancers who highlight their working style on their profile.",
+            "dismissible": true,
+            "displayLocation": "top",
+            "severity": "Notification"
           }
         }
       }
@@ -15326,17 +15355,6 @@
           "freelancerCachedPendingInvitationIds": {
             "invitationIds": []
           }
-        }
-      }
-    },
-    {
-      "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=smf.display",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "data": {
-          "siteMessageDisplayed": null
         }
       }
     },
@@ -15442,6 +15460,21 @@
     },
     {
       "method": "POST",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=connectsBalance.retrieve",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "data": {
+          "organization": {
+            "subscriptionPlan": {
+              "connectsBalance": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
       "url": "https://www.upwork.com/api/graphql/v1?alias=catalog.instantConsultationsEligibility.retrieve",
       "status": 200,
       "content_type": "application/json",
@@ -15455,27 +15488,25 @@
     },
     {
       "method": "POST",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=catalog.consultationsEligibility.retrieve",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "data": {
+          "consultationEligibility": {
+            "success": false
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
       "url": "https://www.upwork.com/api/graphql/v1?alias=store/editor/list/getProjects",
       "status": 200,
       "content_type": "application/json",
       "data": {
         "data": {
           "catalogPersonProjectsList": []
-        }
-      }
-    },
-    {
-      "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=connectsBalance.retrieve",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "data": {
-          "organization": {
-            "subscriptionPlan": {
-              "connectsBalance": 0
-            }
-          }
         }
       }
     },
@@ -15503,19 +15534,6 @@
     },
     {
       "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=catalog.consultationsEligibility.retrieve",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "data": {
-          "consultationEligibility": {
-            "success": false
-          }
-        }
-      }
-    },
-    {
-      "method": "POST",
       "url": "https://www.upwork.com/api/graphql/v1?alias=get-suspension-status-for-user",
       "status": 200,
       "content_type": "application/json",
@@ -15523,36 +15541,6 @@
         "data": {
           "getSuspensionStatusForUser": {
             "status": "Limited"
-          }
-        }
-      }
-    },
-    {
-      "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=pib-get-connects-payments-balances",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "data": {
-          "getConnectsPaymentsBalances": {
-            "connectsBalance": 0,
-            "adCreditsBalance": 0,
-            "totalBalance": 0
-          }
-        }
-      }
-    },
-    {
-      "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=boosted-message-badge-eligibility",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "data": {
-          "userStats": {
-            "topRatedStatus": "not_eligible",
-            "topRatedPlusStatus": "not_eligible",
-            "topRatedEx": "not_eligible"
           }
         }
       }
@@ -15574,18 +15562,30 @@
     },
     {
       "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=purchased-invitation-badge-status-owner",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=boosted-message-badge-eligibility",
       "status": 200,
       "content_type": "application/json",
       "data": {
         "data": {
-          "purchasedInvitationBadgeStatus": {
-            "statuses": [
-              {
-                "personId": "1607059590658580480",
-                "status": false
-              }
-            ]
+          "userStats": {
+            "topRatedStatus": "not_eligible",
+            "topRatedPlusStatus": "not_eligible",
+            "topRatedEx": "not_eligible"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=pib-get-connects-payments-balances",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "data": {
+          "getConnectsPaymentsBalances": {
+            "connectsBalance": 0,
+            "adCreditsBalance": 0,
+            "totalBalance": 0
           }
         }
       }
@@ -15621,6 +15621,24 @@
     },
     {
       "method": "POST",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=purchased-invitation-badge-status-owner",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "data": {
+          "purchasedInvitationBadgeStatus": {
+            "statuses": [
+              {
+                "personId": "1607059590658580480",
+                "status": false
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
       "url": "https://www.upwork.com/api/graphql/v1?alias=get-video-connects-payments-balances",
       "status": 200,
       "content_type": "application/json",
@@ -15631,6 +15649,18 @@
             "adCreditsBalance": 0,
             "totalBalance": 0
           }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=load-onetrust-jwt-token",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "data": {
+          "oneTrustJwtToken": "eyJraWQiOiJ1cHdvcmstMjAyNSIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIxNjA3MDU5NTkwNjU4NTgwNDgwIiwiYXVkIjoib25ldHJ1c3QiLCJraWQiOiJ1cHdvcmstMjAyNSIsImlzcyI6ImF1dGgudXB3b3JrLmNvbSIsImV4cCI6MTc4NzI1MjM2NywiaWF0IjoxNzg3MjQ4NzY3fQ.W8QRYwvSnY6nO35pVe9JQK4BjVQ8NLCZ0JwrXnC6OZ6jbgob0uHFnpC-V9a1Tkc5meRYlT1WdOwCgO6Y7Jz0o0E178aKBamzOEtgz1_XnHsB8Qa0aFdZh8VmY2PDRFWTsbQHuk6SwiPCEX-cc5eWq42foTqleh1KRV_L_D4htmAEDvdXqLZzp8ESh1IiN-Xz992g6tILTPaYTR5gAIsj39N78VkX8e-KEOCJLVZTGb-raY1FhulxMqGOFB2p0EHUbf4hGBC8J7SDpWBGoTmoquVu95UJR_r4fh3AiHvmEXknohJD820hDwQbbfFQ9_vyNUPv9H2vIY71hWnNXxXJK92rlpBxKwTZrPghK8GUqE_lzlAj6vtJoloFfO8R782ZiVDFpVB38WDpV54WS45-yfyERH4_-EaVdCud6_KBUZc8u3Tv_s_Md0OpGUNwreLbyS67x7pASpfJuQSRsdfT6N-ujqFxHRjDUOClVAZT8zmNlSibcbwUXfIXwo8WFqNqAjdsA8dnCxOHEj3Ht0wwd81dEYD8AvbS7B6PZEVQG9ccilwtLp3tY5A-XTd259QyFzjt4t7CW10K5glV0x4qsYeeSTSPQVzQ6uJQvkdaalo0_-ihNw-oPlqPeIdKEDu_GVdgGqLb0nJG-ebD6zVBhcOAQVISAHRaw76tqlVBoUA",
+          "oneTrustConsentUserId": "1607059590658580480"
         }
       }
     },
@@ -15654,18 +15684,6 @@
               }
             }
           }
-        }
-      }
-    },
-    {
-      "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=load-onetrust-jwt-token",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "data": {
-          "oneTrustJwtToken": "eyJraWQiOiJ1cHdvcmstMjAyNSIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIxNjA3MDU5NTkwNjU4NTgwNDgwIiwiYXVkIjoib25ldHJ1c3QiLCJraWQiOiJ1cHdvcmstMjAyNSIsImlzcyI6ImF1dGgudXB3b3JrLmNvbSIsImV4cCI6MTc4NzI1MDAzMSwiaWF0IjoxNzg3MjQ2NDMxfQ.DJbRoWXgzMn3GpfFAsy2odbbh_NWzSik0Hrted3on-tAAglm6MHJhryPmAcgHymL3prQr6Qd5MRbqbjz8aWhig_kpkrX5Vi6AxHFSxlPqptAg2f8SUXOYqHUqUtw-gN_O1noYluHKMGKvquEfdzzI87n8KX9SrRo_5W4JJogZoQ_fV0YhNtRT3Gqm6bHiXHtEq5We-g1NV4XOzV_ZlHraMG1a6nAQiaA8a4uvdToIKu0Fyv6haC0cxaV3lJNTxdR98LhIMnGHMQDrR5Y3Yc3anq2gKwaPfs1YY5DZNjdC7TX1AXt0euySjH8dYjqNdaTAJVmmrTWMscogZPnkYUdssZeA88grxABEsw_zrQ4uAyFuJKn9n-U3gVYuaiMrYSbhnX-5-LitfXd7GJKNItjIYyeN6FxUT01kByzoV2BfyT-oZAZaE-dW-d6MwKK5wxMPNxMOOEEKb9X2D-c-Sj04dA3J7BD_0dxLi2TuAdWOijgy39pwEVM2D9GNW9Vv9f1Mtm3jABII2hqCwAeWNkahi4IS-dFG3iCv6eoseSe_6ceXOe7U98uY0HBTm9K6eTw48mYq9w6Om-G9MXnD_jnL0IhN-N81zMUxllPtmKcgT0kEZUZEsXdIodaay6qes6-zp6Yqjg0YL0QTHnOpDDu_l07AEMg4JSzs79r6iXmfIc",
-          "oneTrustConsentUserId": "1607059590658580480"
         }
       }
     },
@@ -15773,6 +15791,23 @@
     },
     {
       "method": "POST",
+      "url": "https://consent.us.transcend.io/sync",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "confirmed": false,
+        "timestamp": "2026-08-20T17:59:28.986Z",
+        "updatedAt": "2026-08-20T17:59:28.986Z",
+        "encryptedIdentifier": "pp7JG46TSz1qNITlkb1cBn0zjFs1SYpvYQwdjtRJeDY=",
+        "partition": "76b6554e-5f7f-4e24-a8d7-d33804a56e9b",
+        "userId": "pp7JG46TSz1qNITlkb1cBn0zjFs1SYpvYQwdjtRJeDY= 76b6554e-5f7f-4e24-a8d7-d33804a56e9b",
+        "identifiers": [],
+        "purposes": {},
+        "purposeToPreferences": {}
+      }
+    },
+    {
+      "method": "POST",
       "url": "https://www.upwork.com/api/graphql/v1?alias=orgs-context",
       "status": 200,
       "content_type": "application/json",
@@ -15830,19 +15865,6 @@
     },
     {
       "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=vpn-context",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "data": {
-          "requestMetadata": {
-            "internal": false
-          }
-        }
-      }
-    },
-    {
-      "method": "POST",
       "url": "https://www.upwork.com/api/graphql/v1?alias=user-footer-flags-ff",
       "status": 200,
       "content_type": "application/json",
@@ -15856,39 +15878,15 @@
     },
     {
       "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=pib-get-freelancer-agencies",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=vpn-context",
       "status": 200,
       "content_type": "application/json",
       "data": {
         "data": {
-          "getAssociatedAgencies": []
+          "requestMetadata": {
+            "internal": false
+          }
         }
-      }
-    },
-    {
-      "method": "POST",
-      "url": "https://www.upwork.com/api/v3/experiments/allocate/person",
-      "status": 400,
-      "content_type": "application/json",
-      "data": {
-        "message": "Experiment 'upwork_now_mvp_freelancers' is a new experiment, use /v3 endpoints for new experiments"
-      }
-    },
-    {
-      "method": "POST",
-      "url": "https://consent.us.transcend.io/sync",
-      "status": 200,
-      "content_type": "application/json; charset=utf-8",
-      "data": {
-        "confirmed": false,
-        "timestamp": "2026-08-20T17:20:35.731Z",
-        "updatedAt": "2026-08-20T17:20:35.731Z",
-        "encryptedIdentifier": "pp7JG46TSz1qNITlkb1cBn0zjFs1SYpvYQwdjtRJeDY=",
-        "partition": "76b6554e-5f7f-4e24-a8d7-d33804a56e9b",
-        "userId": "pp7JG46TSz1qNITlkb1cBn0zjFs1SYpvYQwdjtRJeDY= 76b6554e-5f7f-4e24-a8d7-d33804a56e9b",
-        "identifiers": [],
-        "purposes": {},
-        "purposeToPreferences": {}
       }
     },
     {
@@ -22448,6 +22446,26 @@
         },
         "OTTData": null,
         "MobileData": null
+      }
+    },
+    {
+      "method": "POST",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=pib-get-freelancer-agencies",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "data": {
+          "getAssociatedAgencies": []
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "https://www.upwork.com/api/v3/experiments/allocate/person",
+      "status": 400,
+      "content_type": "application/json",
+      "data": {
+        "message": "Experiment 'upwork_now_mvp_freelancers' is a new experiment, use /v3 endpoints for new experiments"
       }
     },
     {
@@ -23440,19 +23458,6 @@
     },
     {
       "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=savedJobsCount.retrieve",
-      "status": 200,
-      "content_type": "application/json",
-      "data": {
-        "data": {
-          "personSavedJobCount": {
-            "count": 0
-          }
-        }
-      }
-    },
-    {
-      "method": "POST",
       "url": "https://www.upwork.com/api/graphql/v1?alias=profileCompletenessSummary.retrieve",
       "status": 200,
       "content_type": "application/json",
@@ -23497,20 +23502,32 @@
       "status": 200,
       "content_type": "application/json",
       "data": {
-        "receipt": "eyJraWQiOiJ6c3VyMWxObkNrdzU5OEN5bU4vM0M0WjgxSmZCbnlvdGZtWDBrNG1qQ0FJK1Q4Tzl5WkN4T0VmU3ozWDE5YU12dmszQTdldWpBelF5M0NFNzJwbDBydz09IiwiYWxnIjoiSFM1MTIifQ.eyJtb2MiOiJDT09LSUUiLCJzdWIiOiJDb29raWUgVW5pcXVlIElkIiwiYXR0YWNobWVudHMiOm51bGwsIm5vdGVzIjpudWxsLCJzeW5jR3JvdXAiOiI4NzJlN2ExMS0wOTZkLTQ4YjctYmMxNS1lMDFkMDYzM2Y2OTQiLCJ0ZW5hbnRLZXkiOjQ0ODcsImlzcyI6bnVsbCwiY29uc2VudFN0cmluZyI6bnVsbCwibGFuZ3VhZ2UiOm51bGwsInNvdXJjZSI6eyJ0eXBlIjoiV0VCIiwiY29udGVudCI6Imh0dHBzOi8vd3d3LnVwd29yay5jb20vbngvZmluZC13b3JrL2Jlc3QtbWF0Y2hlcyIsInB1cnBvc2VJZHMiOlsiZDhkNTU4M2YtYTI3Yi00YjIyLTk0MTItNjA0NmYyMTUwNzZkIl19LCJwcm9jZXNzVmVyc2lvbiI6MjEzLCJlbmFibGVQYXJlbnRQcmltYXJ5SWRlbnRpZmllcnMiOmZhbHNlLCJhdXRoZW50aWNhdGlvblJlcXVpcmVkIjpmYWxzZSwiZGF0YUVsZW1lbnRUeXBlTWFwIjp7IkludGVyYWN0aW9uVHlwZSI6IlVTRVJfSU5QVVQiLCJDb25zZW50TW9kZWwiOiJVU0VSX0lOUFVUIiwiVXNlckFnZW50IjoiVVNFUl9JTlBVVCIsIkNvdW50cnkiOiJDT1VOVFJZIn0sImR5bmFtaWNDb2xsZWN0aW9uUG9pbnQiOmZhbHNlLCJwcm9jZXNzSWQiOiJhZDczNGVhNC00NzIxLTQ3M2EtYTE1NS0xMjBhMDU1MzI0YjYiLCJkc0RhdGFFbGVtZW50cyI6WyJJbnRlcmFjdGlvblR5cGUiLCJDb3VudHJ5IiwiVXNlckFnZW50IiwiQ29uc2VudE1vZGVsIl0sImRvdWJsZU9wdEluIjpmYWxzZSwiY29uc2VudFR5cGUiOiJDT09LSUVCQU5ORVIiLCJhZGRpdGlvbmFsSWRlbnRpZmllcnMiOnt9LCJpYXQiOiIyMDI2LTA4LTIwVDE3OjIwOjM3LjExMTI3Njg0NCIsImN1c3RvbVBheWxvYWQiOnsiSW50ZXJhY3Rpb24iOjIsIkFkZERlZmF1bHRJbnRlcmFjdGlvbiI6ZmFsc2V9LCJqdGkiOiIwMWEwMjAzMC02MmY3LTgxNDItYjk3NS01MGIyZGM5NzU2ZWEiLCJwb2xpY3lfdXJpIjoidXB3b3JrLmNvbSIsImlkZW50aWZpZXIiOiIxKioqKioqKioqKioqKioqKiowIiwiYWRkaXRpb25hbFBhcmVudElkZW50aWZpZXJUeXBlcyI6W10sInBhcmVudFByaW1hcnlJZGVudGlmaWVyc1R5cGUiOm51bGwsImdhY1N0cmluZyI6bnVsbCwidGNTdHJpbmdWMiI6bnVsbCwicmVjb25maXJtQWN0aXZlUHVycG9zZSI6ZmFsc2UsImFsbG93Tm90R2l2ZW5Db25zZW50cyI6ZmFsc2UsIm5vdGljZXMiOltdLCJpc0Fub255bW91cyI6ZmFsc2UsIm11bHRpcGxlSWRlbnRpZmllclR5cGVzIjpmYWxzZSwicHVycG9zZXMiOlt7IklkIjoiNTgzNzlhNzgtMTczZi00NmYwLWI0ZmQtMDBmOWU4MWRiNjRkIiwiVmVyc2lvbiI6MiwiUHJlZmVyZW5jZXMiOltdLCJDdXN0b21QcmVmZXJlbmNlcyI6W10sIlByaXZhY3lOb3RpY2VzIjpbXSwiVHJhbnNhY3Rpb25UeXBlIjoiTk9fQ0hPSUNFIiwiUHVycG9zZUF0dGFjaG1lbnRzIjpbXSwiUHVycG9zZU5vdGUiOm51bGwsImF0dHJpYnV0ZXMiOnt9LCJQdXJwb3NlU2NvcGVzIjpudWxsLCJJbXBsaWNpdENvbnNlbnRMaWZlU3BhbiI6MH0seyJJZCI6ImQ4ZDU1ODNmLWEyN2ItNGIyMi05NDEyLTYwNDZmMjE1MDc2ZCIsIlZlcnNpb24iOjMsIlByZWZlcmVuY2VzIjpbXSwiQ3VzdG9tUHJlZmVyZW5jZXMiOltdLCJQcml2YWN5Tm90aWNlcyI6W10sIlRyYW5zYWN0aW9uVHlwZSI6IkNPTkZJUk1FRCIsIlB1cnBvc2VBdHRhY2htZW50cyI6W10sIlB1cnBvc2VOb3RlIjpudWxsLCJhdHRyaWJ1dGVzIjp7fSwiUHVycG9zZVNjb3BlcyI6bnVsbCwiSW1wbGljaXRDb25zZW50TGlmZVNwYW4iOjB9LHsiSWQiOiIzYmQwNGE2NC05OTg2LTQ4MzUtOTMyYS0yMGM1MWNlY2MyYmUiLCJWZXJzaW9uIjoxLCJQcmVmZXJlbmNlcyI6W10sIkN1c3RvbVByZWZlcmVuY2VzIjpbXSwiUHJpdmFjeU5vdGljZXMiOltdLCJUcmFuc2FjdGlvblR5cGUiOiJDT05GSVJNRUQiLCJQdXJwb3NlQXR0YWNobWVudHMiOltdLCJQdXJwb3NlTm90ZSI6bnVsbCwiYXR0cmlidXRlcyI6e30sIlB1cnBvc2VTY29wZXMiOm51bGwsIkltcGxpY2l0Q29uc2VudExpZmVTcGFuIjowfSx7IklkIjoiMjhmNWYyOWItNmZjZC00MDUyLWIzNjktYTY1OGNmM2MyZWZjIiwiVmVyc2lvbiI6NSwiUHJlZmVyZW5jZXMiOltdLCJDdXN0b21QcmVmZXJlbmNlcyI6W10sIlByaXZhY3lOb3RpY2VzIjpbXSwiVHJhbnNhY3Rpb25UeXBlIjoiQ09ORklSTUVEIiwiUHVycG9zZUF0dGFjaG1lbnRzIjpbXSwiUHVycG9zZU5vdGUiOm51bGwsImF0dHJpYnV0ZXMiOnt9LCJQdXJwb3NlU2NvcGVzIjpudWxsLCJJbXBsaWNpdENvbnNlbnRMaWZlU3BhbiI6MH1dLCJ0ZW5hbnRJZCI6IjExNGNlZDRkLTFmNTEtNGEzYy1iNWIzLWI1YmZlZjc2MDZhYSIsIm92ZXJyaWRlQWN0aXZlUHVycG9zZSI6dHJ1ZSwicmVjZWlwdERhaXN5Q2hhaW5SZW1vdmVkIjp0cnVlLCJvdEp3dFZlcnNpb24iOjEsImVuYWJsZUdlb2xvY2F0aW9uIjp0cnVlfQ.qE1NVIwgaFsgrKyJHv__ClOr75uRs7bNbiIcViCBQLIb7QSNTWVlR5yo8ha1CcIRP7I9eanhPlEV0yU_7OvuJQ"
+        "receipt": "eyJraWQiOiJ6c3VyMWxObkNrdzU5OEN5bU4vM0M0WjgxSmZCbnlvdGZtWDBrNG1qQ0FJK1Q4Tzl5WkN4T0VmU3ozWDE5YU12dmszQTdldWpBelF5M0NFNzJwbDBydz09IiwiYWxnIjoiSFM1MTIifQ.eyJtb2MiOiJDT09LSUUiLCJzdWIiOiJDb29raWUgVW5pcXVlIElkIiwiYXR0YWNobWVudHMiOm51bGwsIm5vdGVzIjpudWxsLCJzeW5jR3JvdXAiOiI4NzJlN2ExMS0wOTZkLTQ4YjctYmMxNS1lMDFkMDYzM2Y2OTQiLCJ0ZW5hbnRLZXkiOjQ0ODcsImlzcyI6bnVsbCwiY29uc2VudFN0cmluZyI6bnVsbCwibGFuZ3VhZ2UiOm51bGwsInNvdXJjZSI6eyJ0eXBlIjoiV0VCIiwiY29udGVudCI6Imh0dHBzOi8vd3d3LnVwd29yay5jb20vbngvZmluZC13b3JrL2Jlc3QtbWF0Y2hlcyIsInB1cnBvc2VJZHMiOlsiZDhkNTU4M2YtYTI3Yi00YjIyLTk0MTItNjA0NmYyMTUwNzZkIl19LCJwcm9jZXNzVmVyc2lvbiI6MjEzLCJlbmFibGVQYXJlbnRQcmltYXJ5SWRlbnRpZmllcnMiOmZhbHNlLCJhdXRoZW50aWNhdGlvblJlcXVpcmVkIjpmYWxzZSwiZGF0YUVsZW1lbnRUeXBlTWFwIjp7IkludGVyYWN0aW9uVHlwZSI6IlVTRVJfSU5QVVQiLCJDb25zZW50TW9kZWwiOiJVU0VSX0lOUFVUIiwiVXNlckFnZW50IjoiVVNFUl9JTlBVVCIsIkNvdW50cnkiOiJDT1VOVFJZIn0sImR5bmFtaWNDb2xsZWN0aW9uUG9pbnQiOmZhbHNlLCJwcm9jZXNzSWQiOiJhZDczNGVhNC00NzIxLTQ3M2EtYTE1NS0xMjBhMDU1MzI0YjYiLCJkc0RhdGFFbGVtZW50cyI6WyJJbnRlcmFjdGlvblR5cGUiLCJDb3VudHJ5IiwiVXNlckFnZW50IiwiQ29uc2VudE1vZGVsIl0sImRvdWJsZU9wdEluIjpmYWxzZSwiY29uc2VudFR5cGUiOiJDT09LSUVCQU5ORVIiLCJhZGRpdGlvbmFsSWRlbnRpZmllcnMiOnt9LCJpYXQiOiIyMDI2LTA4LTIwVDE3OjU5OjMyLjM2MTg4NDc2MiIsImN1c3RvbVBheWxvYWQiOnsiSW50ZXJhY3Rpb24iOjMsIkFkZERlZmF1bHRJbnRlcmFjdGlvbiI6ZmFsc2V9LCJqdGkiOiIwMWEwMjA1NC0wNTA5LTgxYjEtOTc2Mi03NDBhMGM1NWUyMTMiLCJwb2xpY3lfdXJpIjoidXB3b3JrLmNvbSIsImlkZW50aWZpZXIiOiIxKioqKioqKioqKioqKioqKiowIiwiYWRkaXRpb25hbFBhcmVudElkZW50aWZpZXJUeXBlcyI6W10sInBhcmVudFByaW1hcnlJZGVudGlmaWVyc1R5cGUiOm51bGwsImdhY1N0cmluZyI6bnVsbCwidGNTdHJpbmdWMiI6bnVsbCwicmVjb25maXJtQWN0aXZlUHVycG9zZSI6ZmFsc2UsImFsbG93Tm90R2l2ZW5Db25zZW50cyI6ZmFsc2UsIm5vdGljZXMiOltdLCJpc0Fub255bW91cyI6ZmFsc2UsIm11bHRpcGxlSWRlbnRpZmllclR5cGVzIjpmYWxzZSwicHVycG9zZXMiOlt7IklkIjoiNTgzNzlhNzgtMTczZi00NmYwLWI0ZmQtMDBmOWU4MWRiNjRkIiwiVmVyc2lvbiI6MiwiUHJlZmVyZW5jZXMiOltdLCJDdXN0b21QcmVmZXJlbmNlcyI6W10sIlByaXZhY3lOb3RpY2VzIjpbXSwiVHJhbnNhY3Rpb25UeXBlIjoiTk9fQ0hPSUNFIiwiUHVycG9zZUF0dGFjaG1lbnRzIjpbXSwiUHVycG9zZU5vdGUiOm51bGwsImF0dHJpYnV0ZXMiOnt9LCJQdXJwb3NlU2NvcGVzIjpudWxsLCJJbXBsaWNpdENvbnNlbnRMaWZlU3BhbiI6MH0seyJJZCI6ImQ4ZDU1ODNmLWEyN2ItNGIyMi05NDEyLTYwNDZmMjE1MDc2ZCIsIlZlcnNpb24iOjMsIlByZWZlcmVuY2VzIjpbXSwiQ3VzdG9tUHJlZmVyZW5jZXMiOltdLCJQcml2YWN5Tm90aWNlcyI6W10sIlRyYW5zYWN0aW9uVHlwZSI6IkNPTkZJUk1FRCIsIlB1cnBvc2VBdHRhY2htZW50cyI6W10sIlB1cnBvc2VOb3RlIjpudWxsLCJhdHRyaWJ1dGVzIjp7fSwiUHVycG9zZVNjb3BlcyI6bnVsbCwiSW1wbGljaXRDb25zZW50TGlmZVNwYW4iOjB9LHsiSWQiOiIzYmQwNGE2NC05OTg2LTQ4MzUtOTMyYS0yMGM1MWNlY2MyYmUiLCJWZXJzaW9uIjoxLCJQcmVmZXJlbmNlcyI6W10sIkN1c3RvbVByZWZlcmVuY2VzIjpbXSwiUHJpdmFjeU5vdGljZXMiOltdLCJUcmFuc2FjdGlvblR5cGUiOiJDT05GSVJNRUQiLCJQdXJwb3NlQXR0YWNobWVudHMiOltdLCJQdXJwb3NlTm90ZSI6bnVsbCwiYXR0cmlidXRlcyI6e30sIlB1cnBvc2VTY29wZXMiOm51bGwsIkltcGxpY2l0Q29uc2VudExpZmVTcGFuIjowfSx7IklkIjoiMjhmNWYyOWItNmZjZC00MDUyLWIzNjktYTY1OGNmM2MyZWZjIiwiVmVyc2lvbiI6NSwiUHJlZmVyZW5jZXMiOltdLCJDdXN0b21QcmVmZXJlbmNlcyI6W10sIlByaXZhY3lOb3RpY2VzIjpbXSwiVHJhbnNhY3Rpb25UeXBlIjoiQ09ORklSTUVEIiwiUHVycG9zZUF0dGFjaG1lbnRzIjpbXSwiUHVycG9zZU5vdGUiOm51bGwsImF0dHJpYnV0ZXMiOnt9LCJQdXJwb3NlU2NvcGVzIjpudWxsLCJJbXBsaWNpdENvbnNlbnRMaWZlU3BhbiI6MH1dLCJ0ZW5hbnRJZCI6IjExNGNlZDRkLTFmNTEtNGEzYy1iNWIzLWI1YmZlZjc2MDZhYSIsIm92ZXJyaWRlQWN0aXZlUHVycG9zZSI6dHJ1ZSwicmVjZWlwdERhaXN5Q2hhaW5SZW1vdmVkIjp0cnVlLCJvdEp3dFZlcnNpb24iOjEsImVuYWJsZUdlb2xvY2F0aW9uIjp0cnVlfQ.RKtcgSsutqn4UsyietzbBdQPu_Fm3nLxglGTO1dNngWO9o4F9ox6BasPvMyUMTtEcMj7ersiLVYhpMrN7igpJg"
       }
     },
     {
       "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=first-redirect-url",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=savedJobsCount.retrieve",
       "status": 200,
       "content_type": "application/json",
       "data": {
         "data": {
-          "firstRedirect": {
-            "description": "Redirect resolved for freelancer",
-            "redirectId": null,
-            "redirectUrl": "/nx/find-work/"
+          "personSavedJobCount": {
+            "count": 0
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=softSkillsAssessment.showAssessmentInvite",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "data": {
+          "showAssessmentInvite": {
+            "shouldShowInvite": true,
+            "state": "assessment_allowed"
           }
         }
       }
@@ -23566,14 +23583,28 @@
     },
     {
       "method": "POST",
-      "url": "https://www.upwork.com/api/graphql/v1?alias=softSkillsAssessment.showAssessmentInvite",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=first-redirect-url",
       "status": 200,
       "content_type": "application/json",
       "data": {
         "data": {
-          "showAssessmentInvite": {
-            "shouldShowInvite": true,
-            "state": "assessment_allowed"
+          "firstRedirect": {
+            "description": "Redirect resolved for freelancer",
+            "redirectId": null,
+            "redirectUrl": "/nx/find-work/"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "https://www.upwork.com/api/graphql/v1?alias=freelancerCachedPendingInvitationIds.retrieve",
+      "status": 200,
+      "content_type": "application/json",
+      "data": {
+        "data": {
+          "freelancerCachedPendingInvitationIds": {
+            "invitationIds": []
           }
         }
       }
