@@ -7,7 +7,6 @@ import json
 import re
 from pathlib import Path
 from urllib.parse import urlencode
-from bs4 import BeautifulSoup
 
 
 class UpworkBlockedError(Exception):
@@ -54,6 +53,7 @@ class JobsSearch:
 
     def __init__(self, session):
         self.session = session
+        self.job_card_locator = "section[data-ev-sublocation='job_feed_tile']"
 
     def _assert_search_page(self, html: str) -> None:
         """Assert that the HTML is a valid search page, not a Cloudflare challenge."""
@@ -69,17 +69,23 @@ class JobsSearch:
         # Navigate to search URL
         await self.session.navigate(search_url)
 
-        # Get page HTML content from session (either fake browser fixture or real browser)
-        html = await self.session.get_page_content()
+        # Wait for page to load
+        await self.session.page.wait_for_load_state('networkidle', timeout=10000)
 
-        # Assert page is not a Cloudflare challenge
-        self._assert_search_page(html)
+        # Extract job cards using DOM evaluation
+        job_cards = await self._extract_job_cards_from_dom()
 
-        if html:
-            return self._extract_listings_from_dom(html)
+        if not job_cards:
+            # Fail loudly with diagnostics if no cards found
+            final_url = self.session.page.url
+            final_title = await self.session.page.title()
+            raise RuntimeError(
+                f"No job cards found on page. "
+                f"URL: {final_url}, Title: {final_title}, "
+                f"Locator: {self.job_card_locator}"
+            )
 
-        # Placeholder return if no content available
-        return []
+        return job_cards[:limit]
 
     async def get_job_details(self, job_id: str) -> JobListing:
         """Get detailed information for a specific job."""
@@ -102,40 +108,62 @@ class JobsSearch:
 
         return base_url
 
-    def _extract_listings_from_dom(self, html: str) -> List[JobListing]:
-        """Extract job listings from HTML DOM."""
+    async def _extract_job_cards_from_dom(self) -> List[JobListing]:
+        """Extract job cards from DOM using Playwright locator.evaluate_all()."""
         listings = []
 
-        soup = BeautifulSoup(html, 'html.parser')
+        try:
+            # Use the identified job card locator
+            job_cards_locator = self.session.page.locator(self.job_card_locator)
+            card_count = await job_cards_locator.count()
 
-        # Try to find job tiles (fixture format)
-        job_tiles = soup.find_all('div', class_='job-tile')
+            if card_count == 0:
+                return []
 
-        for idx, tile in enumerate(job_tiles):
-            title_elem = tile.find('h3', class_='job-title')
-            desc_elem = tile.find('div', class_='job-description')
-            budget_elem = tile.find('span', class_='budget')
-            link_elem = tile.find('a', class_='job-link')
+            # Extract data from all job cards using evaluate_all
+            cards_data = await job_cards_locator.evaluate_all("""
+                (elements) => elements.map(el => {
+                    const titleLink = el.querySelector('h3.job-tile-title a');
+                    const postedOn = el.querySelector('[data-test="posted-on"]');
+                    const proposalsTier = el.querySelector('[data-test="proposals-tier"]');
+                    const description = el.querySelector('.job-description');
+                    
+                    return {
+                        title: titleLink ? titleLink.textContent.trim() : null,
+                        url: titleLink ? titleLink.getAttribute('href') : null,
+                        posted_on: postedOn ? postedOn.textContent.trim() : null,
+                        proposals: proposalsTier ? proposalsTier.textContent.trim() : null,
+                        description: description ? description.textContent.trim() : null,
+                        opening_uid: el.getAttribute('data-ev-opening_uid'),
+                        position: el.getAttribute('data-ev-position'),
+                        feed_name: el.getAttribute('data-ev-feed_name')
+                    };
+                })
+            """)
 
-            if title_elem and desc_elem and link_elem:
-                title = title_elem.get_text(strip=True)
-                description = desc_elem.get_text(strip=True)
-                budget = budget_elem.get_text(strip=True) if budget_elem else "Unknown"
-                url = link_elem.get('href', '')
+            for idx, card_data in enumerate(cards_data):
+                if not card_data.get('url'):
+                    continue
 
                 # Extract job ID from URL
-                job_id_match = re.search(r'/jobs/([a-z0-9-]+)', url)
-                job_id = job_id_match.group(1) if job_id_match else f"job_{idx}"
+                job_id_match = re.search(r'/jobs/([a-z0-9-]+)', card_data['url'])
+                job_id = job_id_match.group(1) if job_id_match else card_data.get('opening_uid', f"job_{idx}")
 
                 listings.append(JobListing(
                     job_id=job_id,
-                    title=title,
-                    description=description,
+                    title=card_data.get('title', 'Unknown'),
+                    description=card_data.get('description', ''),
                     client_id="unknown",
                     client_name="Unknown Client",
                     posted_date=datetime.now(),
-                    url=f"https://www.upwork.com{url}",
-                    budget={"amount": budget},
+                    url=f"https://www.upwork.com{card_data['url']}",
+                    budget={
+                        "proposals": card_data.get('proposals'),
+                        "posted_on": card_data.get('posted_on')
+                    },
                 ))
+
+        except Exception as e:
+            raise RuntimeError(f"Failed to extract job cards from DOM: {e}")
 
         return listings
