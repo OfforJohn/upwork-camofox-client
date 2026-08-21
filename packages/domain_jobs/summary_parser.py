@@ -35,6 +35,8 @@ class JobSummary(BaseModel):
             raise ValueError("url is required and cannot be empty")
         if not v.startswith("https://www.upwork.com"):
             raise ValueError("url must be a valid Upwork URL")
+        if "/jobs/" not in v:
+            raise ValueError("url must contain /jobs/ path")
         return v.strip()
     
     @field_validator('job_id')
@@ -49,13 +51,6 @@ class JobSummary(BaseModel):
     def validate_title(cls, v: str) -> str:
         if not v or v.strip() == "":
             raise ValueError("title is required and cannot be empty")
-        return v.strip()
-    
-    @field_validator('url')
-    @classmethod
-    def validate_url(cls, v: str) -> str:
-        if not v or v.strip() == "":
-            raise ValueError("url is required and cannot be empty")
         return v.strip()
     
     @field_validator('description')

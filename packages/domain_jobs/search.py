@@ -1,7 +1,7 @@
 """Jobs search primitive for Upwork."""
 
 from dataclasses import dataclass
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator, Field
 from typing import List, Optional
 from datetime import datetime
 import json
@@ -86,7 +86,7 @@ class JobListing(BaseModel):
     posted_at: Optional[datetime] = None  # Only when absolute timestamp parsed
     budget: Optional[Budget] = None
     status: str = "open"
-    tags: List[str] = []
+    tags: List[str] = Field(default_factory=list)
     
     @field_validator('url')
     @classmethod

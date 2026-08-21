@@ -1,6 +1,6 @@
 """Data models for normalized records and cursors."""
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator, Field
 from typing import Optional, Dict, Any, List
 from datetime import datetime, UTC
 from enum import Enum
@@ -31,9 +31,16 @@ class JobRecord(BaseModel):
     posted_date_text: Optional[str] = None
     status: JobStatus = JobStatus.OPEN
     budget: Optional[Budget] = None
-    tags: List[str] = []
-    created_at: datetime = datetime.now(UTC)
-    updated_at: datetime = datetime.now(UTC)
+    tags: List[str] = Field(default_factory=list)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    
+    @field_validator('id')
+    @classmethod
+    def validate_id(cls, v: str) -> str:
+        if not v or v.strip() == "":
+            raise ValueError("id is required and cannot be empty")
+        return v.strip()
     
     @field_validator('url')
     @classmethod
@@ -64,25 +71,49 @@ class JobRecord(BaseModel):
             "status": self.status.value,
             "budget": self.budget.model_dump() if self.budget else None,
             "tags": self.tags,
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat(),
         }
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "JobRecord":
         posted_raw = data.get("posted_date")
+        created_raw = data.get("created_at")
+        updated_raw = data.get("updated_at")
+        budget_raw = data.get("budget")
+
         return cls(
-            id=data.get("job_id", data.get("id")),
-            title=data["title"],
-            description=data["description"],
-            client_id=data["client_id"],
-            client_name=data["client_name"],
-            posted_date=datetime.fromisoformat(posted_raw) if posted_raw else None,
+            id=data.get("job_id") or data.get("id"),
+            title=data.get("title"),
+            description=data.get("description"),
+            client_id=data.get("client_id"),
+            client_name=data.get("client_name"),
+            posted_date=(
+                datetime.fromisoformat(posted_raw)
+                if isinstance(posted_raw, str) and posted_raw
+                else posted_raw
+            ),
             posted_date_text=data.get("posted_date_text"),
-            url=data["url"],
+            url=data.get("url"),
             status=JobStatus(data.get("status", "open")),
-            budget=data.get("budget"),
+            budget=(
+                budget_raw
+                if isinstance(budget_raw, Budget)
+                else Budget.model_validate(budget_raw)
+                if budget_raw is not None
+                else None
+            ),
             tags=data.get("tags", []),
-            created_at=datetime.now(UTC),
-            updated_at=datetime.now(UTC),
+            created_at=(
+                datetime.fromisoformat(created_raw)
+                if isinstance(created_raw, str) and created_raw
+                else created_raw
+            ),
+            updated_at=(
+                datetime.fromisoformat(updated_raw)
+                if isinstance(updated_raw, str) and updated_raw
+                else updated_raw
+            ),
         )
 
 
@@ -91,13 +122,13 @@ class CursorRecord(BaseModel):
     
     model_config = ConfigDict(extra="forbid")
     
-    id: str = str(uuid.uuid4())
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     search_id: str = ""
     position: int = 0
     total_results: int = 0
     next_page_token: Optional[str] = None
-    created_at: datetime = datetime.now(UTC)
-    updated_at: datetime = datetime.now(UTC)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     def to_dict(self) -> Dict[str, Any]:
         return {
