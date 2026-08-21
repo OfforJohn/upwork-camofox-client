@@ -5,7 +5,7 @@ Output: Validated JobSummary
 """
 
 from selectolax.parser import HTMLParser
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict, HttpUrl
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import re
@@ -14,6 +14,8 @@ from urllib.parse import urljoin
 
 class JobSummary(BaseModel):
     """Validated job summary extracted from a single job card HTML."""
+    
+    model_config = ConfigDict(extra="forbid")
     
     job_id: str = Field(..., description="Unique job ID from data-ev-job-uid attribute")
     title: str = Field(..., description="Job title")

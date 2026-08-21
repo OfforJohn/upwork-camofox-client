@@ -1,200 +1,214 @@
 {
   "jobs": [
     {
-      "job_id": "job_0",
-      "title": "Web Developer for Python &amp; HTML Projects",
-      "description": "Just not interested\n      \n        Vague Description\n      \n        Unrealistic Expectations\n      \n        Too many applicants\n      \n        Job posted too long ago\n      \n        Poor reviews about the client\n      \n        Doesn't Match Skills\n      \n        I am overqualified\n      \n        Budget too low\n      \n        Not in my preferred location\n       \n          The client will not be notified. Your feedback helps us improve job search.\n           Save Job      Unverified \n      Payment...",
-      "client_id": "2089982301013487890",
-      "client_name": "Unknown Client",
-      "posted_date": "2026-08-20T12:23:16.847250",
+      "job_id": "2089982301013487890",
+      "title": "Web Developer forPython& HTML Projects",
+      "description": "We are seeking a skilled web developer with expertise inPythonand HTML, complemented by a background in graphic design. The ideal candidate will be responsible for creating responsive web applications and enhancing user experience through effective design. You should possess a strong understanding of web frameworks and be able to collaborate well within a team. If you have a keen eye for detail and a passion for web development, we invite you to apply.",
+      "client_id": null,
+      "client_name": null,
+      "posted_date": null,
+      "posted_date_text": "Posted yesterday\u00b7Proposals: 10 to 15",
       "url": "https://www.upwork.com/jobs/Web-Developer-for-span-class-highlight-Python-span-amp-HTML-Projects_~022089982301013487890/?referrer_url_path=/nx/search/jobs/",
       "status": "open",
       "budget": {
-        "proposals": "Proposals: 10 to 15",
-        "posted_on": null
+        "job_type": "Hourly: $4.00 - $5.00",
+        "proposals": "Proposals: 10 to 15"
       },
       "tags": [
         "Python",
-        "Python",
-        "Python"
+        "Web Development",
+        "HTML",
+        "Graphic Design"
       ]
     },
     {
-      "job_id": "job_1",
-      "title": "Front-End Developer \u2013 React / Python / AI / LLM / Netlify",
-      "description": "Just not interested\n      \n        Vague Description\n      \n        Unrealistic Expectations\n      \n        Too many applicants\n      \n        Job posted too long ago\n      \n        Poor reviews about the client\n      \n        Doesn't Match Skills\n      \n        I am overqualified\n      \n        Budget too low\n      \n        Not in my preferred location\n       \n          The client will not be notified. Your feedback helps us improve job search.\n           Save Job      Verified \n      Payment v...",
-      "client_id": "2090513227813364352",
-      "client_name": "Unknown Client",
-      "posted_date": "2026-08-20T12:23:16.847749",
+      "job_id": "2090513227813364352",
+      "title": "Front-End Developer \u2013 React /Python/ AI / LLM / Netlify",
+      "description": "We are looking for an experienced Front-End Developer for a full-time contract (40+ hours/week) for 3\u20136 months. We need someone who can focus exclusively on this project during the contract period, work at a fast pace, and take ownership of front-end delivery.\n\nProject Overview\nThe project is a retail data analytics platform that processes large volumes of data collected from multiple retailers. Data is provided through APIs and used to build interactive analytics, comparisons, and AI/LLM-powered insights.\n\nThe product is under active development with frequent releases and evolving priorities.\n\nTechnology Stack\nReactPythonNetlify\nAI / LLM integrations\nREST APIs\nGit\n\nResponsibilities\nDevelop and improve front-end functionality using React\nIntegrate UI with APIs and large datasets\nImplement AI/LLM-powered features\nDeploy and manage releases through Netlify\nTroubleshoot and resolve issues quickly\nDeliver features from requirement to production\nWork directly with stakeholders and adapt to changing priorities\n\nRequirements\nStrong React experience\nExperience withPythonand REST APIs\nPractical Netlify deployment experience\nExperience integrating AI/LLM functionality\nStrong problem-solving and communication skills\nAbility to work independently and deliver quickly\n40+ hours/week availability\nAbility to focus exclusively on this project for 3\u20136 months\n\nWe are looking for a hands-on, delivery-focused developer who can become an active part of the team and move features to production quickly.",
+      "client_id": null,
+      "client_name": "Verified",
+      "posted_date": null,
+      "posted_date_text": "Posted 5 minutes ago\u00b7Proposals: 15 to 20",
       "url": "https://www.upwork.com/jobs/Front-End-Developer-React-span-class-highlight-Python-span-LLM-Netlify_~022090513227813364352/?referrer_url_path=/nx/search/jobs/",
       "status": "open",
       "budget": {
-        "proposals": "Proposals: 15 to 20",
-        "posted_on": null
+        "job_type": "Fixed price",
+        "proposals": "Proposals: 15 to 20"
       },
       "tags": [
         "Python",
-        "Python",
-        "Python",
-        "Python"
+        "Netlify",
+        "React",
+        "AI App Development",
+        "LLM Prompt Engineering"
       ]
     },
     {
-      "job_id": "job_2",
-      "title": "Looking for senior backend developer with python and advance LLM experience",
-      "description": "Just not interested\n      \n        Vague Description\n      \n        Unrealistic Expectations\n      \n        Too many applicants\n      \n        Job posted too long ago\n      \n        Poor reviews about the client\n      \n        Doesn't Match Skills\n      \n        I am overqualified\n      \n        Budget too low\n      \n        Not in my preferred location\n       \n          The client will not be notified. Your feedback helps us improve job search.\n           Save Job      Verified \n      Payment v...",
-      "client_id": "2090478516247641798",
-      "client_name": "Unknown Client",
-      "posted_date": "2026-08-20T12:23:16.848177",
+      "job_id": "2090478516247641798",
+      "title": "Looking for senior backend developer withpythonand advance LLM experience",
+      "description": "A backend-focused engineering position on a transformation project for an international travel company. The engineer will own features end-to-end\u2014from planning and design through development, testing, deployment, and release.\nKey Responsibilities\nOwn features end-to-end: plan, design, build, test, and release\nBuild and maintain backend systems usingPythonDevelop and maintain RESTful APIs and backend services\nContribute to full-stack work when frontend involvement is required\nWrite clean, tested, high-quality code\nUse AI coding agents to maximize development efficiency\nParticipate in code reviews and technical discussions\nMaintain existing systems and resolve production issues\nCollaborate closely with Product, Design, and Quality Engineering teams\nRequired Qualifications\nStrong proficiency inPythonwith solid production experience\nExperience with backend frameworks such as Django, FastAPI, or Flask\nStrong database schema design and data modeling skills\nExperience designing and developing RESTful APIs\nStrong PostgreSQL experience\nKnowledge of AWS infrastructure and cloud-based deployments\nDemonstrable experience with AI coding agents, or strong enthusiasm to adopt them\nGood English communication skills\nTeam-oriented with strong collaboration and communication abilities\nPragmatic approach to balancing speed, quality, and scope\nTech StackPython, Django/FastAPI, PostgreSQL, AWS, Next.js, Vercel\nTrunk-based development with CI/CD and multiple daily deployments.\nNice to Have\nE-commerce or travel platform experience\nExperience working with high-traffic or distributed systems\nAn eye for UX/design\nExperience with modern AI development tools and workflows\nTravel enthusiasm",
+      "client_id": null,
+      "client_name": "Verified",
+      "posted_date": null,
+      "posted_date_text": "Posted 2 hours ago\u00b7Proposals: 20 to 50",
       "url": "https://www.upwork.com/jobs/Looking-for-senior-backend-developer-with-span-class-highlight-python-span-and-advance-LLM-experience_~022090478516247641798/?referrer_url_path=/nx/search/jobs/",
       "status": "open",
       "budget": {
-        "proposals": "Proposals: 20 to 50",
-        "posted_on": null
+        "job_type": "Fixed price",
+        "proposals": "Proposals: 20 to 50"
       },
       "tags": [
-        "python",
         "Python",
-        "Python",
-        "Python",
-        "Python"
+        "API Development",
+        "Back-End Development",
+        "API Integration",
+        "API",
+        "JavaScript"
       ]
     },
     {
-      "job_id": "span-class-highlight-",
-      "title": "Python Developer for Permit Portal Scrapers",
-      "description": "Just not interested\n      \n        Vague Description\n      \n        Unrealistic Expectations\n      \n        Too many applicants\n      \n        Job posted too long ago\n      \n        Poor reviews about the client\n      \n        Doesn't Match Skills\n      \n        I am overqualified\n      \n        Budget too low\n      \n        Not in my preferred location\n       \n          The client will not be notified. Your feedback helps us improve job search.\n           Save Job      Verified \n      Payment v...",
-      "client_id": "2090116979619755021",
-      "client_name": "Unknown Client",
-      "posted_date": "2026-08-20T12:23:16.848710",
+      "job_id": "2090116979619755021",
+      "title": "PythonDeveloper for Permit Portal Scrapers",
+      "description": "Overview\n\nWe collect building permit records from municipal and county permitting portals across the US. We need aPythondeveloper to build one scraper per jurisdiction, on an ongoing basis. We have many jurisdictions to cover, so consistent quality means steady repeat work.\n\nCompensation: $30 USD per completed, accepted scraper. Fixed price, one jurisdiction per milestone. Payment is released when the scraper meets the acceptance criteria below. Every scraper follows the same spec, so after the first two or three the work becomes largely repeatable.\n\nRead this part carefully \u2014 it's where most submissions fail\n\nPulling the permit page is the easy half. The two requirements below are the core of the job, and a scraper that skips them will not be accepted.\n\n1. Missing owner name must be resolved from public property records. Many permit records list no owner. When Owner Name is blank, the script must look it up from the county property appraiser, tax collector, or equivalent public property-records source, using the Job Address as the key. This means parsing and normalizing the address, querying the county's public property search, and pulling the owner of record. Each county exposes this differently \u2014 some have a JSON endpoint, some a form-post search, some a GIS/parcel service. Finding and using the right one for your assigned jurisdiction is part of the job.\n\n2. A contractor company name must produce an email and phone number. If the record gives you a contractor company, that alone is enough to trigger the lookup \u2014 do not skip enrichment just because there's no individual contractor name. The email and phone fields are the most valuable output of this entire scraper.\n\nDeliverable\n\nOne single standalone .py file per jurisdiction. No multi-file frameworks, no shared imports between scrapers, no build steps. Each file must run independently on Windows via Task Scheduler.\n\nAutomation\n\n100% autonomous. No manual clicks, no prompts, no manual browser interaction. It runs on a schedule unattended.\n\nData extraction\n\n20 data points per permit record. The full field list and the classification rules for the derived fields are provided on hire. They cover permit identifiers and dates, permit and property classification, project description, address, project value, status, and the owner / applicant / contractor contact set.\n\nIf a field isn't available after the lookup steps above have been attempted, leave it blank and continue to the next record. The script must never stop or throw on missing data.\n\nContractor contact enrichment\n\nWork these steps in order and stop at the first that returns a result. Never halt on a failed step \u2014 log it and move on.\n\nApplicant contact info on the permit record \u2014 if the applicant's email or phone is listed, copy it into the contractor contact fields.\nState contractor licensing database \u2014 query the state's public license lookup by contractor name and/or company (e.g. FL DBPR, CA CSLB). Parse for email and phone.\nThe contractor's own website \u2014 locate the business site and pull contact details from the contact/about page, including structured data (JSON-LD, microdata, mailto:/tel: links) where present.\nPublic business listings \u2014 where a listing is publicly accessible and its terms permit automated retrieval, pull the published business phone/email.\n\nIf nothing is found after all steps, leave the fields blank and continue.\n\nContact cache\n\nThe script must save every email and phone number it finds to a local file so the same contractor is never looked up twice. Before running any external lookup, check the cache first \u2014 if we already have that contractor's email and phone from a previous run, reuse it and skip the lookup entirely.\n\nGoogle Sheets output\n\nRecords are appended to a designated Google Sheet via the Sheets API using service account credentials we provide. The push happens inside the same script \u2014 no manual export or copy-paste.\n\nReliability requirements\n\nRandomized delays between requests (1\u20134s). No rapid-fire request bursts. Respect Retry-After headers.\nPersistent session so cookies carry across page loads within a domain (requests.Session or a Playwright context).\nExponential backoff on 429/503 (5s \u2192 10s \u2192 20s, max 3 retries). On a hard block, log the URL and skip rather than crash.\nWhere the portal genuinely requires JS to render, use Playwright or Selenium headless.\nConsole-only diagnostics. Do not write screenshots or HTML dumps to disk.\nsys.stdout.reconfigure(encoding='utf-8') for clean Unicode output under Windows Task Scheduler.\n\nAcceptance criteria\n\nA scraper is accepted when it:\n\nruns end-to-end unattended on a fresh machine\npulls the full available record set for the jurisdiction, not just page one\npopulates all 20 data points where the data exists\nresolves owner name from public property records on records where the permit itself left it blank\nreturns email and phone for records that carry a contractor company name\nwrites to the target Sheet\ncompletes without an unhandled exception",
+      "client_id": null,
+      "client_name": "Verified",
+      "posted_date": null,
+      "posted_date_text": "Posted yesterday\u00b7Proposals: 20 to 50",
       "url": "https://www.upwork.com/jobs/span-class-highlight-Python-span-Developer-for-Permit-Portal-Scrapers_~022090116979619755021/?referrer_url_path=/nx/search/jobs/",
       "status": "open",
       "budget": {
-        "proposals": "Proposals: 20 to 50",
-        "posted_on": null
+        "job_type": "Fixed price",
+        "proposals": "Proposals: 20 to 50"
       },
       "tags": [
         "Python",
-        "Python",
-        "Python"
+        "Scrapy",
+        "Django",
+        "Machine Learning"
       ]
     },
     {
-      "job_id": "span-class-highlight-",
-      "title": "Python Selenium Developer Needed for Website Monitoring + Telegram Alerts",
-      "description": "Just not interested\n      \n        Vague Description\n      \n        Unrealistic Expectations\n      \n        Too many applicants\n      \n        Job posted too long ago\n      \n        Poor reviews about the client\n      \n        Doesn't Match Skills\n      \n        I am overqualified\n      \n        Budget too low\n      \n        Not in my preferred location\n       \n          The client will not be notified. Your feedback helps us improve job search.\n           Save Job      Verified \n      Payment v...",
-      "client_id": "2089901120214180053",
-      "client_name": "Unknown Client",
-      "posted_date": "2026-08-20T12:23:16.849002",
+      "job_id": "2089901120214180053",
+      "title": "PythonSelenium Developer Needed for Website Monitoring + Telegram Alerts",
+      "description": "I need a developer to monitor a government website for appointment availability and send me instant notifications. \nWhen a slot opens, the system should alert me on Telegram.\nRequirements:Python, Selenium, Web Monitoring.\nNote: No auto-booking. Only monitoring + notification.",
+      "client_id": null,
+      "client_name": "Verified",
+      "posted_date": null,
+      "posted_date_text": "Posted 2 days ago\u00b7Proposals: 20 to 50",
       "url": "https://www.upwork.com/jobs/span-class-highlight-Python-span-Selenium-Developer-Needed-for-Website-Monitoring-Telegram-Alerts_~022089901120214180053/?referrer_url_path=/nx/search/jobs/",
       "status": "open",
       "budget": {
-        "proposals": "Proposals: 20 to 50",
-        "posted_on": null
+        "job_type": "Fixed price",
+        "proposals": "Proposals: 20 to 50"
       },
-      "tags": [
-        "Python",
-        "Python"
-      ]
+      "tags": []
     },
     {
-      "job_id": "span-class-highlight-",
-      "title": "Python developer with Machine Learning expertise for a water filtration project",
-      "description": "Just not interested\n      \n        Vague Description\n      \n        Unrealistic Expectations\n      \n        Too many applicants\n      \n        Job posted too long ago\n      \n        Poor reviews about the client\n      \n        Doesn't Match Skills\n      \n        I am overqualified\n      \n        Budget too low\n      \n        Not in my preferred location\n       \n          The client will not be notified. Your feedback helps us improve job search.\n           Save Job      Verified \n      Payment v...",
-      "client_id": "2090464381318237991",
-      "client_name": "Unknown Client",
-      "posted_date": "2026-08-20T12:23:16.849287",
+      "job_id": "2090464381318237991",
+      "title": "Pythondeveloper with Machine Learning expertise for a water filtration project",
+      "description": "Looking for apythondeveloper with machine learning expertise to support a water filtration project. Please message if you would like to discuss more. Thanks!",
+      "client_id": null,
+      "client_name": "Verified",
+      "posted_date": null,
+      "posted_date_text": "Posted 3 hours ago\u00b7Proposals: 50+",
       "url": "https://www.upwork.com/jobs/span-class-highlight-Python-span-developer-with-Machine-Learning-expertise-for-water-filtration-project_~022090464381318237991/?referrer_url_path=/nx/search/jobs/",
       "status": "open",
       "budget": {
-        "proposals": "Proposals: 50+",
-        "posted_on": null
+        "job_type": "Hourly",
+        "proposals": "Proposals: 50+"
       },
       "tags": [
         "Python",
-        "python",
-        "Python"
+        "Machine Learning",
+        "API"
       ]
     },
     {
-      "job_id": "job_6",
-      "title": "Need help fixing a tricky bug in a Python script",
-      "description": "Just not interested\n      \n        Vague Description\n      \n        Unrealistic Expectations\n      \n        Too many applicants\n      \n        Job posted too long ago\n      \n        Poor reviews about the client\n      \n        Doesn't Match Skills\n      \n        I am overqualified\n      \n        Budget too low\n      \n        Not in my preferred location\n       \n          The client will not be notified. Your feedback helps us improve job search.\n           Save Job      Verified \n      Payment v...",
-      "client_id": "2090103845762714023",
-      "client_name": "Unknown Client",
-      "posted_date": "2026-08-20T12:23:16.849625",
+      "job_id": "2090103845762714023",
+      "title": "Need help fixing a tricky bug in aPythonscript",
+      "description": "We are seeking an experiencedPythondeveloper to fix a tricky bug in our script. The ideal candidate will have a strong understanding ofPythonand debugging techniques. This is an urgent task that requires immediate attention. The freelancer should be able to identify and resolve the issue efficiently. If you have a knack for problem-solving and a solid grasp ofPython, we would love to hear from you.",
+      "client_id": null,
+      "client_name": "Verified",
+      "posted_date": null,
+      "posted_date_text": "Posted yesterday\u00b7Proposals: 20 to 50",
       "url": "https://www.upwork.com/jobs/Need-help-fixing-tricky-bug-span-class-highlight-Python-span-script_~022090103845762714023/?referrer_url_path=/nx/search/jobs/",
       "status": "open",
       "budget": {
-        "proposals": "Proposals: 20 to 50",
-        "posted_on": null
+        "job_type": "Fixed price",
+        "proposals": "Proposals: 20 to 50"
       },
       "tags": [
         "Python",
-        "Python",
-        "Python",
-        "Python",
-        "Python"
+        "Perl",
+        "Django",
+        "Bash Programming"
       ]
     },
     {
-      "job_id": "span-class-highlight-",
-      "title": "Python Developer \u2013 Soccer Player Analytics Dashboard (Streamlit)",
-      "description": "Just not interested\n      \n        Vague Description\n      \n        Unrealistic Expectations\n      \n        Too many applicants\n      \n        Job posted too long ago\n      \n        Poor reviews about the client\n      \n        Doesn't Match Skills\n      \n        I am overqualified\n      \n        Budget too low\n      \n        Not in my preferred location\n       \n          The client will not be notified. Your feedback helps us improve job search.\n           Save Job      Unverified \n      Payment...",
-      "client_id": "2089893717195500081",
-      "client_name": "Unknown Client",
-      "posted_date": "2026-08-20T12:23:16.850023",
+      "job_id": "2089893717195500081",
+      "title": "PythonDeveloper \u2013 Soccer Player Analytics Dashboard (Streamlit)",
+      "description": "I\u2019m a soccer agent looking for aPythondeveloper to build a practical player analytics tool.\nWhat I need: A simple but professional dashboard that takes player data (from Wyscout exports or CSV files) and shows:\n\u2022  How well the player is performing (performance score vs peers)\n\u2022  Areas where the player needs growth\n\u2022  Whether the player is performing above or below his current level/league\nPreferred Tech Stack:\n\u2022Python\u2022  Streamlit (preferred for the dashboard)\n\u2022  Pandas\n\u2022  Basic data visualization (charts, radar plots, etc.)\nProject Details:\n\u2022  This is a fixed-price project for a clear MVP (Minimum Viable Product)\n\u2022  Budget is set at $2,000\n\u2022  Looking for intermediate-level experience\n\u2022  Clean, easy-to-use interface is more important than complex features\nPlease include in your proposal:\n1.  Examples of previous dashboards or data analysis projects you\u2019ve built\n2.  Your experience with Streamlit or similar tools\n3.  How you would approach this project\n4.  Estimated timeline\nLooking for someone who communicates clearly and can deliver a working tool I can actually use for evaluating players.\n\nPrevious work in soccer analytics is preferred.",
+      "client_id": null,
+      "client_name": null,
+      "posted_date": null,
+      "posted_date_text": "Posted 2 days ago\u00b7Proposals: 20 to 50",
       "url": "https://www.upwork.com/jobs/span-class-highlight-Python-span-Developer-Soccer-Player-Analytics-Dashboard-Streamlit_~022089893717195500081/?referrer_url_path=/nx/search/jobs/",
       "status": "open",
       "budget": {
-        "proposals": "Proposals: 20 to 50",
-        "posted_on": null
+        "job_type": "Fixed price",
+        "proposals": "Proposals: 20 to 50"
       },
       "tags": [
         "Python",
-        "Python",
-        "Python",
-        "Python"
+        "Data Analysis",
+        "Data Visualization",
+        "Streamlit",
+        "pandas"
       ]
     },
     {
-      "job_id": "span-class-highlight-",
-      "title": "Python Developer for Court Records &amp; Public Data Automation Tool",
-      "description": "Just not interested\n      \n        Vague Description\n      \n        Unrealistic Expectations\n      \n        Too many applicants\n      \n        Job posted too long ago\n      \n        Poor reviews about the client\n      \n        Doesn't Match Skills\n      \n        I am overqualified\n      \n        Budget too low\n      \n        Not in my preferred location\n       \n          The client will not be notified. Your feedback helps us improve job search.\n           Save Job      Verified \n      Payment v...",
-      "client_id": "2090251918748066005",
-      "client_name": "Unknown Client",
-      "posted_date": "2026-08-20T12:23:16.850537",
+      "job_id": "2090251918748066005",
+      "title": "PythonDeveloper for Court Records & Public Data Automation Tool",
+      "description": "PythonDeveloper for Court Records & Public Data Automation Tool\n\nI\u2019m looking for an experiencedPythondeveloper/data automation specialist to build a private internal research tool that automates research across property records, court records, and recorded lien/judgment databases.\n\nThis is not a SaaS product. It is a private tool for my own use, so I am more interested in accuracy, reliability, and automation than an elaborate user interface.\n\nWhat I Need.....\n\nI will provide a CSV containing property addresses.\n\nThe tool should automate a workflow that:\n\n1. Takes the property address from the CSV.\n2. Identifies the current property owner using tax assessor/property-record data or another reliable data source.\n3. Normalizes the owner's name and creates appropriate name variations for searching.\n4. Searches appropriate court-record sources for potential monetary judgments associated with that owner.\n5. Extracts relevant information such as creditor/plaintiff, debtor/defendant, judgment amount, judgment date, case number, court, and case status.\n6. Uses entity/name matching to determine how likely it is that the judgment belongs to the same person identified as the property owner.\n7. Searches applicable public-record databases for an apparent corresponding recorded judgment lien/FIFA.\n8. Flags judgments where no apparent corresponding recorded record is located.\n9. Provides the original source/reference for every result so that I can manually verify it.\n10. Outputs the results into a searchable/filterable format and allows CSV or Excel export.\n\nThe ideal end result is very simple from my perspective:\n\nUpload CSV \u2192 Run Research \u2192 Review Flagged Results\n\nSkills I'm Looking For\n\nStrong experience with:\n\n*Python* Web scraping and browser automation\n* Playwright, Selenium, Scrapy, or similar\n* APIs and data providers\n* Public-record data extraction\n* Fuzzy name matching/entity resolution\n* OpenAI/LLM integration\n* Extracting structured information from documents and court records\n* CSV/data processing\n* Databases\n* Building lightweight internal research tools\n\nCourt/Public Records Experience Is Important\n\nI am especially interested in developers who have previously worked with:\n\n* State or county court-record systems\n* Civil court cases and judgments\n* County clerk/recorder databases\n* Property tax assessor records\n* Legal/public-record datasets\n* Judgment lien/FIFA records\n* Government websites with inconsistent search interfaces\n\nIf you have previously built a court-record scraper, property-record research tool, legal-data application, public-record aggregator, or similar system, please mention it in your proposal.\n\nAccuracy & Source Verification\n\nThis tool should not simply return AI-generated answers.\n\nEvery potential match should include the underlying source information so I can independently verify the property owner, court judgment, and recorded-record search.\n\nThe system should also use confidence scoring to reduce false matches, particularly when dealing with common names.\n\nInitial Project\n\nI want to start with a small proof of concept covering one state/jurisdiction before building the complete tool.\n\nThe first milestone will use approximately 50\u2013100 sample properties to prove the core workflow:\n\nProperty Address \u2192 Owner \u2192 Potential Judgment \u2192 Owner/Judgment Match \u2192 Recorded Record Search \u2192 Verified Result\n\nIf the proof of concept is successful, the next phase will involve testing a much larger dataset and then turning the workflow into a private tool I can operate myself.\n\nThere will likely be ongoing work for the right developer as additional data sources/jurisdictions are added and existing integrations require maintenance.\n\nWhen Applying\n\nPlease briefly answer:\n\n1. Have you worked with court records, property records, legal records, or other government/public-record databases before? Please describe the project.\n2. What tools/technologies would you likely use for this project?\n3. How would you approach matching a property owner to a court defendant while reducing false positives?\n4. Have you built systems that combine multiple data sources and automatically compare/match records?\n5. Please provide examples of similar scraping, public-record, legal-data, or entity-matching projects.\n\nPlease do not send a generic AI/chatbot portfolio. I am specifically looking for someone experienced with data extraction, record matching, and ideally court/public-record systems.",
+      "client_id": null,
+      "client_name": "Verified",
+      "posted_date": null,
+      "posted_date_text": "Posted yesterday\u00b7Proposals: 20 to 50",
       "url": "https://www.upwork.com/jobs/span-class-highlight-Python-span-Developer-for-Court-Records-amp-Public-Data-Automation-Tool_~022090251918748066005/?referrer_url_path=/nx/search/jobs/",
       "status": "open",
       "budget": {
-        "proposals": "Proposals: 20 to 50",
-        "posted_on": null
+        "job_type": "Fixed price",
+        "proposals": "Proposals: 20 to 50"
       },
       "tags": [
         "Python",
-        "Python",
-        "Python",
-        "Python",
-        "Python"
+        "Data Scraping",
+        "API",
+        "Data Mining",
+        "Microsoft Excel",
+        "Automation",
+        "Data Extraction"
       ]
     },
     {
-      "job_id": "job_9",
-      "title": "Quant / Python Developer for AI Trading Bot",
-      "description": "Just not interested\n      \n        Vague Description\n      \n        Unrealistic Expectations\n      \n        Too many applicants\n      \n        Job posted too long ago\n      \n        Poor reviews about the client\n      \n        Doesn't Match Skills\n      \n        I am overqualified\n      \n        Budget too low\n      \n        Not in my preferred location\n       \n          The client will not be notified. Your feedback helps us improve job search.\n           Save Job      Unverified \n      Payment...",
-      "client_id": "2090361778369164301",
-      "client_name": "Unknown Client",
-      "posted_date": "2026-08-20T12:23:16.850892",
+      "job_id": "2090361778369164301",
+      "title": "Quant /PythonDeveloper for AI Trading Bot",
+      "description": "Looking for an experienced Quant /PythonDeveloper to build an automated AI trading bot based on SMC/ICT concepts, TradingView alerts, and broker API integration. The project includes developing the core trading logic, connecting to a broker API, and implementing alert-based execution workflows. You should be comfortable working with financial data, building reliable trading systems, and supporting ongoing improvements to the bot\u2019s performance and stability.",
+      "client_id": null,
+      "client_name": null,
+      "posted_date": null,
+      "posted_date_text": "Posted 7 hours ago\u00b7Proposals: 5 to 10",
       "url": "https://www.upwork.com/jobs/Quant-span-class-highlight-Python-span-Developer-for-Trading-Bot_~022090361778369164301/?referrer_url_path=/nx/search/jobs/",
       "status": "open",
       "budget": {
-        "proposals": "Proposals: 5 to 10",
-        "posted_on": null
+        "job_type": "Hourly: $19.00 - $40.00",
+        "proposals": "Proposals: 5 to 10"
       },
       "tags": [
         "Python",
-        "Python",
-        "Python"
+        "Machine Learning",
+        "Django",
+        "C#"
       ]
     }
   ],

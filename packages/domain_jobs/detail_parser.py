@@ -5,7 +5,7 @@ Output: Validated JobDetail
 """
 
 from selectolax.parser import HTMLParser
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 
@@ -13,10 +13,12 @@ from datetime import datetime
 class JobDetail(BaseModel):
     """Validated job detail extracted from a job detail page."""
     
+    model_config = ConfigDict(extra="forbid")
+    
     job_id: str = Field(..., description="Unique job ID")
     title: str = Field(..., description="Job title")
     description: str = Field(..., description="Full job description")
-    url: str = Field(..., description="Job URL")
+    url: Optional[str] = Field(None, description="Job URL (set from navigation context)")
     client_id: Optional[str] = Field(None, description="Client ID")
     client_name: Optional[str] = Field(None, description="Client name")
     posted_date: str = Field(..., description="Posted date text")
@@ -54,6 +56,8 @@ class JobDetail(BaseModel):
     def validate_posted_date(cls, v: str) -> str:
         if not v or v.strip() == "":
             raise ValueError("posted_date is required and cannot be empty")
+        if v == "Unknown":
+            raise ValueError("posted_date cannot be 'Unknown'")
         return v.strip()
 
 
@@ -106,7 +110,11 @@ def parse_detail_page(html: str) -> JobDetail:
     
     # Extract posted date
     posted_element = parser.css_first('[data-test="job-published-date"], .job-published-date')
-    posted_date = posted_element.text(strip=True) if posted_element else "Unknown"
+    if not posted_element:
+        raise ValueError("Missing posted date element")
+    posted_date = posted_element.text(strip=True)
+    if not posted_date:
+        raise ValueError("Empty posted date")
     
     # Extract client information
     client_id = None
