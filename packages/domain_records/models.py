@@ -1,10 +1,11 @@
 """Data models for normalized records and cursors."""
 
-from dataclasses import dataclass, field
+from pydantic import BaseModel, ConfigDict, field_validator
 from typing import Optional, Dict, Any, List
 from datetime import datetime, UTC
 from enum import Enum
 import uuid
+from packages.domain_jobs.models import Budget
 
 
 class JobStatus(str, Enum):
@@ -15,23 +16,41 @@ class JobStatus(str, Enum):
     EXPIRED = "expired"
 
 
-@dataclass
-class JobRecord:
+class JobRecord(BaseModel):
     """Normalized job record."""
+    
+    model_config = ConfigDict(extra="forbid")
+    
     id: str
     title: str
     description: str
     url: str
-    client_id: str | None = None
-    client_name: str | None = None
-    posted_date: datetime | None = None
-    posted_date_text: str | None = None
+    client_id: Optional[str] = None
+    client_name: Optional[str] = None
+    posted_date: Optional[datetime] = None
+    posted_date_text: Optional[str] = None
     status: JobStatus = JobStatus.OPEN
-    budget: Optional[Dict[str, Any]] = None
-    tags: List[str] = field(default_factory=list)
-    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
-    updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
-
+    budget: Optional[Budget] = None
+    tags: List[str] = []
+    created_at: datetime = datetime.now(UTC)
+    updated_at: datetime = datetime.now(UTC)
+    
+    @field_validator('url')
+    @classmethod
+    def validate_url(cls, v: str) -> str:
+        if not v or v.strip() == "":
+            raise ValueError("url is required and cannot be empty")
+        if not v.startswith("https://www.upwork.com"):
+            raise ValueError("url must be a valid Upwork URL")
+        return v.strip()
+    
+    @field_validator('description')
+    @classmethod
+    def validate_description(cls, v: str) -> str:
+        if not v or v.strip() == "":
+            raise ValueError("description is required and cannot be empty")
+        return v.strip()
+    
     def to_dict(self) -> Dict[str, Any]:
         return {
             "job_id": self.id,
@@ -43,7 +62,7 @@ class JobRecord:
             "posted_date_text": self.posted_date_text,
             "url": self.url,
             "status": self.status.value,
-            "budget": self.budget,
+            "budget": self.budget.model_dump() if self.budget else None,
             "tags": self.tags,
         }
 
@@ -67,16 +86,18 @@ class JobRecord:
         )
 
 
-@dataclass
-class CursorRecord:
+class CursorRecord(BaseModel):
     """Cursor record for tracking pagination position."""
-    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    
+    model_config = ConfigDict(extra="forbid")
+    
+    id: str = str(uuid.uuid4())
     search_id: str = ""
     position: int = 0
     total_results: int = 0
     next_page_token: Optional[str] = None
-    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
-    updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    created_at: datetime = datetime.now(UTC)
+    updated_at: datetime = datetime.now(UTC)
 
     def to_dict(self) -> Dict[str, Any]:
         return {

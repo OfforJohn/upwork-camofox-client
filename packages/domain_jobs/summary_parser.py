@@ -5,11 +5,12 @@ Output: Validated JobSummary
 """
 
 from selectolax.parser import HTMLParser
-from pydantic import BaseModel, Field, field_validator, ConfigDict, HttpUrl
-from typing import List, Optional, Dict, Any
+from pydantic import BaseModel, Field, field_validator, ConfigDict
+from typing import List, Optional
 from datetime import datetime
 import re
 from urllib.parse import urljoin
+from .models import Budget
 
 
 class JobSummary(BaseModel):
@@ -25,7 +26,16 @@ class JobSummary(BaseModel):
     client_id: Optional[str] = Field(None, description="Client ID")
     client_name: Optional[str] = Field(None, description="Client name")
     tags: List[str] = Field(default_factory=list, description="Job tags/skills")
-    budget: Dict[str, Any] = Field(default_factory=dict, description="Budget information")
+    budget: Optional[Budget] = Field(None, description="Budget information")
+    
+    @field_validator('url')
+    @classmethod
+    def validate_url(cls, v: str) -> str:
+        if not v or v.strip() == "":
+            raise ValueError("url is required and cannot be empty")
+        if not v.startswith("https://www.upwork.com"):
+            raise ValueError("url must be a valid Upwork URL")
+        return v.strip()
     
     @field_validator('job_id')
     @classmethod
@@ -60,6 +70,8 @@ class JobSummary(BaseModel):
     def validate_posted_date(cls, v: str) -> str:
         if not v or v.strip() == "":
             raise ValueError("posted_date is required and cannot be empty")
+        if v == "Unknown":
+            raise ValueError("posted_date cannot be 'Unknown'")
         return v.strip()
 
 
@@ -180,18 +192,21 @@ def parse_summary_card(html: str) -> JobSummary:
     ))
     
     # Extract budget info
-    budget = {}
+    budget_dict = {}
     job_info = job_card.css_first('[data-test="JobInfo"]')
     if job_info:
         # Extract job type/budget
         job_type = job_info.css_first('[data-test="job-type-label"]')
         if job_type:
-            budget['job_type'] = job_type.text(strip=True)
+            budget_dict['job_type'] = job_type.text(strip=True)
         
         # Extract proposals
         proposals = job_card.css_first('[data-test="proposals-tier"]')
         if proposals:
-            budget['proposals'] = proposals.text(strip=True)
+            budget_dict['proposals'] = proposals.text(strip=True)
+    
+    # Convert to Budget model if we have data
+    budget_obj = Budget(**budget_dict) if budget_dict else None
     
     return JobSummary(
         job_id=job_id,
@@ -202,5 +217,5 @@ def parse_summary_card(html: str) -> JobSummary:
         client_id=client_id,
         client_name=client_name,
         tags=tags,
-        budget=budget
+        budget=budget_obj
     )

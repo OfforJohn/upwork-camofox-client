@@ -6,8 +6,9 @@ Output: Validated JobDetail
 
 from selectolax.parser import HTMLParser
 from pydantic import BaseModel, Field, field_validator, ConfigDict
-from typing import List, Optional, Dict, Any
+from typing import List, Optional
 from datetime import datetime
+from .models import Budget
 
 
 class JobDetail(BaseModel):
@@ -23,7 +24,7 @@ class JobDetail(BaseModel):
     client_name: Optional[str] = Field(None, description="Client name")
     posted_date: str = Field(..., description="Posted date text")
     posted_at: Optional[datetime] = Field(None, description="Absolute posting timestamp")
-    budget: Dict[str, Any] = Field(default_factory=dict, description="Budget information")
+    budget: Optional[Budget] = Field(None, description="Budget information")
     tags: List[str] = Field(default_factory=list, description="Job tags/skills")
     status: str = Field(default="open", description="Job status")
     proposal_count: Optional[int] = Field(None, description="Number of proposals")
@@ -136,10 +137,10 @@ def parse_detail_page(html: str) -> JobDetail:
     ))
     
     # Extract budget info
-    budget = {}
+    budget_dict = {}
     budget_element = parser.css_first('[data-test="job-budget"], .job-budget')
     if budget_element:
-        budget['text'] = budget_element.text(strip=True)
+        budget_dict['text'] = budget_element.text(strip=True)
     
     # Extract proposal count
     proposal_element = parser.css_first('[data-test="proposal-count"], .proposal-count')
@@ -147,9 +148,12 @@ def parse_detail_page(html: str) -> JobDetail:
         proposal_text = proposal_element.text(strip=True)
         try:
             proposal_count = int(''.join(filter(str.isdigit, proposal_text)))
-            budget['proposals'] = proposal_count
+            budget_dict['proposals'] = proposal_count
         except ValueError:
             pass
+    
+    # Convert to Budget model if we have data
+    budget_obj = Budget(**budget_dict) if budget_dict else None
     
     return JobDetail(
         job_id=job_id,
@@ -160,8 +164,8 @@ def parse_detail_page(html: str) -> JobDetail:
         client_name=client_name,
         posted_date=posted_date,
         posted_at=None,  # Parse absolute timestamp if available
-        budget=budget,
+        budget=budget_obj,
         tags=tags,
         status="open",
-        proposal_count=budget.get('proposals'),
+        proposal_count=budget_obj.proposals if budget_obj else None,
     )

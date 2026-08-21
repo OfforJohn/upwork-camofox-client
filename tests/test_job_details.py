@@ -59,8 +59,8 @@ def test_get_job_details_with_mock_page():
         assert listing.url == job_url
         assert "Python" in listing.tags
         assert "Web Scraping" in listing.tags
-        assert listing.budget.get('text') == "$50-100"
-        assert listing.budget.get('proposals') == 5
+        assert listing.budget.text == "$50-100"
+        assert listing.budget.proposals == "5"
     
     asyncio.run(_run_test())
 

@@ -172,6 +172,7 @@ class TestIntegration:
     async def test_clean_output_contract_regression(self):
         """Regression test for clean output contract - ensures jobs array structure is maintained."""
         from packages.domain_records.models import JobRecord, JobStatus
+        from packages.domain_jobs.models import Budget
         from datetime import datetime, UTC
         import uuid
 
@@ -185,10 +186,10 @@ class TestIntegration:
             posted_date=datetime.now(UTC),
             url="https://www.upwork.com/jobs/test-job-123",
             status=JobStatus.OPEN,
-            budget={
-                "proposals": "5 to 10",
-                "posted_on": "1 hour ago"
-            },
+            budget=Budget(
+                proposals="5 to 10",
+                job_type="Hourly"
+            ),
             tags=["Python", "LLM", "Data Science"]
         )
 

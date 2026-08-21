@@ -12,7 +12,8 @@
       "status": "open",
       "budget": {
         "job_type": "Hourly: $4.00 - $5.00",
-        "proposals": "Proposals: 10 to 15"
+        "proposals": "Proposals: 10 to 15",
+        "text": null
       },
       "tags": [
         "Python",
@@ -33,7 +34,8 @@
       "status": "open",
       "budget": {
         "job_type": "Fixed price",
-        "proposals": "Proposals: 15 to 20"
+        "proposals": "Proposals: 15 to 20",
+        "text": null
       },
       "tags": [
         "Python",
@@ -55,7 +57,8 @@
       "status": "open",
       "budget": {
         "job_type": "Fixed price",
-        "proposals": "Proposals: 20 to 50"
+        "proposals": "Proposals: 20 to 50",
+        "text": null
       },
       "tags": [
         "Python",
@@ -78,7 +81,8 @@
       "status": "open",
       "budget": {
         "job_type": "Fixed price",
-        "proposals": "Proposals: 20 to 50"
+        "proposals": "Proposals: 20 to 50",
+        "text": null
       },
       "tags": [
         "Python",
@@ -99,7 +103,8 @@
       "status": "open",
       "budget": {
         "job_type": "Fixed price",
-        "proposals": "Proposals: 20 to 50"
+        "proposals": "Proposals: 20 to 50",
+        "text": null
       },
       "tags": []
     },
@@ -115,7 +120,8 @@
       "status": "open",
       "budget": {
         "job_type": "Hourly",
-        "proposals": "Proposals: 50+"
+        "proposals": "Proposals: 50+",
+        "text": null
       },
       "tags": [
         "Python",
@@ -135,7 +141,8 @@
       "status": "open",
       "budget": {
         "job_type": "Fixed price",
-        "proposals": "Proposals: 20 to 50"
+        "proposals": "Proposals: 20 to 50",
+        "text": null
       },
       "tags": [
         "Python",
@@ -156,7 +163,8 @@
       "status": "open",
       "budget": {
         "job_type": "Fixed price",
-        "proposals": "Proposals: 20 to 50"
+        "proposals": "Proposals: 20 to 50",
+        "text": null
       },
       "tags": [
         "Python",
@@ -178,7 +186,8 @@
       "status": "open",
       "budget": {
         "job_type": "Fixed price",
-        "proposals": "Proposals: 20 to 50"
+        "proposals": "Proposals: 20 to 50",
+        "text": null
       },
       "tags": [
         "Python",
@@ -202,7 +211,8 @@
       "status": "open",
       "budget": {
         "job_type": "Hourly: $19.00 - $40.00",
-        "proposals": "Proposals: 5 to 10"
+        "proposals": "Proposals: 5 to 10",
+        "text": null
       },
       "tags": [
         "Python",

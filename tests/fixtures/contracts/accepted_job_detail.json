@@ -1,0 +1,25 @@
+{
+  "job_id": "2090361778369164301",
+  "title": "Quant / Python Developer for AI Trading Bot",
+  "url": "https://www.upwork.com/jobs/Quant-Python-Developer-for-Trading-Bot_~022090361778369164301/?referrer_url_path=/nx/search/jobs/",
+  "description": "Looking for an experienced Quant / Python Developer to build an automated AI trading bot based on SMC/ICT concepts, TradingView alerts, and broker API integration. The project includes developing the core trading logic, connecting to a broker API, and implementing alert-based execution workflows. You should be comfortable working with financial data, building reliable trading systems, and supporting ongoing improvements to the bot's performance and stability.",
+  "posted_date": "Posted 7 hours ago",
+  "posted_at": null,
+  "client_id": null,
+  "client_name": null,
+  "tags": [
+    "Python",
+    "Machine Learning",
+    "Django",
+    "C#"
+  ],
+  "budget": {
+    "job_type": "Hourly: $19.00 - $40.00",
+    "proposals": "Proposals: 5 to 10",
+    "text": null
+  },
+  "status": "open",
+  "proposal_count": null,
+  "interview_stage": null,
+  "activity_date": null
+}

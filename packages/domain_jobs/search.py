@@ -1,19 +1,59 @@
 """Jobs search primitive for Upwork."""
 
 from dataclasses import dataclass
-from typing import List, Optional, Dict, Any
+from pydantic import BaseModel, ConfigDict, field_validator
+from typing import List, Optional
 from datetime import datetime
 import json
 import re
 from pathlib import Path
 from urllib.parse import urlencode
-from .summary_parser import parse_summary_card
-from .detail_parser import parse_detail_page
+from .summary_parser import parse_summary_card, JobSummary
+from .detail_parser import parse_detail_page, JobDetail
+from .models import Budget
 
 
 class UpworkBlockedError(Exception):
     """Raised when Upwork returns a Cloudflare challenge page or blocks access."""
     pass
+
+
+class EnrichmentMismatchError(Exception):
+    """Raised when summary and detail job IDs don't match during enrichment."""
+    pass
+
+
+def verify_enrichment_match(summary: JobSummary, detail: JobDetail) -> bool:
+    """Verify that summary and detail job IDs match for safe enrichment.
+    
+    Args:
+        summary: JobSummary from search results
+        detail: JobDetail from detail page parse
+        
+    Returns:
+        True if verification passes
+        
+    Raises:
+        EnrichmentMismatchError: If job IDs don't match
+    """
+    if summary.job_id != detail.job_id:
+        raise EnrichmentMismatchError(
+            f"Job ID mismatch: summary.job_id={summary.job_id}, detail.job_id={detail.job_id}"
+        )
+    
+    # If detail has a URL, it should match or be consistent with summary URL
+    if detail.url and summary.url:
+        # Extract job ID from both URLs and compare
+        # URLs may have query parameters, so we just check they're for the same job
+        if detail.url != summary.url:
+            # They don't need to be identical (one might have query params),
+            # but they should both contain the job ID
+            if summary.job_id not in detail.url:
+                raise EnrichmentMismatchError(
+                    f"URL mismatch: summary job_id {summary.job_id} not found in detail URL {detail.url}"
+                )
+    
+    return True
 
 
 @dataclass
@@ -31,24 +71,31 @@ class JobSearchParams:
     fixed_budget_max: Optional[int] = None
 
 
-@dataclass
-class JobListing:
+class JobListing(BaseModel):
     """Raw job listing extracted from Upwork."""
+    
+    model_config = ConfigDict(extra="forbid")
+    
     job_id: str
     title: str
     description: str
     posted_date: str  # Truthful source value like "17 minutes ago"
     url: str
-    client_id: str | None = None
-    client_name: str | None = None
-    posted_at: datetime | None = None  # Only when absolute timestamp parsed
-    budget: Optional[Dict[str, Any]] = None
+    client_id: Optional[str] = None
+    client_name: Optional[str] = None
+    posted_at: Optional[datetime] = None  # Only when absolute timestamp parsed
+    budget: Optional[Budget] = None
     status: str = "open"
-    tags: List[str] = None
-
-    def __post_init__(self):
-        if self.tags is None:
-            self.tags = []
+    tags: List[str] = []
+    
+    @field_validator('url')
+    @classmethod
+    def validate_url(cls, v: str) -> str:
+        if not v or v.strip() == "":
+            raise ValueError("url is required and cannot be empty")
+        if not v.startswith("https://www.upwork.com"):
+            raise ValueError("url must be a valid Upwork URL")
+        return v.strip()
 
 
 class JobsSearch:
@@ -108,6 +155,7 @@ class JobsSearch:
         Raises:
             ValueError: If URL is invalid
             RuntimeError: If navigation or parsing fails
+            EnrichmentMismatchError: If summary and detail job IDs don't match
         """
         if not url or not url.startswith("https://www.upwork.com"):
             raise ValueError(f"Invalid job URL: {url}")
@@ -133,6 +181,24 @@ class JobsSearch:
             # Parse the detail page
             detail = parse_detail_page(html)
             
+            # For enrichment verification, we need the summary. Since we're navigating
+            # directly to the detail page, we create a minimal summary from the detail
+            # for verification purposes. In a real flow, you'd have the summary from search.
+            minimal_summary = JobSummary(
+                job_id=detail.job_id,
+                title=detail.title,
+                description=detail.description,
+                url=url,  # Use the URL we navigated to
+                posted_date=detail.posted_date,
+                client_id=detail.client_id,
+                client_name=detail.client_name,
+                tags=detail.tags,
+                budget=detail.budget,
+            )
+            
+            # Verify enrichment match
+            verify_enrichment_match(minimal_summary, detail)
+            
             # Convert JobDetail to JobListing
             return JobListing(
                 job_id=detail.job_id,
@@ -148,6 +214,8 @@ class JobsSearch:
                 status=detail.status,
             )
             
+        except EnrichmentMismatchError as exc:
+            raise RuntimeError(f"Enrichment verification failed: {exc}") from exc
         except ValueError as exc:
             raise RuntimeError(f"Failed to parse job detail page: {exc}") from exc
         except Exception as exc:
@@ -204,7 +272,7 @@ class JobsSearch:
                         posted_date=summary.posted_date,  # Truthful source value
                         posted_at=None,  # No absolute timestamp from card
                         url=summary.url,  # Already normalized by parser
-                        budget=summary.budget,
+                        budget=summary.budget,  # Already a Budget model from parser
                         tags=summary.tags,
                     ))
                 except ValueError as exc:

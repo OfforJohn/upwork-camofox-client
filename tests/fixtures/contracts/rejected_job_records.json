@@ -1,0 +1,71 @@
+{
+  "rejections": [
+    {
+      "case": "invalid_url",
+      "description": "JobRecord with invalid URL (not Upwork)",
+      "data": {
+        "id": "12345",
+        "title": "Python Developer",
+        "description": "Looking for Python developer",
+        "url": "https://example.com/jobs/test",
+        "posted_date_text": "Posted 2 hours ago"
+      },
+      "expected_error": "url must be a valid Upwork URL"
+    },
+    {
+      "case": "empty_description",
+      "description": "JobRecord with empty description",
+      "data": {
+        "id": "12345",
+        "title": "Python Developer",
+        "description": "",
+        "url": "https://www.upwork.com/jobs/test",
+        "posted_date_text": "Posted 2 hours ago"
+      },
+      "expected_error": "description is required and cannot be empty"
+    },
+    {
+      "case": "fabricated_unknown_date",
+      "description": "JobSummary with 'Unknown' as posted_date",
+      "data": {
+        "job_id": "12345",
+        "title": "Python Developer",
+        "url": "https://www.upwork.com/jobs/test",
+        "description": "Looking for Python developer",
+        "posted_date": "Unknown"
+      },
+      "expected_error": "posted_date cannot be 'Unknown'"
+    },
+    {
+      "case": "summary_detail_id_mismatch",
+      "description": "Enrichment verification with mismatched job IDs",
+      "summary": {
+        "job_id": "12345",
+        "title": "Python Developer",
+        "url": "https://www.upwork.com/jobs/test",
+        "description": "Looking for Python developer",
+        "posted_date": "Posted 2 hours ago"
+      },
+      "detail": {
+        "job_id": "67890",
+        "title": "Python Developer",
+        "url": "https://www.upwork.com/jobs/test",
+        "description": "Looking for Python developer",
+        "posted_date": "Posted 2 hours ago"
+      },
+      "expected_error": "Job ID mismatch"
+    },
+    {
+      "case": "empty_url",
+      "description": "JobRecord with empty URL",
+      "data": {
+        "id": "12345",
+        "title": "Python Developer",
+        "description": "Looking for Python developer",
+        "url": "",
+        "posted_date_text": "Posted 2 hours ago"
+      },
+      "expected_error": "url is required and cannot be empty"
+    }
+  ]
+}
