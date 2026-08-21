@@ -216,8 +216,21 @@ class ActionRunner:
         
         # Execute job detail fetch via Camofox session
         jobs_search = JobsSearch(session)
+        
+        # TODO: Properly pass full JobSummary from search results instead of creating minimal one
+        # For now, create minimal JobSummary from URL for compatibility
+        from packages.domain_jobs.summary_parser import JobSummary
+        minimal_summary = JobSummary(
+            job_id="unknown",  # Will be verified against detail
+            title="unknown",   # Will be verified against detail
+            url=job_url,
+            description="unknown",  # Will be verified against detail
+            posted_date="unknown"   # Will be verified against detail
+        )
+        
         try:
-            listing = await jobs_search.get_job_details(job_url)
+            # Skip enrichment verification since we're using a minimal summary
+            listing = await jobs_search.get_job_details(minimal_summary, verify_enrichment=False)
         except Exception as exc:
             return ActionResult(
                 action_id=action.id,

@@ -32,8 +32,8 @@ class JobRecord(BaseModel):
     status: JobStatus = JobStatus.OPEN
     budget: Optional[Budget] = None
     tags: List[str] = Field(default_factory=list)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now(UTC))
+    updated_at: Optional[datetime] = Field(default_factory=lambda: datetime.now(UTC))
     
     @field_validator('id')
     @classmethod

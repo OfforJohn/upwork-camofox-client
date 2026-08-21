@@ -7,6 +7,7 @@ from packages.domain_jobs.summary_parser import JobSummary
 from packages.domain_jobs.detail_parser import JobDetail
 from packages.domain_records.models import JobRecord
 from packages.domain_jobs.search import verify_enrichment_match
+from datetime import datetime, UTC
 
 
 def test_accepted_job_summary_validates():
@@ -148,3 +149,84 @@ def test_enrichment_verification_fails_id_mismatch():
         verify_enrichment_match(summary, detail)
     
     assert "Job ID mismatch" in str(exc_info.value)
+
+
+def test_job_record_from_dict_missing_optional_client_keys():
+    """Test that JobRecord.from_dict() handles missing optional client keys."""
+    data = {
+        "job_id": "12345",
+        "title": "Test Job",
+        "description": "Test description",
+        "url": "https://www.upwork.com/jobs/test",
+        "status": "open"
+    }
+    
+    # Should not raise - client_id and client_name are optional
+    record = JobRecord.from_dict(data)
+    assert record.id == "12345"
+    assert record.client_id is None
+    assert record.client_name is None
+
+
+def test_job_record_timestamp_round_trip():
+    """Test that timestamps are preserved through to_dict/from_dict round trip."""
+    original = JobRecord(
+        id="12345",
+        title="Test Job",
+        description="Test description",
+        url="https://www.upwork.com/jobs/test"
+    )
+    
+    # Serialize
+    serialized = original.to_dict()
+    assert "created_at" in serialized
+    assert "updated_at" in serialized
+    
+    # Deserialize
+    deserialized = JobRecord.from_dict(serialized)
+    
+    # Serialize again
+    reserialized = deserialized.to_dict()
+    
+    # Timestamps should be preserved (not regenerated)
+    assert serialized["created_at"] == reserialized["created_at"]
+    assert serialized["updated_at"] == reserialized["updated_at"]
+
+
+def test_job_record_independent_tag_lists():
+    """Test that two JobRecord instances don't share the same tag list."""
+    record1 = JobRecord(
+        id="12345",
+        title="Test Job",
+        description="Test description",
+        url="https://www.upwork.com/jobs/test",
+        tags=["Python"]
+    )
+    
+    record2 = JobRecord(
+        id="67890",
+        title="Another Job",
+        description="Another description",
+        url="https://www.upwork.com/jobs/test2"
+    )
+    
+    # Modify record1's tags
+    record1.tags.append("Django")
+    
+    # record2's tags should remain empty
+    assert len(record2.tags) == 0
+    assert "Django" not in record2.tags
+
+
+def test_lookalike_host_rejection():
+    """Test that lookalike hosts like www.upwork.com.evil.example are rejected."""
+    with pytest.raises(ValueError) as exc_info:
+        JobSummary(
+            job_id="12345",
+            title="Test Job",
+            url="https://www.upwork.com.evil.example/jobs/test/~12345",
+            description="Test description",
+            posted_date="Posted 2 hours ago"
+        )
+    
+    assert "url must be a valid Upwork URL" in str(exc_info.value)

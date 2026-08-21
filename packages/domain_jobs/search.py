@@ -7,7 +7,7 @@ from datetime import datetime
 import json
 import re
 from pathlib import Path
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 from .summary_parser import parse_summary_card, JobSummary
 from .detail_parser import parse_detail_page, JobDetail
 from .models import Budget
@@ -93,8 +93,18 @@ class JobListing(BaseModel):
     def validate_url(cls, v: str) -> str:
         if not v or v.strip() == "":
             raise ValueError("url is required and cannot be empty")
-        if not v.startswith("https://www.upwork.com"):
+        
+        parsed = urlparse(v.strip())
+        
+        if parsed.scheme != "https":
+            raise ValueError("url must use https scheme")
+        
+        if parsed.netloc != "www.upwork.com":
             raise ValueError("url must be a valid Upwork URL")
+        
+        if "/jobs/" not in parsed.path:
+            raise ValueError("url must contain /jobs/ path")
+        
         return v.strip()
 
 
@@ -143,11 +153,12 @@ class JobsSearch:
 
         return job_cards[:limit]
 
-    async def get_job_details(self, url: str) -> JobListing:
+    async def get_job_details(self, summary: JobSummary, verify_enrichment: bool = True) -> JobListing:
         """Get detailed information for a specific job by navigating to its detail page.
         
         Args:
-            url: The absolute URL of the job detail page
+            summary: The original JobSummary from search results
+            verify_enrichment: If True, verify enrichment match between summary and detail
             
         Returns:
             JobListing: Enriched job listing with detail page information
@@ -155,10 +166,9 @@ class JobsSearch:
         Raises:
             ValueError: If URL is invalid
             RuntimeError: If navigation or parsing fails
-            EnrichmentMismatchError: If summary and detail job IDs don't match
+            EnrichmentMismatchError: If summary and detail job IDs don't match and verify_enrichment is True
         """
-        if not url or not url.startswith("https://www.upwork.com"):
-            raise ValueError(f"Invalid job URL: {url}")
+        url = summary.url
         
         # Check if we have a real Playwright page object
         if self.session.page is None:
@@ -181,23 +191,9 @@ class JobsSearch:
             # Parse the detail page
             detail = parse_detail_page(html)
             
-            # For enrichment verification, we need the summary. Since we're navigating
-            # directly to the detail page, we create a minimal summary from the detail
-            # for verification purposes. In a real flow, you'd have the summary from search.
-            minimal_summary = JobSummary(
-                job_id=detail.job_id,
-                title=detail.title,
-                description=detail.description,
-                url=url,  # Use the URL we navigated to
-                posted_date=detail.posted_date,
-                client_id=detail.client_id,
-                client_name=detail.client_name,
-                tags=detail.tags,
-                budget=detail.budget,
-            )
-            
-            # Verify enrichment match
-            verify_enrichment_match(minimal_summary, detail)
+            # Verify enrichment match between original summary and detail if requested
+            if verify_enrichment:
+                verify_enrichment_match(summary, detail)
             
             # Convert JobDetail to JobListing
             return JobListing(

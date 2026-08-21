@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field, field_validator, ConfigDict
 from typing import List, Optional
 from datetime import datetime
 import re
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 from .models import Budget
 
 
@@ -33,10 +33,18 @@ class JobSummary(BaseModel):
     def validate_url(cls, v: str) -> str:
         if not v or v.strip() == "":
             raise ValueError("url is required and cannot be empty")
-        if not v.startswith("https://www.upwork.com"):
+        
+        parsed = urlparse(v.strip())
+        
+        if parsed.scheme != "https":
+            raise ValueError("url must use https scheme")
+        
+        if parsed.netloc != "www.upwork.com":
             raise ValueError("url must be a valid Upwork URL")
-        if "/jobs/" not in v:
+        
+        if "/jobs/" not in parsed.path:
             raise ValueError("url must contain /jobs/ path")
+        
         return v.strip()
     
     @field_validator('job_id')

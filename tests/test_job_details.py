@@ -2,6 +2,7 @@
 
 import asyncio
 from packages.domain_jobs.search import JobsSearch
+from packages.domain_jobs.summary_parser import JobSummary
 from unittest.mock import AsyncMock, MagicMock
 
 
@@ -41,12 +42,20 @@ def test_get_job_details_with_mock_page():
         # Create JobsSearch instance
         jobs_search = JobsSearch(fake_session)
         
+        # Create minimal JobSummary for the test
+        summary = JobSummary(
+            job_id="022090361778369164301",
+            title="Python Developer Needed",
+            url="https://www.upwork.com/jobs/test-job",
+            description="Looking for experienced Python developer for web scraping project.",
+            posted_date="Posted 2 hours ago"
+        )
+        
         # Execute get_job_details
-        job_url = "https://www.upwork.com/jobs/test-job"
-        listing = await jobs_search.get_job_details(job_url)
+        listing = await jobs_search.get_job_details(summary, verify_enrichment=False)
         
         # Assert navigation was called
-        fake_session.navigate.assert_called_once_with(job_url)
+        fake_session.navigate.assert_called_once_with(summary.url)
         
         # Assert listing was returned
         assert listing is not None
@@ -56,7 +65,7 @@ def test_get_job_details_with_mock_page():
         assert listing.client_id == "client123"
         assert listing.client_name == "Test Client"
         assert listing.posted_date == "Posted 2 hours ago"
-        assert listing.url == job_url
+        assert listing.url == summary.url
         assert "Python" in listing.tags
         assert "Web Scraping" in listing.tags
         assert listing.budget.text == "$50-100"
@@ -73,12 +82,20 @@ def test_get_job_details_invalid_url():
         
         jobs_search = JobsSearch(fake_session)
         
-        # Test with invalid URL
+        # Create JobSummary with invalid URL (will fail validation before navigation)
         try:
-            await jobs_search.get_job_details("invalid-url")
+            summary = JobSummary(
+                job_id="12345",
+                title="Test Job",
+                url="invalid-url",
+                description="Test description",
+                posted_date="Posted 2 hours ago"
+            )
+            await jobs_search.get_job_details(summary)
             assert False, "Should have raised ValueError"
         except ValueError as e:
-            assert "Invalid job URL" in str(e)
+            # URL validation happens at JobSummary creation
+            assert "url" in str(e).lower()
     
     asyncio.run(_run_test())
 
@@ -91,8 +108,16 @@ def test_get_job_details_no_page():
         
         jobs_search = JobsSearch(fake_session)
         
+        summary = JobSummary(
+            job_id="12345",
+            title="Test Job",
+            url="https://www.upwork.com/jobs/test",
+            description="Test description",
+            posted_date="Posted 2 hours ago"
+        )
+        
         try:
-            await jobs_search.get_job_details("https://www.upwork.com/jobs/test")
+            await jobs_search.get_job_details(summary)
             assert False, "Should have raised RuntimeError"
         except RuntimeError as e:
             assert "Cannot get job details without a real browser page" in str(e)
