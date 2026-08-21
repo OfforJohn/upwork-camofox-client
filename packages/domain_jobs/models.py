@@ -2,6 +2,36 @@
 
 from pydantic import BaseModel, ConfigDict, field_validator
 from typing import Optional, Union
+from urllib.parse import urlparse
+
+
+def validate_upwork_url(v: str) -> str:
+    """Validate that a URL is a valid Upwork job URL.
+    
+    Args:
+        v: The URL string to validate
+        
+    Returns:
+        The validated URL string
+        
+    Raises:
+        ValueError: If URL is invalid or not a proper Upwork job URL
+    """
+    if not v or v.strip() == "":
+        raise ValueError("url is required and cannot be empty")
+    
+    parsed = urlparse(v.strip())
+    
+    if parsed.scheme != "https":
+        raise ValueError("url must use https scheme")
+    
+    if parsed.netloc != "www.upwork.com":
+        raise ValueError("url must be a valid Upwork URL")
+    
+    if "/jobs/" not in parsed.path:
+        raise ValueError("url must contain /jobs/ path")
+    
+    return v.strip()
 
 
 class Budget(BaseModel):

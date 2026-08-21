@@ -7,10 +7,10 @@ from datetime import datetime
 import json
 import re
 from pathlib import Path
-from urllib.parse import urlencode, urlparse
+from urllib.parse import urlencode
 from .summary_parser import parse_summary_card, JobSummary
 from .detail_parser import parse_detail_page, JobDetail
-from .models import Budget
+from .models import Budget, validate_upwork_url
 
 
 class UpworkBlockedError(Exception):
@@ -34,24 +34,27 @@ def verify_enrichment_match(summary: JobSummary, detail: JobDetail) -> bool:
         True if verification passes
         
     Raises:
-        EnrichmentMismatchError: If job IDs don't match
+        EnrichmentMismatchError: If job IDs don't match or URLs are invalid
     """
     if summary.job_id != detail.job_id:
         raise EnrichmentMismatchError(
             f"Job ID mismatch: summary.job_id={summary.job_id}, detail.job_id={detail.job_id}"
         )
     
-    # If detail has a URL, it should match or be consistent with summary URL
-    if detail.url and summary.url:
-        # Extract job ID from both URLs and compare
-        # URLs may have query parameters, so we just check they're for the same job
-        if detail.url != summary.url:
-            # They don't need to be identical (one might have query params),
-            # but they should both contain the job ID
-            if summary.job_id not in detail.url:
-                raise EnrichmentMismatchError(
-                    f"URL mismatch: summary job_id {summary.job_id} not found in detail URL {detail.url}"
-                )
+    # Detail must have a canonical URL for enrichment verification
+    if not detail.url:
+        raise EnrichmentMismatchError(
+            f"Detail page missing canonical URL - cannot verify enrichment"
+        )
+    
+    # URLs should match or be consistent
+    if detail.url != summary.url:
+        # They don't need to be identical (one might have query params),
+        # but they should both contain the job ID
+        if summary.job_id not in detail.url:
+            raise EnrichmentMismatchError(
+                f"URL mismatch: summary job_id {summary.job_id} not found in detail URL {detail.url}"
+            )
     
     return True
 
@@ -91,21 +94,7 @@ class JobListing(BaseModel):
     @field_validator('url')
     @classmethod
     def validate_url(cls, v: str) -> str:
-        if not v or v.strip() == "":
-            raise ValueError("url is required and cannot be empty")
-        
-        parsed = urlparse(v.strip())
-        
-        if parsed.scheme != "https":
-            raise ValueError("url must use https scheme")
-        
-        if parsed.netloc != "www.upwork.com":
-            raise ValueError("url must be a valid Upwork URL")
-        
-        if "/jobs/" not in parsed.path:
-            raise ValueError("url must contain /jobs/ path")
-        
-        return v.strip()
+        return validate_upwork_url(v)
 
 
 class JobsSearch:

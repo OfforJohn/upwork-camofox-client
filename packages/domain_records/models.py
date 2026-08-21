@@ -5,7 +5,7 @@ from typing import Optional, Dict, Any, List
 from datetime import datetime, UTC
 from enum import Enum
 import uuid
-from packages.domain_jobs.models import Budget
+from packages.domain_jobs.models import Budget, validate_upwork_url
 
 
 class JobStatus(str, Enum):
@@ -45,11 +45,7 @@ class JobRecord(BaseModel):
     @field_validator('url')
     @classmethod
     def validate_url(cls, v: str) -> str:
-        if not v or v.strip() == "":
-            raise ValueError("url is required and cannot be empty")
-        if not v.startswith("https://www.upwork.com"):
-            raise ValueError("url must be a valid Upwork URL")
-        return v.strip()
+        return validate_upwork_url(v)
     
     @field_validator('description')
     @classmethod

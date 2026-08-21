@@ -230,3 +230,64 @@ def test_lookalike_host_rejection():
         )
     
     assert "url must be a valid Upwork URL" in str(exc_info.value)
+
+
+def test_job_record_lookalike_host_rejection():
+    """Test that JobRecord rejects lookalike hosts."""
+    with pytest.raises(ValueError) as exc_info:
+        JobRecord(
+            id="12345",
+            title="Test Job",
+            description="Test description",
+            url="https://www.upwork.com.evil.example/jobs/test/~12345"
+        )
+    
+    assert "url must be a valid Upwork URL" in str(exc_info.value)
+
+
+def test_missing_canonical_url_validation():
+    """Test that JobDetail raises error when canonical URL is missing."""
+    from packages.domain_jobs.detail_parser import parse_detail_page
+    
+    # HTML without canonical link
+    html_without_canonical = """
+    <html>
+    <body>
+        <div data-ev-job-uid="12345">
+            <h1 data-test="job-title">Test Job</h1>
+            <div data-test="job-description">Test description</div>
+            <div data-test="job-published-date">Posted 2 hours ago</div>
+        </div>
+    </body>
+    </html>
+    """
+    
+    with pytest.raises(ValueError) as exc_info:
+        parse_detail_page(html_without_canonical)
+    
+    assert "Missing canonical URL" in str(exc_info.value)
+
+
+def test_canonical_url_mismatch_in_enrichment():
+    """Test that enrichment verification fails when canonical URL doesn't match summary."""
+    summary = JobSummary(
+        job_id="12345",
+        title="Test Job",
+        url="https://www.upwork.com/jobs/test-job/~12345",
+        description="Test description",
+        posted_date="Posted 2 hours ago"
+    )
+    
+    # Detail with different canonical URL (different job ID)
+    detail = JobDetail(
+        job_id="12345",  # Same job ID but different URL
+        title="Test Job",
+        url="https://www.upwork.com/jobs/other-job/~67890",
+        description="Test description",
+        posted_date="Posted 2 hours ago"
+    )
+    
+    with pytest.raises(Exception) as exc_info:
+        verify_enrichment_match(summary, detail)
+    
+    assert "URL mismatch" in str(exc_info.value)

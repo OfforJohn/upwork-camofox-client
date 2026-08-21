@@ -22,6 +22,9 @@ def test_get_job_details_with_mock_page():
         # Mock page.content to return minimal detail page HTML
         detail_html = """
         <html>
+        <head>
+            <link rel="canonical" href="https://www.upwork.com/jobs/test-job/~022090361778369164301">
+        </head>
         <body>
             <div data-ev-job-uid="022090361778369164301">
                 <h1 data-test="job-title">Python Developer Needed</h1>

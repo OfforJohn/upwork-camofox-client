@@ -102,12 +102,14 @@ def parse_detail_page(html: str) -> JobDetail:
     
     description = desc_element.text(strip=True)
     
-    # Extract URL from canonical link or current page
+    # Extract URL from canonical link - required for enrichment verification
     url_element = parser.css_first('link[rel="canonical"]')
-    if url_element:
-        url = url_element.attrs.get('href', '')
-    else:
-        url = ""  # Will be set from navigation context
+    if not url_element:
+        raise ValueError("Missing canonical URL link element")
+    
+    url = url_element.attrs.get('href', '')
+    if not url:
+        raise ValueError("Empty canonical URL")
     
     # Extract posted date
     posted_element = parser.css_first('[data-test="job-published-date"], .job-published-date')
