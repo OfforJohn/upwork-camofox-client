@@ -41,3 +41,6 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Credentials
+tests/fixtures/auth_credentials.json

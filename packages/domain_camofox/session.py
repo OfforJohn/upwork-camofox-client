@@ -5,6 +5,7 @@ from typing import Optional, Dict, Any, List, Protocol
 import asyncio
 from datetime import datetime, UTC
 import json
+from pathlib import Path
 from .interface import BrowserInterface
 
 try:
@@ -12,6 +13,11 @@ try:
     CAMOUFOX_AVAILABLE = True
 except ImportError:
     CAMOUFOX_AVAILABLE = False
+
+
+class SessionExpiredError(Exception):
+    """Raised when session has expired and requires manual re-authentication."""
+    pass
 
 
 class BrowserSessionPort(Protocol):
@@ -188,6 +194,61 @@ class CamofoxSession:
         self.is_active = False
         self.created_at = datetime.now(UTC)
 
+    @staticmethod
+    def load_persisted_credentials(credentials_path: Optional[Path] = None) -> Optional[Dict[str, Any]]:
+        """Load persisted credentials from file.
+        
+        Args:
+            credentials_path: Path to credentials file. If None, uses default path.
+            
+        Returns:
+            Credentials dict if file exists, None otherwise.
+        """
+        if credentials_path is None:
+            credentials_path = Path(__file__).parent.parent.parent / "tests" / "fixtures" / "auth_credentials.json"
+        
+        if not credentials_path.exists():
+            return None
+        
+        with open(credentials_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+
+    @staticmethod
+    def create_config_from_credentials(
+        account_id: str,
+        credentials: Dict[str, Any]
+    ) -> SessionConfig:
+        """Create SessionConfig from persisted credentials.
+        
+        Args:
+            account_id: Account ID for the session
+            credentials: Credentials dict with cookies, local_storage, session_storage
+            
+        Returns:
+            SessionConfig with loaded credentials
+        """
+        cookies = [
+            Cookie(
+                name=cookie["name"],
+                value=cookie["value"],
+                domain=cookie["domain"],
+                path=cookie.get("path", "/"),
+                expires=cookie.get("expires")
+            )
+            for cookie in credentials.get("cookies", [])
+        ]
+        
+        session_state = SessionState(
+            local_storage=credentials.get("local_storage", {}),
+            session_storage=credentials.get("session_storage", {})
+        )
+        
+        return SessionConfig(
+            account_id=account_id,
+            cookies=cookies,
+            session_state=session_state
+        )
+
     async def launch(self) -> None:
         """Launch browser session with cookies, proxy, and humanization."""
         if self.is_active:
@@ -255,7 +316,11 @@ class CamofoxSession:
         # Example: await self.page.evaluate(f"""sessionStorage.setItem(...)""")
 
     async def navigate(self, url: str) -> None:
-        """Navigate to URL within the session."""
+        """Navigate to URL within the session.
+        
+        Raises:
+            SessionExpiredError: If session has expired (redirected to login, etc.)
+        """
         self._require_active()
 
         if self.browser:
@@ -266,8 +331,39 @@ class CamofoxSession:
                 wait_until="domcontentloaded",
                 timeout=60_000,
             )
+            # Check for session expiry after navigation
+            await self._check_session_expiry(url)
         else:
             raise RuntimeError("Browser page is not available")
+
+    async def _check_session_expiry(self, expected_url: str) -> None:
+        """Check if session has expired by examining current page.
+        
+        Raises:
+            SessionExpiredError: If session has expired
+        """
+        if not self.page:
+            return
+        
+        current_url = self.page.url
+        
+        # Check for login page redirect
+        if "login" in current_url.lower() or "signin" in current_url.lower():
+            raise SessionExpiredError(
+                f"Session expired: redirected to login page ({current_url}). "
+                f"Please run manual authentication script to re-authenticate."
+            )
+        
+        # Check if we're still on the expected domain
+        from urllib.parse import urlparse
+        expected_domain = urlparse(expected_url).netloc
+        current_domain = urlparse(current_url).netloc
+        
+        if current_domain != expected_domain:
+            raise SessionExpiredError(
+                f"Session expired: redirected from {expected_domain} to {current_domain}. "
+                f"Please run manual authentication script to re-authenticate."
+            )
 
     async def get_page_info(self):
         """Get current page title and URL."""
