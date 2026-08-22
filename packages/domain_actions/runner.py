@@ -7,7 +7,7 @@ import json
 import uuid
 from enum import Enum
 
-from ..domain_camofox.session import SessionManager, SessionConfig, ProxyConfig, HumanizationConfig, Cookie
+from ..domain_camofox.session import SessionManager, SessionConfig, ProxyConfig, HumanizationConfig, Cookie, CamofoxSession
 from ..domain_jobs.search import JobsSearch, JobSearchParams
 from ..domain_records.models import JobRecord, CursorRecord
 from ..domain_records.normalizer import JobNormalizer
@@ -190,16 +190,47 @@ class ActionRunner:
         )
 
     async def _execute_jobs_get(self, action: ActionEnvelope) -> ActionResult:
-        """Execute jobs.get action to fetch detailed job information."""
+        """Execute jobs.get action to fetch detailed job information.
+        
+        Requires either:
+        1. A full JobSummary object in the payload (from search results), OR
+        2. Both job_id and url in the payload to construct a minimal summary
+        
+        Enrichment verification is always performed to ensure summary/detail identity match.
+        """
         correlation_id = action.correlation_id or action.id
         
-        # Get job URL from payload
-        job_url = action.payload.get("url")
-        if not job_url:
-            return ActionResult(
-                action_id=action.id,
-                success=False,
-                error="Missing required field: url",
+        # Check for full JobSummary in payload (preferred path)
+        summary_data = action.payload.get("summary")
+        if summary_data:
+            from packages.domain_jobs.summary_parser import JobSummary
+            try:
+                summary = JobSummary(**summary_data)
+            except Exception as exc:
+                return ActionResult(
+                    action_id=action.id,
+                    success=False,
+                    error=f"Invalid summary in payload: {exc}",
+                )
+        else:
+            # Fallback: require job_id and url to construct minimal summary
+            job_id = action.payload.get("job_id")
+            job_url = action.payload.get("url")
+            
+            if not job_id or not job_url:
+                return ActionResult(
+                    action_id=action.id,
+                    success=False,
+                    error="Missing required fields: either 'summary' object or both 'job_id' and 'url'",
+                )
+            
+            from packages.domain_jobs.summary_parser import JobSummary
+            summary = JobSummary(
+                job_id=job_id,
+                title="",  # Will be verified against detail
+                url=job_url,
+                description="",  # Will be verified against detail
+                posted_date=""  # Will be verified against detail
             )
         
         # Get or create Camofox session
@@ -214,23 +245,12 @@ class ActionRunner:
         )
         self.event_emitter.emit(session_event)
         
-        # Execute job detail fetch via Camofox session
+        # Execute job detail fetch via Camofox session with enrichment verification
         jobs_search = JobsSearch(session)
         
-        # TODO: Properly pass full JobSummary from search results instead of creating minimal one
-        # For now, create minimal JobSummary from URL for compatibility
-        from packages.domain_jobs.summary_parser import JobSummary
-        minimal_summary = JobSummary(
-            job_id="unknown",  # Will be verified against detail
-            title="unknown",   # Will be verified against detail
-            url=job_url,
-            description="unknown",  # Will be verified against detail
-            posted_date="unknown"   # Will be verified against detail
-        )
-        
         try:
-            # Skip enrichment verification since we're using a minimal summary
-            listing = await jobs_search.get_job_details(minimal_summary, verify_enrichment=False)
+            # Always verify enrichment to ensure summary/detail identity match
+            listing = await jobs_search.get_job_details(summary, verify_enrichment=True)
         except Exception as exc:
             return ActionResult(
                 action_id=action.id,
@@ -261,11 +281,25 @@ class ActionRunner:
         )
 
     def _build_session_config(self, account_id: str) -> SessionConfig:
-        """Build session configuration for account."""
-        # TODO: Load actual cookies and session state from domain_storage
-        # For now, return empty config
-        return SessionConfig(
-            account_id=account_id,
-            cookies=[],
-            humanization=HumanizationConfig(),
-        )
+        """Build session configuration for account.
+        
+        Loads persisted credentials if available for automatic session reuse.
+        Falls back to empty config if no credentials exist.
+        """
+        # Try to load persisted credentials
+        credentials = CamofoxSession.load_persisted_credentials()
+        
+        if credentials:
+            # Use persisted credentials for automatic session reuse
+            return CamofoxSession.create_config_from_credentials(
+                account_id=account_id,
+                credentials=credentials
+            )
+        else:
+            # No persisted credentials - return empty config
+            # Session will require manual authentication
+            return SessionConfig(
+                account_id=account_id,
+                cookies=[],
+                humanization=HumanizationConfig(),
+            )
