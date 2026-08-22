@@ -8,7 +8,7 @@ from selectolax.parser import HTMLParser
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from typing import List, Optional
 from datetime import datetime
-from .models import Budget
+from .models import Budget, validate_upwork_url
 
 
 class JobDetail(BaseModel):
@@ -19,7 +19,7 @@ class JobDetail(BaseModel):
     job_id: str = Field(..., description="Unique job ID")
     title: str = Field(..., description="Job title")
     description: str = Field(..., description="Full job description")
-    url: Optional[str] = Field(None, description="Job URL (set from navigation context)")
+    url: str = Field(..., description="Canonical job URL from detail page")
     client_id: Optional[str] = Field(None, description="Client ID")
     client_name: Optional[str] = Field(None, description="Client name")
     posted_date: str = Field(..., description="Posted date text")
@@ -30,6 +30,11 @@ class JobDetail(BaseModel):
     proposal_count: Optional[int] = Field(None, description="Number of proposals")
     interview_stage: Optional[str] = Field(None, description="Interview stage")
     activity_date: Optional[str] = Field(None, description="Last activity date")
+    
+    @field_validator('url')
+    @classmethod
+    def validate_url(cls, v: str) -> str:
+        return validate_upwork_url(v)
     
     @field_validator('job_id')
     @classmethod

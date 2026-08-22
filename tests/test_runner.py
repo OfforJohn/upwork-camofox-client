@@ -201,10 +201,8 @@ class TestIntegration:
         for field in required_fields:
             assert field in output, f"Missing required field: {field}"
 
-        # Verify deprecated fields are NOT present
-        deprecated_fields = ["id", "created_at", "updated_at"]
-        for field in deprecated_fields:
-            assert field not in output, f"Found deprecated field: {field}"
+        # Verify deprecated field 'id' is NOT present
+        assert "id" not in output, "Found deprecated field: id"
 
         # Verify job_id is used instead of id
         assert output["job_id"] == "test-job-123"

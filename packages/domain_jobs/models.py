@@ -28,8 +28,8 @@ def validate_upwork_url(v: str) -> str:
     if parsed.netloc != "www.upwork.com":
         raise ValueError("url must be a valid Upwork URL")
     
-    if "/jobs/" not in parsed.path:
-        raise ValueError("url must contain /jobs/ path")
+    if not parsed.path.startswith("/jobs/"):
+        raise ValueError("url must start with /jobs/ path")
     
     return v.strip()
 

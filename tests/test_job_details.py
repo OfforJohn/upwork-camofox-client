@@ -68,7 +68,8 @@ def test_get_job_details_with_mock_page():
         assert listing.client_id == "client123"
         assert listing.client_name == "Test Client"
         assert listing.posted_date == "Posted 2 hours ago"
-        assert listing.url == summary.url
+        # Should return the canonical URL from detail page, not navigation URL
+        assert listing.url == "https://www.upwork.com/jobs/test-job/~022090361778369164301"
         assert "Python" in listing.tags
         assert "Web Scraping" in listing.tags
         assert listing.budget.text == "$50-100"

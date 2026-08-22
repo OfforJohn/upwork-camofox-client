@@ -193,7 +193,7 @@ class JobsSearch:
                 client_name=detail.client_name,
                 posted_date=detail.posted_date,
                 posted_at=detail.posted_at,
-                url=url,  # Use the URL we navigated to
+                url=detail.url,  # Use the verified canonical URL from detail
                 budget=detail.budget,
                 tags=detail.tags,
                 status=detail.status,
