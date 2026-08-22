@@ -56,7 +56,15 @@ async def test_auth_reuse():
         print(f"   - Title: {page_info.title}")
         print(f"   - URL: {page_info.url}")
         
-        # Check if we're on the search page
+        # Check if we're on the search page (not Cloudflare challenge)
+        if "challenge" in page_info.title.lower() or "__cf_chl" in page_info.url:
+            print("\n❌ Cloudflare challenge detected")
+            print(f"   Title: {page_info.title}")
+            print(f"   URL contains Cloudflare challenge token")
+            print("\nAutomatic credential reuse blocked by Cloudflare.")
+            print("Persisted credentials alone are insufficient to bypass Cloudflare.")
+            return False
+        
         if "search" in page_info.url.lower() and "jobs" in page_info.url.lower():
             print("\n✅ SUCCESS: Session is authenticated and can access job search")
             print("\n" + "=" * 60)

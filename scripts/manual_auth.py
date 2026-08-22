@@ -40,7 +40,7 @@ async def manual_auth():
         
         # Navigate to Upwork
         print("\nNavigating to https://www.upwork.com...")
-        await page.goto("https://www.upwork.com", wait_until="domcontentloaded")
+        await page.goto("https://www.upwork.com", wait_until="domcontentloaded", timeout=120000)
         
         print("\nBrowser launched. Please complete authentication.")
         input("\nPress Enter when you have successfully logged in and can see the jobs page...")
