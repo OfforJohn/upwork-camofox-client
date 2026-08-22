@@ -278,11 +278,11 @@ def test_canonical_url_mismatch_in_enrichment():
         posted_date="Posted 2 hours ago"
     )
     
-    # Detail with different canonical URL (different job ID)
+    # Detail with different canonical URL (same job ID but different path)
     detail = JobDetail(
-        job_id="12345",  # Same job ID but different URL
+        job_id="12345",
         title="Test Job",
-        url="https://www.upwork.com/jobs/other-job/~67890",
+        url="https://www.upwork.com/jobs/other-job/~12345",
         description="Test description",
         posted_date="Posted 2 hours ago"
     )

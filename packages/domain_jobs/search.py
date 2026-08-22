@@ -7,7 +7,7 @@ from datetime import datetime
 import json
 import re
 from pathlib import Path
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse, urlunparse, parse_qs
 from .summary_parser import parse_summary_card, JobSummary
 from .detail_parser import parse_detail_page, JobDetail
 from .models import Budget, validate_upwork_url
@@ -21,6 +21,30 @@ class UpworkBlockedError(Exception):
 class EnrichmentMismatchError(Exception):
     """Raised when summary and detail job IDs don't match during enrichment."""
     pass
+
+
+def normalize_url(url: str) -> str:
+    """Normalize URL for comparison by stripping trailing slash and sorting query params.
+    
+    Args:
+        url: The URL to normalize
+        
+    Returns:
+        Normalized URL string
+    """
+    parsed = urlparse(url)
+    
+    # Strip trailing slash from path
+    path = parsed.path.rstrip('/')
+    
+    # Sort query parameters for consistent comparison
+    if parsed.query:
+        query_dict = parse_qs(parsed.query, keep_blank_values=True)
+        sorted_query = '&'.join(f"{k}={v[0]}" if v else k for k, v in sorted(query_dict.items()))
+    else:
+        sorted_query = ''
+    
+    return urlunparse((parsed.scheme, parsed.netloc, path, parsed.params, sorted_query, parsed.fragment))
 
 
 def verify_enrichment_match(summary: JobSummary, detail: JobDetail) -> bool:
@@ -47,14 +71,11 @@ def verify_enrichment_match(summary: JobSummary, detail: JobDetail) -> bool:
             f"Detail page missing canonical URL - cannot verify enrichment"
         )
     
-    # URLs should match or be consistent
-    if detail.url != summary.url:
-        # They don't need to be identical (one might have query params),
-        # but they should both contain the job ID
-        if summary.job_id not in detail.url:
-            raise EnrichmentMismatchError(
-                f"URL mismatch: summary job_id {summary.job_id} not found in detail URL {detail.url}"
-            )
+    # URLs must match exactly after normalization
+    if normalize_url(detail.url) != normalize_url(summary.url):
+        raise EnrichmentMismatchError(
+            f"URL mismatch: summary URL {summary.url} does not match detail URL {detail.url}"
+        )
     
     return True
 
